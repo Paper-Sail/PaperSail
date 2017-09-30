@@ -1,0 +1,27 @@
+*
+  outline: 1px red solid
+
+body
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  background-color: rgb(180,255,200)
+  width: 1vw
+  height: 1vh
+  overflow: hidden
+  
+@mixin gameobject
+  position: absolute
+  top: 0
+  left: 0
+  
+.global
+  @include gameobject
+  transition: transform 1s ease
+  
+.gameobject
+  @include gameobject
+
+.player
+  @include gameobject
+
+.shadow
+  @include gameobject
