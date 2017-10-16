@@ -21,7 +21,9 @@ GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
   stars: new THREE.TextureLoader().load("/images/stars_trans.png"),
-  touch: new THREE.TextureLoader().load("/images/water_circle_trail.png"),
+  touch: new THREE.TextureLoader().load("/images/white_glow.png"),
+  splash: new THREE.TextureLoader().load("/images/water_circle_trail.png"),
+  glow: new THREE.TextureLoader().load("/images/white_glow.png"),
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
 GAME.materials = {
@@ -39,8 +41,18 @@ GAME.materials = {
     color: 0xFFFFFF,
     transparent: true
   }),
+  splash: new THREE.MeshBasicMaterial({
+    map: GAME.textures.splash,
+    color: 0xFFFFFF,
+    transparent: true
+  }),
   touch: new THREE.MeshBasicMaterial({
     map: GAME.textures.touch,
+    color: 0xFFFFFF,
+    transparent: true
+  }),
+  glow: new THREE.MeshBasicMaterial({
+    map: GAME.textures.glow,
     color: 0xFFFFFF,
     transparent: true
   })
@@ -76,7 +88,7 @@ function Island(){
 GAME.onClick = function(pos){
   var partpos = pos.clone()
   partpos.z = -1;
-  SPARTICLE.spawn(partpos,GAME.materials.touch,{
+  SPARTICLE.spawn(partpos,GAME.materials.splash,{
     minScale: 0,
     maxScale: 20
   });
@@ -88,7 +100,8 @@ GAME.onClick = function(pos){
 
 GAME.init = function(){
   GAME.objects = [];
-  
+  GAME.splashTime = 1;
+  GAME.splashTimeScale = 0.25;
   
   GAME.cursor = new THREE.Mesh(rectangle(-5,-5,10,10),GAME.materials.touch);
   GAME.cursor.position.z = 10000;
@@ -118,7 +131,20 @@ GAME.init = function(){
       radius: island.collision.boundingSphere.radius*1.5,
       points: island.collision.vertices
     });
-    
+    var glowCenter = island.collision.boundingSphere.center;
+    var glowRadius = island.collision.boundingSphere.radius*2.5;
+    var glow = new THREE.Mesh(rectangle(
+        -glowRadius,
+        -glowRadius,
+        glowRadius*2,
+        glowRadius*2
+      ),
+      GAME.materials.glow
+    );
+    glow.material.color = new THREE.Color(0x1E47AE);
+    glow.material.opacity = 1;
+    island.mesh.add(glow);
+    glow.position.z = -2;
     GAME.scene.add(island.mesh);
   }
   
@@ -140,7 +166,7 @@ GAME.update = function(dt){
   var ctime = Math.max(0, Math.min(1, (GAME.clock.elapsedTime-GAME.cursorTime)*2 ));
   var wob =  1-(Math.pow(((Math.sin(ctime*Math.PI)+ctime)/1.55),2))/5;
   GAME.cursor.material.opacity = ctime*wob;
-  GAME.cursor.scale.set(ctime*wob,ctime*wob,wob);
+  //GAME.cursor.scale.set(ctime*wob,ctime*wob,wob);
   
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
       var dotty = desiredDirection.dot(currentDirection);
@@ -184,6 +210,27 @@ GAME.update = function(dt){
   
   
   GAME.boatvelocity.z = 0;
+  
+  GAME.splashTime-=GAME.boatvelocity.length()*GAME.splashTimeScale*dt;
+  //console.log(GAME.boatvelocity.length);
+  if (GAME.splashTime<=0){
+    console.log("splash");
+    GAME.splashTime = 1+Math.random();
+    var partpos = GAME.camera.position.clone().sub(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(6));
+    partpos.z = -1;
+    var size = 0.75+Math.random()*0.25;
+    SPARTICLE.spawn(partpos,GAME.materials.splash,{
+      minScale: 3*size,
+      maxScale: 10*size,
+      roam: 10,
+      scaleFunc: function(x){ return Math.sqrt(x);},
+      alphaFunc: function(x){ return 0.25*(1-(Math.pow(1-(x*2),2)))},
+      maxAge: 3
+    });
+  }
+  
+  
+  
   GAME.camera.position.add(GAME.boatvelocity.clone().multiplyScalar(dt));
   SPARTICLE.update(dt);
   SCROLL.update(dt);
