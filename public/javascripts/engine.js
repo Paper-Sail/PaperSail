@@ -14,6 +14,7 @@ function initialise(container){
   const GAMESIZE = 200;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
   const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
+  GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
   
   
   

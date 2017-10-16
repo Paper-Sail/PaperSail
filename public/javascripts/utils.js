@@ -19,6 +19,35 @@ function shapeFromPoints(points){
   return geometry;
 }
 
+function rectangle(x,y,w,h) {
+  var geometry = new THREE.Geometry();
+  geometry.vertices.push(
+    new THREE.Vector3(x,y,0),
+    new THREE.Vector3(x+w,y,0),
+    new THREE.Vector3(x+w,y+h,0),
+    new THREE.Vector3(x,y+h,0)
+  );
+  geometry.faces.push(
+    new THREE.Face3(0,1,2),
+    new THREE.Face3(1,2,3)
+  );
+  
+  geometry.faceVertexUvs[0] = [
+    [
+      new THREE.Vector2(0,0),
+      new THREE.Vector2(1,0),
+      new THREE.Vector2(1,1)
+    ],
+    [
+      new THREE.Vector2(1,0),
+      new THREE.Vector2(1,1),
+      new THREE.Vector2(0,1)
+    ]
+  ];
+  
+  return geometry;
+}
+
 
 function convexShell(points, shell){
   if (points.length<6){
