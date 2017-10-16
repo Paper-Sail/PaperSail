@@ -173,7 +173,7 @@ GAME.update = function(dt){
       
       GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*10*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
   } else {
-    GAME.cursor.position.z = 10000;
+    GAME.cursorTime = lerp(GAME.cursorTime,GAME.clock.elapsedTime+1,dt*2);
     GAME.boatvelocity.sub(GAME.boatvelocity.clone().multiplyScalar(dt*2));
   }
   var pushVelocity = new THREE.Vector3();
@@ -214,7 +214,6 @@ GAME.update = function(dt){
   GAME.splashTime-=GAME.boatvelocity.length()*GAME.splashTimeScale*dt;
   //console.log(GAME.boatvelocity.length);
   if (GAME.splashTime<=0){
-    console.log("splash");
     GAME.splashTime = 1+Math.random();
     var partpos = GAME.camera.position.clone().sub(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(6));
     partpos.z = -1;
