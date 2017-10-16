@@ -167,11 +167,11 @@ GAME.update = function(dt){
   var wob =  1-(Math.pow(((Math.sin(ctime*Math.PI)+ctime)/1.55),2))/5;
   GAME.cursor.material.opacity = ctime*wob;
   //GAME.cursor.scale.set(ctime*wob,ctime*wob,wob);
-  
+  var dotty = desiredDirection.dot(currentDirection);
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
-      var dotty = desiredDirection.dot(currentDirection);
       
-      GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*10*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
+      
+      GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*15*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
   } else {
     GAME.cursorTime = lerp(GAME.cursorTime,GAME.clock.elapsedTime+1,dt*2);
     GAME.boatvelocity.sub(GAME.boatvelocity.clone().multiplyScalar(dt*2));
@@ -205,8 +205,20 @@ GAME.update = function(dt){
   var desiAngle = Math.atan2(desiredDirection.y, desiredDirection.x);
   currentDirection.lerp(desiredDirection,dt);
   var aimAngle = Math.atan2(currentDirection.y, currentDirection.x);
-  //console.log(curAngle,desiAngle,aimAngle);
-  GAME.camera.rotation.z = aimAngle;
+  var avalue = GAME.camera.rotation.z - aimAngle
+  avalue = mod(avalue+TAU/2,TAU)-TAU/2
+  var sign = -Math.sign(avalue);
+  dotty = desiredDirection.clone().normalize().dot(currentDirection.clone().normalize());
+  var size = Math.min(0.5,Math.sqrt((0.5-dotty/2)));
+  if (GAME.target.clone().sub(GAME.camera.position).length()>10){
+    GAME.boatangularvelocity += sign*dt*size*3 - GAME.boatangularvelocity*dt*3;
+  } else {
+    GAME.boatangularvelocity +=  - GAME.boatangularvelocity*dt*10;  
+  }
+  var lerpy = 1-(0.5-dotty/2);
+  lerpy = Math.pow(lerpy,2)
+  GAME.camera.rotation.z += lerp(GAME.boatangularvelocity*dt*1.5,-avalue,lerpy);
+  
   
   
   GAME.boatvelocity.z = 0;
@@ -221,7 +233,7 @@ GAME.update = function(dt){
     SPARTICLE.spawn(partpos,GAME.materials.splash,{
       minScale: 3*size,
       maxScale: 10*size,
-      roam: 10,
+      roam: 5*Math.random(),
       scaleFunc: function(x){ return Math.sqrt(x);},
       alphaFunc: function(x){ return 0.25*(1-(Math.pow(1-(x*2),2)))},
       maxAge: 3
