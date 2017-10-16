@@ -24,19 +24,19 @@ function rectangle(x,y,w,h) {
   geometry.vertices.push(
     new THREE.Vector3(x,y,0),
     new THREE.Vector3(x+w,y,0),
-    new THREE.Vector3(x+w,y+h,0),
-    new THREE.Vector3(x,y+h,0)
+    new THREE.Vector3(x,y+h,0),
+    new THREE.Vector3(x+w,y+h,0)
   );
   geometry.faces.push(
     new THREE.Face3(0,1,2),
-    new THREE.Face3(1,2,3)
+    new THREE.Face3(1,3,2)
   );
   
   geometry.faceVertexUvs[0] = [
     [
       new THREE.Vector2(0,0),
       new THREE.Vector2(1,0),
-      new THREE.Vector2(1,1)
+      new THREE.Vector2(0,1)
     ],
     [
       new THREE.Vector2(1,0),
@@ -49,7 +49,7 @@ function rectangle(x,y,w,h) {
 }
 
 
-function convexShell(points, shell){
+function convexShell(points, shell, uvDiv){
   if (points.length<6){
     console.error("Please specify at least 3 points (6 values)")
     return;
@@ -120,7 +120,7 @@ function convexShell(points, shell){
     var o2 = i2+plength;
     var a1 = i/plength;
     var a2 = (i+1)/plength;
-    var uvMult = Math.max(1,Math.floor(perim/50));
+    var uvMult = Math.max(1,Math.floor(perim/uvDiv));
     var uvOffset = Math.random();
     a1*=uvMult;
     a2*=uvMult;
@@ -165,3 +165,18 @@ function remap(input_start, input_end, output_start, output_end, input) {
 function mod(x, n){
 	return ((x%n)+n)%n;
 }
+
+function lerp(a,b,n) {
+  return b*n+a*(1-n);
+}
+
+//*
+get = function (obj, field, nullable) {
+  if (obj.hasOwnProperty(field)){
+    return obj[field]
+  } else {
+    return nullable;
+  }
+};
+//*/
+

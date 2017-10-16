@@ -34,7 +34,7 @@ const SCROLL = {
         // TODO: Do scaling and scrolling properly
         //x = campos.x-mod(-x,layer.areasize*2)+layer.areasize;
         //y = campos.y-mod(-y,layer.areasize*2)+layer.areasize;
-        chunk.sprite.position.set(x, y, 0);
+        chunk.sprite.position.set(x, y, layer.offset);
       }
     }
   }  

@@ -21,6 +21,7 @@ GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
   stars: new THREE.TextureLoader().load("/images/stars_trans.png"),
+  touch: new THREE.TextureLoader().load("/images/water_circle_trail.png"),
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
 GAME.materials = {
@@ -37,14 +38,19 @@ GAME.materials = {
     map: GAME.textures.stars,
     color: 0xFFFFFF,
     transparent: true
+  }),
+  touch: new THREE.MeshBasicMaterial({
+    map: GAME.textures.touch,
+    color: 0xFFFFFF,
+    transparent: true
   })
 }
 function Island(){
   
   var ipoints = [];
-  var d = 5+Math.random()*10;
-  var v = 1;
-  var md = 1;
+  var d = 10+Math.random()*10;
+  var v = 2;
+  var md = 5;
   var Md = 100;
   for (var a = 0; a < Math.PI*2-0.3; a+=0.2+Math.random()*0.1) {
     d = Math.max(md,Math.min(Md,d+(Math.random()*2-1)*v));
@@ -52,7 +58,7 @@ function Island(){
     ipoints.push(d*Math.sin(a));
   }
   
-  var outergeometry = convexShell(ipoints,6);
+  var outergeometry = convexShell(ipoints,12,100);
   var innergeometry = shapeFromPoints(ipoints);
   innergeometry.computeBoundingSphere();
   var geometry = new THREE.Geometry();
@@ -68,12 +74,26 @@ function Island(){
 }
 
 GAME.onClick = function(pos){
+  var partpos = pos.clone()
+  partpos.z = -1;
+  SPARTICLE.spawn(partpos,GAME.materials.touch,{
+    minScale: 0,
+    maxScale: 20
+  });
+  GAME.cursor.position.copy(partpos);
+  GAME.cursorTime = GAME.clock.elapsedTime;
   pos.z = 300;
   GAME.target = pos;
 }
 
 GAME.init = function(){
   GAME.objects = [];
+  
+  
+  GAME.cursor = new THREE.Mesh(rectangle(-5,-5,10,10),GAME.materials.touch);
+  GAME.cursor.position.z = 10000;
+  GAME.cursorTime = 1000;
+  GAME.scene.add(GAME.cursor);
   
   var boat = new THREE.Sprite(GAME.materials.boat);
   boat.renderOrder = 0;
@@ -117,11 +137,17 @@ GAME.update = function(dt){
   var desiredDirection = (GAME.target.clone().sub(GAME.camera.position)).normalize().applyAxisAngle(forward,-TAU/4);
   var currentDirection = new THREE.Vector3(Math.cos(GAME.camera.rotation.z),Math.sin(GAME.camera.rotation.z),0);
   
+  var ctime = Math.max(0, Math.min(1, (GAME.clock.elapsedTime-GAME.cursorTime)*2 ));
+  var wob =  1-(Math.pow(((Math.sin(ctime*Math.PI)+ctime)/1.55),2))/5;
+  GAME.cursor.material.opacity = ctime*wob;
+  GAME.cursor.scale.set(ctime*wob,ctime*wob,wob);
+  
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
       var dotty = desiredDirection.dot(currentDirection);
       
       GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*10*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
   } else {
+    GAME.cursor.position.z = 10000;
     GAME.boatvelocity.sub(GAME.boatvelocity.clone().multiplyScalar(dt*2));
   }
   var pushVelocity = new THREE.Vector3();
@@ -159,7 +185,7 @@ GAME.update = function(dt){
   
   GAME.boatvelocity.z = 0;
   GAME.camera.position.add(GAME.boatvelocity.clone().multiplyScalar(dt));
-  
+  SPARTICLE.update(dt);
   SCROLL.update(dt);
   
 }
