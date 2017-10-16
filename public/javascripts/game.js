@@ -102,7 +102,8 @@ GAME.init = function(){
     GAME.scene.add(island.mesh);
   }
   
-  SCROLL.newLayer(GAME.materials.stars,100,GAME.size*10,-2);
+  console.log(GAME.size);
+  SCROLL.newLayer(GAME.materials.stars,100,GAME.size,-10);
   
   
   GAME.target = new THREE.Vector3(1,1,0);

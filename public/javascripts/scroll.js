@@ -26,10 +26,15 @@ const SCROLL = {
     var campos = GAME.camera.position;
     for (var i = 0; i < SCROLL.layers.length; i++) {
       var layer = SCROLL.layers[i];
-      var m = 1;
+      var m = -layer.offset/10;
       for (var j = 0; j < layer.chunks.length; j++) {
         var chunk = layer.chunks[j];
-        chunk.sprite.position.set(campos.x*m+chunk.x, campos.y*m+chunk.y, 0);
+        var x = campos.x*m+chunk.x;
+        var y = campos.y*m+chunk.y;
+        // TODO: Do scaling and scrolling properly
+        //x = campos.x-mod(-x,layer.areasize*2)+layer.areasize;
+        //y = campos.y-mod(-y,layer.areasize*2)+layer.areasize;
+        chunk.sprite.position.set(x, y, 0);
       }
     }
   }  
