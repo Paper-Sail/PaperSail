@@ -26,7 +26,7 @@ const SPARTICLE = {
         return false;
       } else {
         var scale = Math.max(0.00001,lerp(p.minScale, p.maxScale, p.scaleFunc(age)));
-        p.mesh.position.copy(p.position.clone().add(p.roam.multiplyScalar(age)));
+        p.mesh.position.copy(p.position.clone().add(p.roam.clone().multiplyScalar(age)));
         p.mesh.material.opacity=(p.alphaFunc(age));
         p.mesh.scale.set(scale,scale,scale);
         return true;
