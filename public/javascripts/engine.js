@@ -7,12 +7,16 @@ function initialise(container){
 
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
+  console.log("Aspect:",ASPECT);
   const NEAR = 1;
   const FAR = 1000;
   
   const GAMESIZE = 200;
-  const GAMEWIDTH = GAMESIZE;
-  const GAMEHEIGHT = GAMESIZE/ASPECT
+  const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
+  const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
+  
+  
+  
   // Create a WebGL renderer, camera
   // and a scene
   GAME.renderer = new THREE.WebGLRenderer();
@@ -55,7 +59,7 @@ function initialise(container){
 
 // Setup update-render loop
 function update(){
-  var dt = GAME.clock.getDelta();
+  var dt = Math.min(1/20,GAME.clock.getDelta());
   GAME.update(dt);
   
   GAME.renderer.render(GAME.scene, GAME.camera);
