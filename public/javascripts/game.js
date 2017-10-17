@@ -281,7 +281,7 @@ GAME.update = function(dt){
     }
   }
   pushVelocity.normalize().multiplyScalar(100*dt*(maxPower/GAME.boatradius));
-  //GAME.boatvelocity.add(pushVelocity);
+  GAME.boatvelocity.add(pushVelocity);
   var curAngle = Math.atan2(currentDirection.y, currentDirection.x);
   var desiAngle = Math.atan2(desiredDirection.y, desiredDirection.x);
   currentDirection.lerp(desiredDirection,dt);
