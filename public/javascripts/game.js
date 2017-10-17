@@ -115,11 +115,16 @@ GAME.init = function(){
   boat.scale.set(30,30,30);
   GAME.objects.collisions = [];
   for (var i = 0; i < 1000; i++) {
-    var pos = new THREE.Vector3(
-      (Math.random()*2-1)*1000,
-      (Math.random()*2-1)*1000,
-      0
-    );
+    var pos;
+    while (true){
+      pos = new THREE.Vector3(
+        (Math.random()*2-1)*1000,
+        (Math.random()*2-1)*1000,
+        0
+      );
+      if (pos.length()>50) break;
+      else console.log("reroll");
+    }
     var island = Island();
     island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
@@ -152,7 +157,7 @@ GAME.init = function(){
   SCROLL.newLayer(GAME.materials.stars,100,GAME.size,-10);
   
   
-  GAME.target = new THREE.Vector3(1,1,0);
+  GAME.target = new THREE.Vector3(0,5,0);
   GAME.boatvelocity = new THREE.Vector3();
   GAME.boatangularvelocity = 0;
 }
@@ -212,12 +217,13 @@ GAME.update = function(dt){
   var size = Math.min(0.5,Math.sqrt((0.5-dotty/2)));
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
     GAME.boatangularvelocity += sign*dt*size*3 - GAME.boatangularvelocity*dt*3;
+    var lerpy = 1-(0.5-dotty/2);
+    lerpy = Math.pow(lerpy,2)
+    GAME.camera.rotation.z += lerp(GAME.boatangularvelocity*dt*1.5,-avalue,lerpy);
   } else {
-    GAME.boatangularvelocity +=  - GAME.boatangularvelocity*dt*10;  
+    GAME.boatangularvelocity +=  - GAME.boatangularvelocity*dt*3;  
+    GAME.camera.rotation.z += GAME.boatangularvelocity*dt*1.5
   }
-  var lerpy = 1-(0.5-dotty/2);
-  lerpy = Math.pow(lerpy,2)
-  GAME.camera.rotation.z += lerp(GAME.boatangularvelocity*dt*1.5,-avalue,lerpy);
   
   
   
