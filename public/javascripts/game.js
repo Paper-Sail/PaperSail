@@ -1,5 +1,6 @@
 const GAME = {};
 GAME.boatradius = 8;
+GAME.backgroundcolor = new THREE.Color(0x05267A);
 
 window.addEventListener("load", function(){
   // Get the DOM element to attach to
@@ -27,6 +28,7 @@ GAME.textures = {
   glow: new THREE.TextureLoader().load("/images/white_glow.png"),
   fairy: new THREE.TextureLoader().load("/images/white_glow.png"),
   fishbody: new THREE.TextureLoader().load("/images/fish_body.png"),
+  fishfin: new THREE.TextureLoader().load("/images/fish_fin.png"),
   islandDecorations: [
     new THREE.TextureLoader().load("/images/plants_1.png"),
     new THREE.TextureLoader().load("/images/plants_2.png"),
@@ -77,9 +79,13 @@ GAME.materials = {
   }),
   fishbody: new THREE.MeshBasicMaterial({
     map: GAME.textures.fishbody,
-    color: 0x000000,
-    transparent: true,
-    opacity: 0.5
+    color: new THREE.Color(0x000000).lerp(GAME.backgroundcolor,0.5),
+    transparent: true
+  }),
+  fishfin: new THREE.MeshBasicMaterial({
+    map: GAME.textures.fishfin,
+    color: new THREE.Color(0x000000).lerp(GAME.backgroundcolor,0.5),
+    transparent: true
   }),
   islandDecorations: [],
 }
@@ -143,7 +149,7 @@ GAME.onClick = function(pos){
 
 GAME.init = function(){
   
-  FISH.spawn(75,150,30,GAME.materials.fishbody);
+  FISH.spawn(75,150,30,GAME.materials.fishbody, GAME.materials.fishfin);
   
   GAME.objects = [];
   GAME.splashTime = 1;
@@ -161,7 +167,7 @@ GAME.init = function(){
   GAME.scene.add(GAME.cursor);
   
   var boat = new THREE.Sprite(GAME.materials.boat);
-  boat.renderOrder = 0;
+  //boat.renderOrder = 0;
   GAME.camera.add(boat);
   boat.position.z = -10;
   boat.scale.set(30,30,30);
@@ -177,7 +183,7 @@ GAME.init = function(){
       if (pos.length()>50) break;
     }
     var island = Island();
-    island.mesh.renderOrder = 0;
+    //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
     island.position = new THREE.Vector3(pos.x,pos.y, 0);
     
@@ -275,7 +281,7 @@ GAME.update = function(dt){
     }
   }
   pushVelocity.normalize().multiplyScalar(100*dt*(maxPower/GAME.boatradius));
-  GAME.boatvelocity.add(pushVelocity);
+  //GAME.boatvelocity.add(pushVelocity);
   var curAngle = Math.atan2(currentDirection.y, currentDirection.x);
   var desiAngle = Math.atan2(desiredDirection.y, desiredDirection.x);
   currentDirection.lerp(desiredDirection,dt);
@@ -372,6 +378,11 @@ GAME.update = function(dt){
   
   
   GAME.camera.position.add(GAME.boatvelocity.clone().multiplyScalar(dt));
+  //GAME.target.copy(FISH.fish[0].position)
+  //GAME.target.z = 300;
+  //GAME.camera.position.lerp(FISH.fish[0].position,dt)
+  //GAME.camera.position.z = 300;
+  //GAME.camera.rotation.z = 0;
   SPARTICLE.update(dt);
   SCROLL.update(dt);
   FISH.update(dt);
