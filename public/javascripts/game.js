@@ -26,6 +26,7 @@ GAME.textures = {
   semisplash: new THREE.TextureLoader().load("/images/water_semicircle_trail.png"),
   glow: new THREE.TextureLoader().load("/images/white_glow.png"),
   fairy: new THREE.TextureLoader().load("/images/white_glow.png"),
+  fishbody: new THREE.TextureLoader().load("/images/fish_body.png"),
   islandDecorations: [
     new THREE.TextureLoader().load("/images/plants_1.png"),
     new THREE.TextureLoader().load("/images/plants_2.png"),
@@ -74,6 +75,12 @@ GAME.materials = {
     color: 0xFFFFFF,
     transparent: true
   }),
+  fishbody: new THREE.MeshBasicMaterial({
+    map: GAME.textures.fishbody,
+    color: 0x000000,
+    transparent: true,
+    opacity: 0.5
+  }),
   islandDecorations: [],
 }
 for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
@@ -120,7 +127,7 @@ function Island(){
 GAME.onClick = function(pos){
   var bell = 1+Math.floor(Math.random()*3);
   var plop = 1+Math.floor(Math.random()*3);
-  sound["touch_bell_"+bell].play();
+  //sound["touch_bell_"+bell].play();
   sound["touch_plop_"+plop].play();
   var partpos = pos.clone()
   partpos.z = -1;
@@ -135,6 +142,9 @@ GAME.onClick = function(pos){
 }
 
 GAME.init = function(){
+  
+  FISH.spawn(75,150,30,GAME.materials.fishbody);
+  
   GAME.objects = [];
   GAME.splashTime = 1;
   GAME.fairyTime = 1;
@@ -364,7 +374,7 @@ GAME.update = function(dt){
   GAME.camera.position.add(GAME.boatvelocity.clone().multiplyScalar(dt));
   SPARTICLE.update(dt);
   SCROLL.update(dt);
-  
+  FISH.update(dt);
 }
 
 
