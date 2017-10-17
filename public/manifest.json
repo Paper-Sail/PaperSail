@@ -1,0 +1,10 @@
+{
+  "short_name": "PaperSail",
+  "name": "Paper Sail",
+  "icons": [
+    
+  ],
+  "start_url": "/index.html",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
