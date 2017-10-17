@@ -42,9 +42,10 @@ const FISH = {
         new THREE.Vector2(1,1-i*uvy)
       ];
     }
-    var position = new THREE.Vector3(0,0,0).applyAxisAngle(forward,Math.random()*TAU);
+    var position = new THREE.Vector3(400,0,0).applyAxisAngle(forward,Math.random()*TAU);
     var fins = new THREE.Mesh(rectangle(-width/2,-width/4,width,width/2), finmaterial);
     var fishy = {
+      woboff: Math.random()*TAU,
       mesh: new THREE.Mesh(geometry, material),
       position: position,
       direction: new THREE.Vector3(0,1,0),
@@ -124,7 +125,7 @@ const FISH = {
       }
       fishy.speed = lerp(fishy.speed,lerp(fishy.minSpeed,fishy.maxSpeed,fishy.nextIn),dt*2);
       fishy.direction.lerp(fishy.targetDirection,dt*0.5);
-      fishy.position.add(fishy.direction.clone().normalize().applyAxisAngle(forward,Math.sin(fishy.time*wobble)).multiplyScalar(dt*fishy.speed));
+      fishy.position.add(fishy.direction.clone().normalize().applyAxisAngle(forward,Math.sin(fishy.woboff+fishy.time*wobble)).multiplyScalar(dt*fishy.speed));
       var dist = fishy.position.distanceTo(fishy.history[0]);
       if (dist>fishy.seglength){
         fishy.history.pop();

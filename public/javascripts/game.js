@@ -155,8 +155,8 @@ GAME.onClick = function(pos){
 }
 
 GAME.init = function(){
-  
-  FISH.spawn(75,150,30,GAME.materials.fishbody, GAME.materials.fishfin);
+  for (var i = 0; i<1; i++)
+    FISH.spawn(75,150,30,GAME.materials.fishbody, GAME.materials.fishfin);
   
   GAME.objects = [];
   GAME.splashTime = 1;
