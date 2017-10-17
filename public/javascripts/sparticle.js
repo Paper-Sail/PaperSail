@@ -17,6 +17,7 @@ const SPARTICLE = {
     p.mesh = new THREE.Mesh(rectangle(-1,-1,2,2),p.material);
     p.mesh.position.copy(p.position);
     p.mesh.rotation.z = p.angle;
+    p.mesh.material.opacity = 0;
     SPARTICLE.all.push(p);
     GAME.scene.add(p.mesh);
   },

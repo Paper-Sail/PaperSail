@@ -42,7 +42,7 @@ const FISH = {
         new THREE.Vector2(1,1-i*uvy)
       ];
     }
-    var position = new THREE.Vector3(400,0,0).applyAxisAngle(forward,Math.random()*TAU);
+    var position = new THREE.Vector3(0,0,0).applyAxisAngle(forward,Math.random()*TAU);
     var fins = new THREE.Mesh(rectangle(-width/2,-width/4,width,width/2), finmaterial);
     var fishy = {
       mesh: new THREE.Mesh(geometry, material),
@@ -59,6 +59,8 @@ const FISH = {
       lastseen: 0,
       unseen: true,
       returntime: 25,
+      splashTime: 1,
+      splashTimeScale: 1,
       history: [],
       width: width,
       length: length,
@@ -100,6 +102,21 @@ const FISH = {
         } else {
           fishy.targetDirection.lerp(fromcam,0.25).normalize();
         }
+      }
+      fishy.splashTime-=dt*fishy.splashTimeScale*fishy.nextIn*fishy.nextIn;
+      if (fishy.splashTime<=0){
+        fishy.splashTime = Math.random();
+        var partpos = FISH.sample(0.01*fishy.segments,fishy.position,fishy.history).add((new THREE.Vector3(Math.random()*5,0,0)).applyAxisAngle(forward,Math.random()*TAU));
+        partpos.z = -1;
+        var size = 0.5+Math.random()*0.5;
+        SPARTICLE.spawn(partpos,GAME.materials.splash,{
+          minScale: 5*size,
+          maxScale: 10*size,
+          roam: 3*Math.random(),
+          scaleFunc: function(x){ return Math.sqrt(x);},
+          alphaFunc: function(x){ return 0.25*(1-(Math.pow(1-(x*2),2)))},
+          maxAge: 4*size
+        });
       }
       var wobble = 0.3
       if (fishy.lastseen>fishy.returntime){
