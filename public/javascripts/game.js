@@ -118,6 +118,10 @@ function Island(){
 }
 
 GAME.onClick = function(pos){
+  var bell = 1+Math.floor(Math.random()*3);
+  var plop = 1+Math.floor(Math.random()*3);
+  sound["touch_bell_"+bell].play();
+  sound["touch_plop_"+plop].play();
   var partpos = pos.clone()
   partpos.z = -1;
   SPARTICLE.spawn(partpos,GAME.materials.splash,{
