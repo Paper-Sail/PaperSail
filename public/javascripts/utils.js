@@ -179,4 +179,7 @@ get = function (obj, field, nullable) {
   }
 };
 //*/
+Array.prototype.pickRandom = function () {
+  return this[Math.floor(Math.random()*this.length)];
+};
 

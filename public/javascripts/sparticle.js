@@ -5,6 +5,7 @@ const SPARTICLE = {
     var p = {
       position: position,
       material: material.clone(),
+      angle: get(options, "angle", 0),
       spawnTime: GAME.clock.elapsedTime,
       maxAge: get(options, "maxAge", 1),
       alphaFunc: get(options, "alphaFunc", function(n){return 1-Math.sqrt(n)}),
@@ -15,6 +16,7 @@ const SPARTICLE = {
     };
     p.mesh = new THREE.Mesh(rectangle(-1,-1,2,2),p.material);
     p.mesh.position.copy(p.position);
+    p.mesh.rotation.z = p.angle;
     SPARTICLE.all.push(p);
     GAME.scene.add(p.mesh);
   },
