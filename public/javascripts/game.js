@@ -69,8 +69,15 @@ GAME.materials = {
   }),
   glow: new THREE.MeshBasicMaterial({
     map: GAME.textures.glow,
-    color: 0xFFFFFF,
-    transparent: true
+    transparent: true,
+    color: new THREE.Color(0x1E47AE),
+    opacity: 1
+  }),
+  boatglow: new THREE.MeshBasicMaterial({
+    map: GAME.textures.glow,
+    transparent: true,
+    color: new THREE.Color(0x1E47AE),
+    opacity: 0.5
   }),
   fairy: new THREE.MeshBasicMaterial({
     map: GAME.textures.fairy,
@@ -167,6 +174,9 @@ GAME.init = function(){
   GAME.scene.add(GAME.cursor);
   
   var boat = new THREE.Sprite(GAME.materials.boat);
+  var boatglow = new THREE.Mesh(rectangle(-0.6,-0.9,1.2,1.8),GAME.materials.boatglow);
+  boatglow.position.z = -9.8;
+  boat.add(boatglow);
   //boat.renderOrder = 0;
   GAME.camera.add(boat);
   boat.position.z = -10;
@@ -203,8 +213,6 @@ GAME.init = function(){
       ),
       GAME.materials.glow
     );
-    glow.material.color = new THREE.Color(0x1E47AE);
-    glow.material.opacity = 1;
     island.mesh.add(glow);
     glow.position.z = -2;
     GAME.scene.add(island.mesh);
