@@ -3,7 +3,6 @@ const FISH = {
   spawn: function(width, length, segments, material, finmaterial){
     var geometry = new THREE.Geometry();
     geometry.dynamic = true;
-    geometry.frustumCulled = false;
     for (var i=0; i<=segments; i++){
       geometry.vertices.push(
         new THREE.Vector3(0, -(length/segments)*i, 0),
@@ -43,11 +42,11 @@ const FISH = {
         new THREE.Vector2(1,1-i*uvy)
       ];
     }
-    console.log(finmaterial);
+    var position = new THREE.Vector3(400,0,0).applyAxisAngle(forward,Math.random()*TAU);
     var fins = new THREE.Mesh(rectangle(-width/2,-width/4,width,width/2), finmaterial);
     var fishy = {
       mesh: new THREE.Mesh(geometry, material),
-      position: new THREE.Vector3(0,0,0),
+      position: position,
       direction: new THREE.Vector3(0,1,0),
       targetDirection: new THREE.Vector3(0,1,0),
       nextIn: 1,
@@ -58,7 +57,8 @@ const FISH = {
       time: 0,
       start: 0,
       lastseen: 0,
-      returntime: 5,
+      unseen: true,
+      returntime: 25,
       history: [],
       width: width,
       length: length,
@@ -67,8 +67,9 @@ const FISH = {
       fins: fins
     };
     fishy.mesh.position.z = -5;
+    fishy.mesh.frustumCulled = false;
     for (var i=0;i<=segments+4; i++){
-      fishy.history.push(new THREE.Vector3(0, -(length/segments)*i, 0));
+      fishy.history.push((new THREE.Vector3(0, -(length/segments)*i, 0)).add(position));
     }
     GAME.scene.add(fishy.mesh);
     GAME.scene.add(fishy.fins);
@@ -81,6 +82,11 @@ const FISH = {
       var fromcam = GAME.camera.position.clone().sub(fishy.position);
       fromcam.z = 0;
       if (fromcam.length()>GAME.size*0.75){
+        fishy.unseen = true;
+      } else if (fromcam.length()<GAME.size*0.25){
+        fishy.unseen = false;
+      }
+      if (fishy.unseen){
         fishy.lastseen+=dt;
       } else {
         fishy.lastseen = 0;
@@ -97,7 +103,7 @@ const FISH = {
       }
       var wobble = 0.3
       if (fishy.lastseen>fishy.returntime){
-        wobble = 0;
+        wobble = 0.3;
       }
       fishy.speed = lerp(fishy.speed,lerp(fishy.minSpeed,fishy.maxSpeed,fishy.nextIn),dt*2);
       fishy.direction.lerp(fishy.targetDirection,dt*0.5);
