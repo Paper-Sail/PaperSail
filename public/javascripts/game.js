@@ -181,6 +181,9 @@ MULTI.on('tick', function(data){
     boat.rotation.z = data.rotation;
     GAME.scene.add(boat);
     GAME.ghosts[data.id] = {
+      position: data.position,
+      rotation: data.rotation,
+      direction: data.direction,
       boat: boat,
       id: data.id,
       last: data.time,
@@ -188,8 +191,9 @@ MULTI.on('tick', function(data){
   } else {
     var ghost = GAME.ghosts[data.id];
     if (ghost.last<data.time){
-      ghost.boat.position.set(data.position.x,data.position.y,0);
-      ghost.boat.rotation.z = data.rotation;
+      ghost.position = data.position;
+      ghost.rotation = data.rotation;
+      ghost.direction = data.direction;
       ghost.last = data.time;
     }
   }
@@ -198,7 +202,7 @@ MULTI.on('tick', function(data){
 GAME.init = function(){
   GAME.ghosts = {};
   GAME.tickIn = 0;
-  GAME.tickRate = 5;
+  GAME.tickRate = 2;
   for (var i = 0; i<1; i++)
     FISH.spawn(75,150,30,GAME.materials.fishbody, GAME.materials.fishfin);
   
@@ -438,6 +442,17 @@ GAME.update = function(dt){
   SPARTICLE.update(dt);
   SCROLL.update(dt);
   FISH.update(dt);
+  
+  for (var id in GAME.ghosts) {
+    if (GAME.ghosts.hasOwnProperty(id )) {
+      var ghost = GAME.ghosts[id];
+      ghost.boat.position.lerp(new THREE.Vector3(ghost.position.x, ghost.position.y, 0), dt);
+      var curDirection = new THREE.Vector2(Math.cos(ghost.boat.rotation.z), Math.sin(ghost.boat.rotation.z));
+      var tgtDirection = new THREE.Vector2(Math.cos(ghost.rotation), Math.sin(ghost.rotation));
+      curDirection.lerp(tgtDirection,dt).normalize();
+      ghost.boat.rotation.z = Math.atan2(curDirection.y, curDirection.x);
+    }
+  }
   
   GAME.tickIn-=GAME.tickRate*dt;
   if (GAME.tickIn<0){
