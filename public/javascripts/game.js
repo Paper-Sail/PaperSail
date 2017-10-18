@@ -274,7 +274,7 @@ GAME.init = function(){
       var av = p1.clone().lerp(p2,0.5);
       var d = p2.clone().sub(p1).normalize();
       var ang = Math.atan2(d.y, d.x);
-      var size = 7+Math.random()*10
+      var size = 10+Math.random()*20
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),GAME.materials.islandDecorations.pickRandom());
       deco.rotation.z = ang;
       deco.position.copy(island.position.clone().add(av));
