@@ -38,6 +38,9 @@ GAME.textures = {
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
 GAME.materials = {
+  background: new THREE.MeshBasicMaterial({
+    color: GAME.backgroundcolor
+  }),
   islandmat: new THREE.MeshBasicMaterial({
     color: 0x000000,
     map: GAME.textures.islandtex,
@@ -111,6 +114,7 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 }
 
 
+<<<<<<< 80aa1bd806f800699810fce1045d3f031be02134
 
 
 function Island(){
@@ -142,6 +146,8 @@ function Island(){
   }
 }
 
+=======
+>>>>>>> Moved map generation to world.js
 GAME.onClick = function(pos){
   var bell = 1+Math.floor(Math.random()*3);
   var plop = 1+Math.floor(Math.random()*3);
@@ -230,6 +236,7 @@ GAME.init = function(){
   boat.position.z = -10;
   boat.scale.set(30,30,30);
   GAME.objects.collisions = [];
+<<<<<<< 80aa1bd806f800699810fce1045d3f031be02134
   for (var i = 0; i < 500; i++) {
     var pos;
     while (true){
@@ -282,6 +289,10 @@ GAME.init = function(){
     }
     //*/
   }
+=======
+  
+  WORLD.init();
+>>>>>>> Moved map generation to world.js
   
   console.log(GAME.size);
   SCROLL.newLayer(GAME.materials.stars,100,GAME.size,-10);
