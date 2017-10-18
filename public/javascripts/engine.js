@@ -11,7 +11,7 @@ function initialise(container){
   const NEAR = 1;
   const FAR = 1000;
   
-  const GAMESIZE = 250;
+  const GAMESIZE = 200;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
   const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
   GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
@@ -35,7 +35,7 @@ function initialise(container){
   
   
   GAME.scene = new THREE.Scene();
-  GAME.scene.background = new THREE.Color(0x05267A);
+  //GAME.scene.background = GAME.backgroundcolor;
 
   // Add the camera to the scene.
   GAME.scene.add(GAME.camera);
@@ -46,7 +46,7 @@ function initialise(container){
   // DOM element.
   GAME.container.appendChild(GAME.renderer.domElement);
   
-  GAME.container.addEventListener("click",function(e){
+  GAME.renderer.domElement.addEventListener("click",function(e){
     var vector = new THREE.Vector3();
     vector.set(
         ( e.clientX / window.innerWidth ) * 2 - 1,
