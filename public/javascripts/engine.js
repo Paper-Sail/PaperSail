@@ -11,7 +11,7 @@ function initialise(container){
   const NEAR = 1;
   const FAR = 1000;
   
-  const GAMESIZE = 200;
+  const GAMESIZE = 250;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
   const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
   GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
