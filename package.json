@@ -16,6 +16,7 @@
     "pug-browser": "0.0.20",
     "reload": "^2.0.0",
     "serve-favicon": "~2.3.0",
+    "socket.io": "^2.0.3",
     "watch": "^1.0.2"
   }
 }
