@@ -3,11 +3,11 @@ var MULTI = {
   callbacks: []
 };
 socket.on('connect', function(){
-  console.log("THIS IS AMAZEBALLS");
+  MULTI.id = guid();
 });
 socket.on('event', function(data){
   for (var i = 0; i < MULTI.callbacks.length; i++) {
-    if (data.name==MULTI.callbacks[i].name){
+    if (data.id!=MULTI.id && data.name==MULTI.callbacks[i].name){
       MULTI.callbacks[i].cb(data);
     }
   }
@@ -22,5 +22,7 @@ MULTI.on = function(name, cb){
 }
 
 MULTI.send = function(data){
+  data.id = MULTI.id;
+  data.time = (new Date()).valueOf();
   socket.emit('event',data);
 }
