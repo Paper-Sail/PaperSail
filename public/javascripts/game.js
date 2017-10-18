@@ -124,7 +124,21 @@ GAME.onClick = function(pos){
   GAME.cursorTime = GAME.clock.elapsedTime;
   pos.z = 300;
   GAME.target = pos;
+  MULTI.send({
+    name: "click",
+    position: {
+      x: pos.x,
+      y: pos.y
+    }
+  });
 }
+
+MULTI.on('click', function(data){
+  SPARTICLE.spawn(new THREE.Vector3(data.position.x, data.position.y, -1),GAME.materials.splash,{
+    minScale: 0,
+    maxScale: 20
+  });
+});
 
 GAME.init = function(){
   for (var i = 0; i<1; i++)
