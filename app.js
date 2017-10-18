@@ -33,25 +33,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
-var reloader = reload(app);
-watch.watchTree(__dirname + "/public", function (f, curr, prev) {
-  if (typeof f == "object" && prev === null && curr === null) {
-  
-  } else
-    reloader.reload();
-});
-watch.watchTree(__dirname + "/sass", function (f, curr, prev) {
-  if (typeof f == "object" && prev === null && curr === null) {
-  
-  } else
-    reloader.reload();
-});
-watch.watchTree(__dirname + "/views", function (f, curr, prev) {
-  if (typeof f == "object" && prev === null && curr === null) {
-  
-  } else
-    reloader.reload();
-});
+if (process.env.NODE_ENV=="development"){
+  console.log("Devvo");
+  var reloader = reload(app);
+  watch.watchTree(__dirname + "/public", function (f, curr, prev) {
+    if (typeof f == "object" && prev === null && curr === null) {
+    
+    } else
+      reloader.reload();
+  });
+  watch.watchTree(__dirname + "/sass", function (f, curr, prev) {
+    if (typeof f == "object" && prev === null && curr === null) {
+    
+    } else
+      reloader.reload();
+  });
+  watch.watchTree(__dirname + "/views", function (f, curr, prev) {
+    if (typeof f == "object" && prev === null && curr === null) {
+    
+    } else
+      reloader.reload();
+  });
+}
 
 
 // catch 404 and forward to error handler
