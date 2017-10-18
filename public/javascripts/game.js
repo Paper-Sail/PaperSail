@@ -116,18 +116,18 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 function Island(){
   
   var ipoints = [];
-  var d = 10+Math.random()*10;
-  var v = 2;
-  var md = 5;
+  var d = 10+Math.random()*40;
+  var v = 6;
+  var md = 10;
   var Md = 100;
   var aoff = Math.random()*TAU
-  for (var a = 0; a < Math.PI*2-0.3; a+=0.2+Math.random()*0.1) {
+  for (var a = 0; a < Math.PI*2-0.15; a+=0.15+Math.random()*0.075) {
     d = Math.max(md,Math.min(Md,d+(Math.random()*2-1)*v));
     ipoints.push(d*Math.cos(a+aoff));
     ipoints.push(d*Math.sin(a+aoff));
   }
   
-  var outergeometry = convexShell(ipoints,12,100);
+  var outergeometry = convexShell(ipoints,12,200);
   var innergeometry = shapeFromPoints(ipoints);
   innergeometry.computeBoundingSphere();
   var geometry = new THREE.Geometry();
@@ -230,7 +230,7 @@ GAME.init = function(){
   boat.position.z = -10;
   boat.scale.set(30,30,30);
   GAME.objects.collisions = [];
-  for (var i = 0; i < 300; i++) {
+  for (var i = 0; i < 500; i++) {
     var pos;
     while (true){
       pos = new THREE.Vector3(
