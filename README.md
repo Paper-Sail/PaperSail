@@ -11,4 +11,4 @@ Created by [Cosmografik](http://cosmografik.fr/) and [Gaeel](http://spaceshipsin
 * Navigate your terminal to the cloned repo
 * `npm install`
 * `npm start`
-* Open [localhost:3000](http://localhost:3000) in your browser
+* Open [localhost:5000](http://localhost:3000) in your browser
