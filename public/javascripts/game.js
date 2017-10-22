@@ -50,6 +50,11 @@ GAME.materials = {
     map: GAME.textures.boat,
     color: 0xFFFFFF
   }),
+  ghost: new THREE.MeshBasicMaterial({
+    map: GAME.textures.boat,
+    transparent: true,
+    color: 0x000000
+  }),
   stars: new THREE.MeshBasicMaterial({
     map: GAME.textures.stars,
     color: 0xFFFFFF,
@@ -139,8 +144,33 @@ MULTI.on('click', function(data){
     maxScale: 20
   });
 });
+MULTI.on('tick', function(data){
+  
+  if (!GAME.hasOwnProperty("ghosts")) return;
+  if (!GAME.ghosts.hasOwnProperty(data.id)){
+    var boat = new THREE.Mesh(rectangle(-15,-15,30,30),GAME.materials.ghost);
+    boat.position.set(data.position.x,data.position.y,0);
+    boat.rotation.z = data.rotation;
+    GAME.scene.add(boat);
+    GAME.ghosts[data.id] = {
+      boat: boat,
+      id: data.id,
+      last: data.time,
+    }
+  } else {
+    var ghost = GAME.ghosts[data.id];
+    if (ghost.last<data.time){
+      ghost.boat.position.set(data.position.x,data.position.y,0);
+      ghost.boat.rotation.z = data.rotation;
+      ghost.last = data.time;
+    }
+  }
+});
 
 GAME.init = function(){
+  GAME.ghosts = {};
+  GAME.tickIn = 0;
+  GAME.tickRate = 5;
   for (var i = 0; i<1; i++)
     FISH.spawn(75,150,30,GAME.materials.fishbody, GAME.materials.fishfin);
   
@@ -330,6 +360,25 @@ GAME.update = function(dt){
   SPARTICLE.update(dt);
   SCROLL.update(dt);
   FISH.update(dt);
+  
+  GAME.tickIn-=GAME.tickRate*dt;
+  if (GAME.tickIn<0){
+    GAME.tickIn = 1;
+    MULTI.send({
+      name: "tick",
+      position: {
+        x: GAME.camera.position.x,
+        y: GAME.camera.position.y
+      },
+      rotation: GAME.camera.rotation.z,
+      direction: {
+        x: GAME.boatvelocity.x,
+        y: GAME.boatvelocity.y
+      }
+    })
+  }
+  
+  
 }
 
 
