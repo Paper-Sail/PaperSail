@@ -1,0 +1,126 @@
+<template>
+  <div id="app" :style="{ 'background-image': 'url(' + footer + ')' }" v-if="homePageActive">
+    <Home v-if="isHomePage" @openTuto="onOpenTuto" />
+    <Tuto v-else :progressValue="progressValue" :showStartButton="this.showStartButton" @onStartClick="go" />
+  </div>
+</template>
+
+<script>
+import Home from './components/home.vue';
+import Tuto from './components/tuto.vue';
+
+export default {
+  components: {
+    Home,
+    Tuto
+  },
+  computed: {
+    footer() {
+      return `${publicPath}/assets/footer.png`;
+    },
+  },
+  methods: {
+    onOpenTuto() {
+      this.isHomePage = false;
+    },
+    go() {
+      this.homePageActive = false;
+      go();
+    }
+  },
+  watch: {
+    isHomePage(val) {
+      if(!val) {
+        this.interval = setInterval(() => {
+          this.progressValue += 5;
+        }, 100);
+      }
+    },
+    progressValue() {
+      if(this.progressValue >= 100) {
+        clearInterval(this.interval);
+        this.showStartButton = true;
+      }
+    }
+  },
+  data() {
+    return {
+      isHomePage: true,
+      progressValue: 0,
+      interval: null,
+      showStartButton: false,
+      homePageActive: true
+    };
+  },
+}
+</script>
+
+<style>
+#app {
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+  height: 100%;
+  height: 100%;
+  background-color: #0e2b5e;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom;
+}
+h1 {
+  color: white;
+  font-weight: 400;
+  font-size: 30px;
+}
+h2, h3, p, ul {
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+}
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.pt {
+  padding-top: 20px;
+}
+.mt {
+  margin-top: 20px;
+}
+.jim {
+  font-family: 'Jim Nightshade', cursive;
+}
+.bitter {
+  font-family: 'Bitter', serif;
+}
+.pic {
+  width: 80%;
+}
+.bottom-btn {
+  color: white;
+  position: absolute;
+  bottom: 0;
+}
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.el-carousel {
+  width: 60%;
+}
+.el-carousel__arrow--right {
+  right: -15px;
+  top : 35%;
+}
+.el-carousel__arrow--left {
+  left: -15px;
+  top : 35%;
+}
+.el-carousel__indicators--outside button{
+  width: 5px;
+  height: 5px;
+  border-radius : 50%;
+}
+</style>
