@@ -5,6 +5,7 @@ var MULTI = {
   
 };
 socket.on('connect', function(){
+  MULTI.id = guid();
 });
 socket.on('event', function(data){
   for (var i = 0; i < MULTI.callbacks.length; i++) {
