@@ -7,12 +7,12 @@ window.addEventListener("load", function(){
   GAME.container =
       document.querySelector('#container');
   
-  initialise(GAME.container);
+  //initialise(GAME.container);
   
   
-  GAME.init();
+  //GAME.init();
   // GO!
-  update();
+  //update();
   
 });
 

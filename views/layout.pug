@@ -3,8 +3,11 @@ html
   head
     title= "Paper Sail"
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/https://fonts.googleapis.com/css?family=Bitter|Jim+Nightshade')
+    link(rel='stylesheet', href='/stylesheets/style.css')
     link(href='/manifest.json')
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    script(src="/javascripts/config.js")
     script(src="/three/build/three.js")
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/utils.js")
@@ -16,7 +19,9 @@ html
     script(src="/javascripts/scroll.js")
     script(src="/javascripts/game.js")
 
-
   body
     block content
     script(src="/reload/reload.js")
+    script(src="/webapp/dist/manifest.js")
+    script(src="/webapp/dist/vendor.js")
+    script(src="/webapp/dist/index.js")
