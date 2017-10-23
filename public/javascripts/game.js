@@ -1,19 +1,47 @@
-const GAME = {};
+const GAME = {
+  addEventListener: function(event, cb){
+    if (GAME.callbacks.hasOwnProperty(event) && typeof(cb)=="function"){
+      GAME.callbacks[event].push(cb);
+    }
+  },
+  callbacks: {
+    ready: [],
+    element: [],
+    update: []
+  }
+};
+
+GAME.loadTracker = {
+  value: 0
+}
+LOADER.trackers.push(GAME.loadTracker)
+
 GAME.boatradius = 8;
 GAME.backgroundcolor = new THREE.Color(0x05267A);
 
 window.addEventListener("load", function(){
   // Get the DOM element to attach to
+  GAME.loadTracker.value = 0;
+  LOADER.refresh();
   GAME.container =
       document.querySelector('#container');
+  GAME.loadTracker.value = 0.25;
+  LOADER.refresh();
+  GAME.element = ENGINE.initialise(container);
+  for (var i = 0; i < GAME.callbacks.element.length; i++) {
+    GAME.callbacks.element[i](GAME.element);
+  }
+  GAME.loadTracker.value = 0.5;
+  LOADER.refresh();
   
-  //initialise(GAME.container);
   
-  
-  //GAME.init();
+  GAME.init();
   // GO!
-  //update();
-  
+  for (var i = 0; i < GAME.callbacks.ready.length; i++) {
+    GAME.callbacks.ready[i](GAME.element);
+  }
+  GAME.loadTracker.value = 1;
+  LOADER.refresh();
 });
 
 
@@ -140,6 +168,21 @@ function Island(){
     mesh: island,
     collision: innergeometry
   }
+}
+
+// Setup update-render loop
+
+GAME.start = function(){
+  GAME.container.appendChild(GAME.element);
+  GAME.clock = new THREE.Clock(true);
+  GAME.tick();
+}
+GAME.tick = function(){
+  var dt = Math.min(1/20,GAME.clock.getDelta());
+  GAME.update(dt);
+  
+  GAME.renderer.render(GAME.scene, GAME.camera);
+  requestAnimationFrame(GAME.tick);
 }
 
 GAME.onClick = function(pos){
@@ -283,7 +326,7 @@ GAME.init = function(){
     //*/
   }
   
-  console.log(GAME.size);
+  
   SCROLL.newLayer(GAME.materials.stars,100,GAME.size,-10);
   
   
@@ -471,7 +514,9 @@ GAME.update = function(dt){
     })
   }
   
-  
+  for (var i = 0; i < GAME.callbacks.update.length; i++) {
+    GAME.callbacks.update[i](dt);
+  }
 }
 
 
