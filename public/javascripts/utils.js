@@ -192,3 +192,18 @@ function guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+
+function iterateCoroutine(coroutine) {
+  var skipTime = 1000/60;
+  function iterator(){
+    var start = Date.now();
+    while (Date.now()-start<skipTime){
+        var status = coroutine.next();
+        if (status.done)
+          return;
+    }
+    requestAnimationFrame(iterator);
+  }
+  iterator();
+}
+

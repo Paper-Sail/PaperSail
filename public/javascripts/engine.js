@@ -36,7 +36,7 @@ ENGINE.initialise = function(container){
   
   
   GAME.scene = new THREE.Scene();
-  //GAME.scene.background = GAME.backgroundcolor;
+  GAME.scene.background = GAME.backgroundcolor;
 
   // Add the camera to the scene.
   GAME.scene.add(GAME.camera);
