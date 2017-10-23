@@ -1,0 +1,1 @@
+var publicPath = window.location.href + 'webapp/';

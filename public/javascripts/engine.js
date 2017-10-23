@@ -1,4 +1,6 @@
-function initialise(container){
+const ENGINE = {}
+
+ENGINE.initialise = function(container){
   
   // Set the scene size.
   const WIDTH = container.clientWidth;
@@ -7,7 +9,6 @@ function initialise(container){
 
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
-  console.log("Aspect:",ASPECT);
   const NEAR = 1;
   const FAR = 1000;
   
@@ -44,7 +45,7 @@ function initialise(container){
 
   // Attach the renderer-supplied
   // DOM element.
-  GAME.container.appendChild(GAME.renderer.domElement);
+  //GAME.container.appendChild(GAME.renderer.domElement);
   
   GAME.renderer.domElement.addEventListener("click",function(e){
     var vector = new THREE.Vector3();
@@ -55,14 +56,5 @@ function initialise(container){
     vector.unproject( GAME.camera );
     GAME.onClick(vector); 
   });
-  GAME.clock = new THREE.Clock(true);
-}
-
-// Setup update-render loop
-function update(){
-  var dt = Math.min(1/20,GAME.clock.getDelta());
-  GAME.update(dt);
-  
-  GAME.renderer.render(GAME.scene, GAME.camera);
-  requestAnimationFrame(update);
+  return GAME.renderer.domElement;
 }
