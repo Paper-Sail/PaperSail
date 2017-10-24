@@ -31,7 +31,6 @@ ENGINE.initialise = function(container){
           NEAR,
           FAR
       );
-
   GAME.camera.position.z = 300;
   
   

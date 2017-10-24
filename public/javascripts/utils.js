@@ -19,6 +19,14 @@ function shapeFromPoints(points){
   return geometry;
 }
 
+function ndhash(){
+  var str = "";
+  for (var i = 0; i < arguments.length; i++) {
+    str += arguments[i]+":";
+  }
+  return (parseInt(md5(str),16)%(1000000000))/1000000000
+}
+
 function rectangle(x,y,w,h) {
   var geometry = new THREE.Geometry();
   geometry.vertices.push(
@@ -181,6 +189,9 @@ get = function (obj, field, nullable) {
 //*/
 Array.prototype.pickRandom = function () {
   return this[Math.floor(Math.random()*this.length)];
+};
+Array.prototype.pickFloaty = function (val) {
+  return this[Math.floor(mod(val,1)*this.length)];
 };
 
 function guid() {
