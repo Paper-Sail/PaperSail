@@ -143,11 +143,14 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 
 
 // Setup update-render loop
-
+GAME.started = false;
 GAME.start = function(){
-  GAME.container.appendChild(GAME.element);
-  GAME.clock = new THREE.Clock(true);
-  GAME.tick();
+  if (!GAME.started){
+    GAME.started = true;
+    GAME.container.appendChild(GAME.element);
+    GAME.clock = new THREE.Clock(true);
+    GAME.tick();
+  }
 }
 GAME.tick = function(){
   var dt = Math.min(1/20,GAME.clock.getDelta());
@@ -268,10 +271,13 @@ GAME.update = function(dt){
   GAME.cursor.material.opacity = ctime*wob;
   //GAME.cursor.scale.set(ctime*wob,ctime*wob,wob);
   var dotty = desiredDirection.dot(currentDirection);
+  if (GAME.target.clone().sub(GAME.camera.position).length()<20){
+    GAME.target = GAME.camera.position.clone();
+  }
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
       
       
-      GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*150*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
+      GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*25*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
   } else {
     GAME.boatvelocity.sub(GAME.boatvelocity.clone().multiplyScalar(dt*2));
   }
@@ -407,6 +413,7 @@ GAME.update = function(dt){
   SPARTICLE.update(dt);
   SCROLL.update(dt);
   FISH.update(dt);
+  WORLD.update(dt);
   
   for (var id in GAME.ghosts) {
     if (GAME.ghosts.hasOwnProperty(id )) {

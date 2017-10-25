@@ -11,7 +11,7 @@ kern = [
 ]
 
 const WORLD = {
-  regionSize: 2000,
+  regionSize: 300,
   init: function(){
     WORLD.world = new THREE.Object3D();
     WORLD.regions = [];
@@ -35,24 +35,45 @@ const WORLD = {
     }
     LOADER.trackers.push(tracker);
     LOADER.refresh();
-    iterateCoroutine(WORLD.buildWorld(region, tracker));
+    iterateCoroutine(WORLD.buildWorld(region, tracker), 10, 1);
+  },
+  buildRegionNoTrack: function(x, y){
+    var region = {
+      three: new THREE.Object3D(),
+      x: x,
+      y: y
+    }
+    //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
+    WORLD.world.add(region.three);
+    WORLD.regions.push(region);
+    iterateCoroutine(WORLD.buildWorld(region), 10, 1);
+  },
+  getRegion: function(x,y) {
+    for (var i = 0; i < WORLD.regions.length; i++) {
+      if (WORLD.regions[i].x==x && WORLD.regions[i].y==y)
+        return WORLD.regions[i];
+    }
   },
   buildWorld: function*(region, tracker) {
-    var islands = 50
+    var islands = 15
     var rs = WORLD.regionSize;
-    var back = new THREE.Mesh(rectangle(-rs/2+region.x*rs,-rs/2+region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
-      color: new THREE.Color( parseInt(  md5(ndhash(region.x,region.y)).substr(0,6),16))
+    var back = new THREE.Mesh(rectangle(region.x*rs,region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
+      color: GAME.backgroundcolor
     }));
     back.position.z = -100;
     region.three.add(back);
     for (var i = 0; i < islands; i++) {
       WORLD.putIsland(region,i);
-      tracker.value = i/islands;
-      LOADER.refresh()
+      if (tracker){
+        tracker.value = i/islands;
+        LOADER.refresh()
+      }
       yield;
     }
-    tracker.value = 1;
-    LOADER.refresh()
+    if (tracker){
+      tracker.value = 1;
+      LOADER.refresh();
+    }
   },
   putIsland: function(region,seed){
     var rs = WORLD.regionSize;
@@ -62,7 +83,7 @@ const WORLD = {
     function rand(){
       return ndhash(region.x, region.y, n())
     }
-    var pos = new THREE.Vector2(rand()*rs-rs/2+region.x*rs,rand()*rs-rs/2+region.y*rs);
+    var pos = new THREE.Vector2(rand()*rs+region.x*rs,rand()*rs+region.y*rs);
     var island = Island(rand());
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
@@ -103,6 +124,27 @@ const WORLD = {
       island.mesh.add(deco);
     }
     //*/
+  },
+  update: function(){
+    var curx = Math.floor(GAME.camera.position.x/WORLD.regionSize);
+    var cury = Math.floor(GAME.camera.position.y/WORLD.regionSize);
+    WORLD.regions = WORLD.regions.filter(function(region){
+      var valid = region.x>=curx-1 && region.x<=curx+1 && region.y>=cury-1 && region.y<=cury+1;
+      if (!valid){
+        //region.three.children[0].material.color = new THREE.Color(0xFF0000);
+        WORLD.world.remove(region.three);
+      } else {
+        //region.three.children[0].material.color = new THREE.Color(0x00FF00);
+      }
+      return valid;
+    });
+    for (var i = 0; i < kern.length; i++) {
+      var cx = kern[i][0]+curx;
+      var cy = kern[i][1]+cury;
+      if (!WORLD.getRegion(cx, cy)){
+        WORLD.buildRegionNoTrack(cx,cy);
+      }
+    }
   }
 }
 

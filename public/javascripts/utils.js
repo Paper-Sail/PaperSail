@@ -204,8 +204,9 @@ function guid() {
     s4() + '-' + s4() + s4() + s4();
 }
 
-function iterateCoroutine(coroutine) {
-  var skipTime = 1000/60;
+function iterateCoroutine(coroutine, skipTime, pauseTime) {
+  var skipTime = skipTime ? skipTime : 1000/60;
+  var pauseTime = pauseTime ? pauseTime : 0;
   function iterator(){
     var start = Date.now();
     while (Date.now()-start<skipTime){
@@ -213,7 +214,11 @@ function iterateCoroutine(coroutine) {
         if (status.done)
           return;
     }
-    requestAnimationFrame(iterator);
+    if (pauseTime>0){
+      setTimeout(iterator, )
+    } else {
+      requestAnimationFrame(iterator);
+    }
   }
   iterator();
 }
