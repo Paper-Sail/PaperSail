@@ -12,7 +12,7 @@ ENGINE.initialise = function(container){
   const NEAR = 1;
   const FAR = 1000;
   
-  const GAMESIZE = 250;
+  const GAMESIZE = 500;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
   const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
   GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
@@ -35,7 +35,7 @@ ENGINE.initialise = function(container){
   
   
   GAME.scene = new THREE.Scene();
-  GAME.scene.background = GAME.backgroundcolor;
+  //GAME.scene.background = GAME.backgroundcolor;
 
   // Add the camera to the scene.
   GAME.scene.add(GAME.camera);

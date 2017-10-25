@@ -1,18 +1,33 @@
+kern = [
+  [-1,-1],
+  [-1,0],
+  [-1,1],
+  [0,-1],
+  [0,0],
+  [0,1],
+  [1,-1],
+  [1,0],
+  [1,1]
+]
+
 const WORLD = {
   regionSize: 2000,
   init: function(){
     WORLD.world = new THREE.Object3D();
     WORLD.regions = [];
     GAME.scene.add(WORLD.world);
-    WORLD.buildRegion(0,0);
+    for (var i = 0; i < kern.length; i++) {
+      var p = kern[i]
+      WORLD.buildRegion(p[0],p[1]);
+    }
   },
   buildRegion: function(x, y){
     var region = {
       three: new THREE.Object3D(),
-      x: 0,
-      y: 0
+      x: x,
+      y: y
     }
-    region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
+    //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
     WORLD.world.add(region.three);
     WORLD.regions.push(region);
     var tracker = {
@@ -23,10 +38,16 @@ const WORLD = {
     iterateCoroutine(WORLD.buildWorld(region, tracker));
   },
   buildWorld: function*(region, tracker) {
-    var islands = 250
-    for (var i = 0; i < 250; i++) {
+    var islands = 50
+    var rs = WORLD.regionSize;
+    var back = new THREE.Mesh(rectangle(-rs/2+region.x*rs,-rs/2+region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
+      color: new THREE.Color( parseInt(  md5(ndhash(region.x,region.y)).substr(0,6),16))
+    }));
+    back.position.z = -100;
+    region.three.add(back);
+    for (var i = 0; i < islands; i++) {
       WORLD.putIsland(region,i);
-      tracker.value = i/500;
+      tracker.value = i/islands;
       LOADER.refresh()
       yield;
     }
@@ -34,13 +55,14 @@ const WORLD = {
     LOADER.refresh()
   },
   putIsland: function(region,seed){
+    var rs = WORLD.regionSize;
     function n(){
       return seed++;
     }
     function rand(){
       return ndhash(region.x, region.y, n())
     }
-    var pos = new THREE.Vector2(rand()*1000-500,rand()*1000-500);
+    var pos = new THREE.Vector2(rand()*rs-rs/2+region.x*rs,rand()*rs-rs/2+region.y*rs);
     var island = Island(rand());
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);

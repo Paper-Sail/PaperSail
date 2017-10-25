@@ -271,7 +271,7 @@ GAME.update = function(dt){
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
       
       
-      GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*15*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
+      GAME.boatvelocity.add(currentDirection.clone().applyAxisAngle(forward,+TAU/4).multiplyScalar(dt*150*Math.max(0,dotty))).sub(GAME.boatvelocity.clone().multiplyScalar(dt*1));
   } else {
     GAME.boatvelocity.sub(GAME.boatvelocity.clone().multiplyScalar(dt*2));
   }
