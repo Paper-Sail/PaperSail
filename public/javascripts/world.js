@@ -12,6 +12,7 @@ kern = [
 
 const WORLD = {
   regionSize: 300,
+  fogDensity: 12,
   init: function(){
     WORLD.world = new THREE.Object3D();
     WORLD.regions = [];
@@ -28,6 +29,7 @@ const WORLD = {
       y: y
     }
     //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
+    WORLD.makeFog(region);
     WORLD.world.add(region.three);
     WORLD.regions.push(region);
     var tracker = {
@@ -44,6 +46,7 @@ const WORLD = {
       y: y
     }
     //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
+    WORLD.makeFog(region);
     WORLD.world.add(region.three);
     WORLD.regions.push(region);
     iterateCoroutine(WORLD.buildWorld(region), 10, 1);
@@ -134,7 +137,19 @@ const WORLD = {
         //region.three.children[0].material.color = new THREE.Color(0xFF0000);
         WORLD.world.remove(region.three);
       } else {
-        //region.three.children[0].material.color = new THREE.Color(0x00FF00);
+        for (var fogchunk in region.fog) {
+          if (region.fog.hasOwnProperty(fogchunk)) {
+            var chunk = region.fog[fogchunk];
+            var dx = GAME.camera.position.x - chunk.x;
+            var dy = GAME.camera.position.y - chunk.y;
+            var d2 = dx*dx+dy*dy;
+            var md = (WORLD.regionSize/WORLD.fogDensity)*2.5;
+            if (d2<md*md){
+              delete region.fog[fogchunk];
+              region.three.remove(chunk.three);
+            }
+          }
+        }
       }
       return valid;
     });
@@ -143,6 +158,32 @@ const WORLD = {
       var cy = kern[i][1]+cury;
       if (!WORLD.getRegion(cx, cy)){
         WORLD.buildRegionNoTrack(cx,cy);
+      }
+    }
+  },
+  makeFog: function(region){
+    region.fog = {};
+    for(var i = 0; i<WORLD.fogDensity; i++){
+      for (var j=0; j<WORLD.fogDensity; j++){
+        
+        var chunk = {};
+        chunk.x = ((i+0.5)/WORLD.fogDensity+region.x)*WORLD.regionSize;
+        chunk.y = ((j+0.5)/WORLD.fogDensity+region.y)*WORLD.regionSize;
+        region.fog[i+"-"+j] = chunk;
+        
+        chunk.three = new THREE.Mesh(
+          rectangle(
+            (i/WORLD.fogDensity+region.x)*WORLD.regionSize,
+            (j/WORLD.fogDensity+region.y)*WORLD.regionSize,
+            1/WORLD.fogDensity*WORLD.regionSize,
+            1/WORLD.fogDensity*WORLD.regionSize
+          ),
+          new THREE.MeshBasicMaterial({
+            color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
+          })
+        );
+        chunk.three.position.z = 10;
+        region.three.add(chunk.three);
       }
     }
   }
