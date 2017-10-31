@@ -19,7 +19,7 @@ LOADER.trackers.push(GAME.loadTracker)
 GAME.boatradius = 8;
 GAME.backgroundcolor = new THREE.Color(0x05267A);
 
-function go() {
+window.addEventListener("load", function() {
   // Get the DOM element to attach to
   GAME.loadTracker.value = 0;
   LOADER.refresh();
@@ -42,7 +42,7 @@ function go() {
   }
   GAME.loadTracker.value = 1;
   LOADER.refresh();
-};
+});
 
 GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
