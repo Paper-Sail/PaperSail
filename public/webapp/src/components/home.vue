@@ -1,10 +1,12 @@
 <template>
   <div class="home flex">
-    <h1 class="pt jim">A #VeryVeryShort<br>exploration game<br>by <a href="https://twitter.com/cosmografik" target="_blank">Cosmografik</a> & <a href="https://twitter.com/_gaeel_" target="_blank">Gaeel</a></h1>
+    <h1 class="pt jim">A #VeryVeryShort exploration game<br>by <a href="https://twitter.com/cosmografik" target="_blank">Cosmografik</a> & <a href="https://twitter.com/_gaeel_" target="_blank">Gaeel</a></h1>
     <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
     <img class="pic" :src="`${assetsUrl}home_picture.gif`">
     <a class="start" @click="openTuto" :style="{ 'background-image': 'url(' + start + ')' }"></a>
-    <a class="bottom-btn bitter" @click="openAbout">À PROPOS</a>
+    <div class="footer">
+      <a class="bottom-btn bitter" @click="openAbout">À PROPOS</a>
+    </div>
     <About ref="about"/>
   </div>
 </template>
@@ -37,6 +39,10 @@ export default {
 </script>
 <style lang="scss" scoped>
   .home {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 90%;
     h1 a {
       text-decoration: underline;
       color: white;
@@ -47,12 +53,14 @@ export default {
     .start {
       display: block;
       position: absolute;
-      bottom: 60px; 
+      bottom: 15%; 
       width: 80px;
       height: 80px;
       background-repeat: no-repeat;
       background-size: contain;
       margin: 40px auto;
+      left: 50%;
+      margin-left: -40px;
       &:before, &:after {
         content: "";
         display: block;
@@ -74,9 +82,6 @@ export default {
         margin-top: -36px;
         opacity: .5;
       }
-    }
-    .bottom-btn {
-      margin-bottom: 10px;
     }
   }
 </style>
