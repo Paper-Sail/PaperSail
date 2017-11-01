@@ -186,13 +186,14 @@ GAME.onClick = function(pos){
 }
 
 MULTI.on('click', function(data){
-  SPARTICLE.spawn(new THREE.Vector3(data.position.x, data.position.y, -1),GAME.materials.splash,{
+  GAMEINFO.log("click\t"+data.id.substr(0,6)+": "+Math.floor(data.position.x)+":"+Math.floor(data.position.y));
+  SPARTICLE.spawn(new THREE.Vector3(data.position.x, data.position.y, -10),GAME.materials.splash,{
     minScale: 0,
     maxScale: 20
   });
 });
 MULTI.on('tick', function(data){
-  
+  GAMEINFO.log("tick\t"+data.id.substr(0,6)+": "+Math.floor(data.position.x)+":"+Math.floor(data.position.y));
   if (!GAME.hasOwnProperty("ghosts")) return;
   if (!GAME.ghosts.hasOwnProperty(data.id)){
     var boat = new THREE.Mesh(rectangle(-15,-15,30,30),GAME.materials.ghost);
@@ -292,7 +293,7 @@ GAME.update = function(dt){
     var cdx = GAME.camera.position.x-collision.center.x;
     var cdy = GAME.camera.position.y-collision.center.y;
     var cd = (cdx*cdx+cdy*cdy);
-    if (cd<Math.pow(collision.radius+GAME.boatradius,2)){
+    if (cd<Math.pow(collision.radius+GAME.boatradius,3)){
       for (var ci = 0; ci < collision.points.length; ci++) {
         var point = collision.position.clone().add(collision.points[ci]);
         var dx = GAME.camera.position.x-point.x;
@@ -308,7 +309,7 @@ GAME.update = function(dt){
       }
     }
   }
-  pushVelocity.normalize().multiplyScalar(100*dt*(maxPower/GAME.boatradius));
+  pushVelocity.normalize().multiplyScalar(500*dt*(maxPower/GAME.boatradius));
   GAME.boatvelocity.add(pushVelocity);
   var curAngle = Math.atan2(currentDirection.y, currentDirection.x);
   var desiAngle = Math.atan2(desiredDirection.y, desiredDirection.x);
@@ -424,6 +425,7 @@ GAME.update = function(dt){
       var tgtDirection = new THREE.Vector2(Math.cos(ghost.rotation), Math.sin(ghost.rotation));
       curDirection.lerp(tgtDirection,dt).normalize();
       ghost.boat.rotation.z = Math.atan2(curDirection.y, curDirection.x);
+      WORLD.doFog(ghost.position.x, ghost.position.y);
     }
   }
   

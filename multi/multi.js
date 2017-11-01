@@ -17,7 +17,7 @@ multi.fogDensity = fogDensity;
 function Player(client) {
   players.push(this);
   var that = this;
-  //this.client = client;
+  this.client = client;
   client.on('event', function(data){
     if (data.name && data.name=="tick"){
       that.id = data.id;
@@ -25,15 +25,10 @@ function Player(client) {
       that.direction = data.direction;
       that.rotation = data.rotation;
     }
-    for (var i = 0; i < players.length; i++) {
-      console.log(players[i]);
-    }
     
     for (var i = 0; i < players.length; i++) {
       var player = players[i];
-      if (player!=that){
-        client.emit('event', data);
-      }
+      player.client.emit('event', data);
     }
   });
   client.on('disconnect', function(){
