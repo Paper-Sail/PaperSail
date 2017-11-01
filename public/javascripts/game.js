@@ -186,14 +186,14 @@ GAME.onClick = function(pos){
 }
 
 MULTI.on('click', function(data){
-  GAMEINFO.log("click\t"+data.id.substr(0,6)+": "+Math.floor(data.position.x)+":"+Math.floor(data.position.y));
+  //GAMEINFO.log("click\t"+data.id.substr(0,6)+": "+Math.floor(data.position.x)+":"+Math.floor(data.position.y));
   SPARTICLE.spawn(new THREE.Vector3(data.position.x, data.position.y, -10),GAME.materials.splash,{
     minScale: 0,
     maxScale: 20
   });
 });
 MULTI.on('tick', function(data){
-  GAMEINFO.log("tick\t"+data.id.substr(0,6)+": "+Math.floor(data.position.x)+":"+Math.floor(data.position.y));
+  //GAMEINFO.log("tick\t"+data.id.substr(0,6)+": "+Math.floor(data.position.x)+":"+Math.floor(data.position.y));
   if (!GAME.hasOwnProperty("ghosts")) return;
   if (!GAME.ghosts.hasOwnProperty(data.id)){
     var boat = new THREE.Mesh(rectangle(-15,-15,30,30),GAME.materials.ghost);
@@ -223,9 +223,12 @@ GAME.init = function(){
   GAME.ghosts = {};
   GAME.tickIn = 0;
   GAME.tickRate = 2;
-  for (var i = 0; i<1; i++)
-    FISH.spawn(75,150,30,GAME.materials.fishbody, GAME.materials.fishfin);
-  
+  var fishies = 4
+  for (var i = 0; i<fishies; i++){
+    var fsize = 1 - 0.7*(i/fishies)
+    GAMEINFO.log("Spawn fish w/size "+fsize);
+    FISH.spawn(75*fsize,150*fsize,30,GAME.materials.fishbody, GAME.materials.fishfin);
+  }
   GAME.objects = [];
   GAME.splashTime = 1;
   GAME.fairyTime = 1;
@@ -319,7 +322,8 @@ GAME.update = function(dt){
   avalue = mod(avalue+TAU/2,TAU)-TAU/2
   var sign = -Math.sign(avalue);
   dotty = desiredDirection.clone().normalize().dot(currentDirection.clone().normalize());
-  var size = Math.min(0.5,Math.sqrt((0.5-dotty/2)));
+  var size = Math.min(0.5,Math.sqrt((0.5-Math.min(1,dotty)/2)));
+  var oldrot = GAME.camera.rotation.z;
   if (GAME.target.clone().sub(GAME.camera.position).length()>10){
     GAME.boatangularvelocity += sign*dt*size*3 - GAME.boatangularvelocity*dt*3;
     var lerpy = 0;//1-(0.5-dotty/2);
@@ -328,6 +332,11 @@ GAME.update = function(dt){
   } else {
     GAME.boatangularvelocity +=  - GAME.boatangularvelocity*dt*3;  
     GAME.camera.rotation.z += GAME.boatangularvelocity*dt*1.5
+  }
+  GAMEINFO.display(GAME.camera.rotation.z);
+  if (isNaN(GAME.camera.rotation.z)){
+    GAMEINFO.log("PANIC! oldrot="+oldrot);
+    GAME.camera.rotation.z = oldrot;
   }
   
   

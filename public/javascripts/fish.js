@@ -42,7 +42,8 @@ const FISH = {
         new THREE.Vector2(1,1-i*uvy)
       ];
     }
-    var position = new THREE.Vector3(400,0,0).applyAxisAngle(forward,Math.random()*TAU);
+    var position = new THREE.Vector3(100+Math.random()*300,0,0).applyAxisAngle(forward,Math.random()*TAU);
+    GAMEINFO.log("Fish spawned at position ("+Math.floor(position.x)+","+Math.floor(position.y)+")");
     var fins = new THREE.Mesh(rectangle(-width/2,-width/4,width,width/2), finmaterial);
     var fishy = {
       woboff: Math.random()*TAU,
@@ -57,7 +58,7 @@ const FISH = {
       speed: 10,
       time: 0,
       start: 0,
-      lastseen: 0,
+      lastseen: Math.random()*25,
       unseen: true,
       returntime: 25,
       splashTime: 1,
@@ -67,7 +68,7 @@ const FISH = {
       length: length,
       seglength: length/segments,
       segments: segments,
-      fins: fins
+      fins: fins,
     };
     fishy.mesh.position.z = -5;
     fishy.mesh.frustumCulled = false;

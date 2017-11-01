@@ -10,13 +10,17 @@ const GAMEINFO = {
   },
   display: function(str){
     GAMEINFO.head = str;
+    GAMEINFO.refresh();
   },
   refresh: function(){
     var curstr = "";
     for (var i = 0; i < GAMEINFO.cur.length; i++) {
       curstr += GAMEINFO.cur[i]+"\n";
     }
-    document.getElementById("gameinfo").innerText=GAMEINFO.head+"\n"+curstr;
+    var gielem = document.getElementById("gameinfo");
+    if (gielem){
+        gielem.innerText=GAMEINFO.head+"\n"+curstr;
+    }
   }
 }
 
