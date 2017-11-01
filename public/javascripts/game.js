@@ -155,7 +155,10 @@ GAME.tick = function(){
   GAME.update(dt);
   
   GAME.renderer.render(GAME.scene, GAME.camera);
-  requestAnimationFrame(GAME.tick);
+  if (document.hasFocus())
+    requestAnimationFrame(GAME.tick);
+  else
+    setTimeout(GAME.tick, 300);
 }
 
 GAME.onClick = function(pos){

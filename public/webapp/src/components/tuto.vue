@@ -57,6 +57,7 @@
     },
     methods: {
       go() {
+        GAME.start();
         this.$emit('onStartClick');
       },
       changeSlide(index) {
