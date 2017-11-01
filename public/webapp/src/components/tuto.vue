@@ -2,7 +2,7 @@
   <div class="tuto pt flex">
     <h3 v-if="firstSteps" class="jim">Fabriquez votre voile</h3>
     <h3 v-else class="jim">Quelques Conseils...</h3>
-      <el-carousel trigger="click" height="270px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
+      <el-carousel :interval="4000" trigger="click" height="270px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <img class="pic" :src="`${assetsUrl}${item.url}`">
         <p class="bitter sentence" v-html="item.sentence"></p>
@@ -74,6 +74,10 @@
 
 <style lang="scss" scoped>
   .tuto {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 90%;
     .loading {
       margin-bottom: 20px;
       color: white;

@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-if="homePageActive">
     <Home v-if="isHomePage" @openTuto="onOpenTuto" :style="{ 'background-image': 'url(' + footer + ')' }" />
-    <Tuto v-else :progressValue="progressValue" :showStartButton="this.showStartButton" @onStartClick="go" />
+    <Tuto v-else :progressValue="progressValue" :showStartButton="this.showStartButton" @onStartClick="go" :style="{ 'background-image': 'url(' + footer + ')' }" />
   </div>
 </template>
 
@@ -58,6 +58,15 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Jim+Nightshade');
 @import url('https://fonts.googleapis.com/css?family=Bitter');
+
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
 
 #app {
   font-family: Helvetica, sans-serif;
