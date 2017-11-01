@@ -32,7 +32,7 @@ export default {
     isHomePage(val) {
       if(!val) {
         this.interval = setInterval(() => {
-          this.progressValue += 5;
+          this.progressValue = LOADER.completion*100;
         }, 100);
       }
     },
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       isHomePage: true,
-      progressValue: 0,
+      progressValue: LOADER.completion*100,
       interval: null,
       showStartButton: false,
       homePageActive: true
