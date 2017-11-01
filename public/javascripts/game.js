@@ -197,6 +197,10 @@ MULTI.on('tick', function(data){
   if (!GAME.hasOwnProperty("ghosts")) return;
   if (!GAME.ghosts.hasOwnProperty(data.id)){
     var boat = new THREE.Mesh(rectangle(-15,-15,30,30),GAME.materials.ghost);
+    var boatglow = new THREE.Mesh(rectangle(-0.6*30,-0.9*30,1.2*30,1.8*30),GAME.materials.boatglow);
+    boat.add(boatglow);
+    boatglow.position.set(0,0,-0.1);
+    console.log(boatglow);
     boat.position.set(data.position.x,data.position.y,0);
     boat.rotation.z = data.rotation;
     GAME.scene.add(boat);
