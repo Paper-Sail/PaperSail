@@ -1,7 +1,7 @@
 <template>
   <div class="tuto pt flex">
-    <h3 v-if="firstSteps" class="jim">Fabriquez<br>votre voile</h3>
-    <h3 v-else class="jim">Quelques<br>conseils...</h3>
+    <h3 v-if="firstSteps" class="jim">Fabriquez votre voile</h3>
+    <h3 v-else class="jim">Quelques onseils...</h3>
       <el-carousel trigger="click" height="270px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <img class="pic" :src="`${assetsUrl}${item.url}`">
@@ -29,27 +29,27 @@
     items() {
       return [
         {
-          url:"tuto_1.png",
+          url:"tuto_1.gif",
           sentence:"-1-<br>Pliez un bout de papier"
         },
         {
-          url:"tuto_2.png",
+          url:"tuto_2.gif",
           sentence:"-2-<br>Découpez comme ceci"
         },
         {
-          url:"tuto_3.png",
+          url:"tuto_3.gif",
           sentence:"-3-<br>Placez le sur l'écran"
         },
         {
-          url:"tuto_4.png",
+          url:"tuto_4.gif",
           sentence:"-4-<br>Ajoutez à l'écran d'accueil"
         },
         {
-          url:"tuto_5.png",
+          url:"tuto_5.gif",
           sentence:"-5-<br>Eteignez la lumière"
         },
         {
-          url:"tuto_6.png",
+          url:"tuto_6.gif",
           sentence:"-6-<br>Explorez seul ou à plusieurs"
         }
       ]

@@ -72,7 +72,7 @@ export default {
 h1, h3 {
   color: white;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 25px;
 }
 h2  {
   color: white;
