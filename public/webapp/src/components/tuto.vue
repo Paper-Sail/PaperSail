@@ -79,7 +79,6 @@
     background-size: contain;
     background-position: 0 90%;
     .loading {
-      margin-bottom: 20px;
       color: white;
       position: absolute;
       bottom: 0;
