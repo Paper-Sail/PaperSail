@@ -36,7 +36,7 @@
 
 <style lang="scss">
 .dialog {
-  background: #050f1e;
+  background: rgba(0, 0, 0, 0.9);
   color: white;
   padding-top: 0;
   .el-dialog__body {
@@ -51,7 +51,7 @@
 }
 .logo {
   width: 100%;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 .credits {
   margin-top: 50px;

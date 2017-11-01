@@ -8,6 +8,6 @@ Vue.use(ElementUI)
 Vue.mixin(Utils)
 
 new Vue({
-  el: '#tuto',
+  el: '#webapp',
   render: h => h(App)
 })

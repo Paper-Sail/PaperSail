@@ -12,12 +12,12 @@
   }
   </style>
   <script>
-    publicPath = window.location.href;
+    publicPath = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
   </script>
 </head>
 
 <body>
-  <div id="tuto"></div>
+  <div id="webapp"></div>
 </body>
 
 </html>

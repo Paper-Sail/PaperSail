@@ -1,7 +1,8 @@
 <template>
   <div class="tuto pt flex">
-    <h1 class="jim">Fabriquez<br>votre voile</h1>
-      <el-carousel trigger="click" height="250px" indicator-position="outside" arrow="always" :autoplay="true">
+    <h3 v-if="firstSteps" class="jim">Fabriquez<br>votre voile</h3>
+    <h3 v-else class="jim">Quelques<br>conseils...</h3>
+      <el-carousel trigger="click" height="270px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <img class="pic" :src="`${assetsUrl}${item.url}`">
         <p class="bitter sentence" v-html="item.sentence"></p>
@@ -57,8 +58,16 @@
     methods: {
       go() {
         this.$emit('onStartClick');
+      },
+      changeSlide(index) {
+        this.firstSteps = index <= 2;
       }
-    }
+    },
+    data() {
+      return {
+        firstSteps: true
+      };
+    },
  }
 </script>
 

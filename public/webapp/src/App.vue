@@ -56,6 +56,9 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Jim+Nightshade');
+@import url('https://fonts.googleapis.com/css?family=Bitter');
+
 #app {
   font-family: Helvetica, sans-serif;
   text-align: center;
@@ -66,19 +69,24 @@ export default {
   background-size: contain;
   background-position: bottom;
 }
-h1 {
+h1, h3 {
   color: white;
   font-weight: 400;
   font-size: 30px;
 }
-h2, h3, p, ul {
+h2  {
   color: white;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 20px;
+}
+p {
+  font-size: 18px;
+  color: white;
 }
 ul {
   list-style-type: none;
   padding-left: 0;
+  color: white;
 }
 
 .pt {
