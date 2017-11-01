@@ -4,11 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var reload = require('reload')
-var watch = require('watch')
-
+var reload = require('reload');
+var watch = require('watch');
+var multiindex = require('./routes/multi');
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -31,10 +30,9 @@ app.use(require('node-sass-middleware')({
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/multi', multiindex);
 
 if (process.env.NODE_ENV=="development"){
-  console.log("Devvo");
   var reloader = reload(app);
   watch.watchTree(__dirname + "/public", function (f, curr, prev) {
     if (typeof f == "object" && prev === null && curr === null) {
