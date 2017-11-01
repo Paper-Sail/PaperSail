@@ -140,11 +140,11 @@ ul {
 }
 .el-carousel__arrow--right {
   right: -15px;
-  top : 35%;
+  top : 200px;
 }
 .el-carousel__arrow--left {
   left: -15px;
-  top : 35%;
+  top : 200px;
 }
 .el-carousel__indicators--outside button{
   width: 5px;

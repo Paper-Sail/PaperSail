@@ -9,7 +9,7 @@
       </el-carousel-item>
     </el-carousel>
     <h3 class="jim loading" v-if="showStartButton" @click="go">GO !</h3>
-    <div v-else class="loading">
+    <div v-else class="loading footer">
       <div class="bitter">CHARGEMENT</div>
       <progress max="100" :value="progressValue"></progress>
     </div>
@@ -83,10 +83,12 @@
       color: white;
       position: absolute;
       bottom: 0;
+      background: black;
     }
     .sentence {
       opacity: .7;
       font-size: 20px;
+      min-height: 80px;
     }
     progress {
       color: white;
