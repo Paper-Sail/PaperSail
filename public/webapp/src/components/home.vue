@@ -39,6 +39,10 @@ export default {
 </script>
 <style lang="scss" scoped>
   .home {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 90%;
     h1 a {
       text-decoration: underline;
       color: white;
@@ -49,7 +53,7 @@ export default {
     .start {
       display: block;
       position: absolute;
-      bottom: 60px; 
+      bottom: 15%; 
       width: 80px;
       height: 80px;
       background-repeat: no-repeat;

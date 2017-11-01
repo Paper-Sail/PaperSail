@@ -1,6 +1,6 @@
 <template>
-  <div id="app" :style="{ 'background-image': 'url(' + footer + ')' }" v-if="homePageActive">
-    <Home v-if="isHomePage" @openTuto="onOpenTuto" />
+  <div id="app" v-if="homePageActive">
+    <Home v-if="isHomePage" @openTuto="onOpenTuto" :style="{ 'background-image': 'url(' + footer + ')' }" />
     <Tuto v-else :progressValue="progressValue" :showStartButton="this.showStartButton" @onStartClick="go" />
   </div>
 </template>
@@ -64,10 +64,11 @@ export default {
   text-align: center;
   height: 100%;
   height: 100%;
-  background-color: #05267A;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: bottom;
+  background: #05267a; /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover, #05267a 20%, #000000 99%); /* FF3.6-15 */
+  background: -webkit-radial-gradient(center, ellipse cover, #05267a 20%,#000000 99%); /* Chrome10-25,Safari5.1-6 */
+  background: radial-gradient(ellipse at center, #05267a 20%,#000000 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05267a', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 h1, h3 {
   color: white;
@@ -110,6 +111,8 @@ ul {
   left: 0;
   width: 100%;
   color: white;
+  background: black;
+  height: 10%;
   .bottom-btn {
     margin-bottom: 10px;
     display: block;
