@@ -90,7 +90,7 @@ const WORLD = {
     var island = Island(rand());
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
-    island.position = new THREE.Vector3(pos.x,pos.y, 0);
+    island.position = new THREE.Vector3(pos.x,pos.y, 1);
     
     GAME.objects.collisions.push({
       center: pos.clone().add(island.collision.boundingSphere.center),
@@ -109,7 +109,7 @@ const WORLD = {
       GAME.materials.glow
     );
     island.mesh.add(glow);
-    glow.position.z = -2;
+    glow.position.z = -4;
     region.three.add(island.mesh);
     //*
     for (var il=0; il<rand()*3; il++){
@@ -128,6 +128,24 @@ const WORLD = {
     }
     //*/
   },
+  doFog: function(px, py){
+    for (var i = 0; i < WORLD.regions.length; i++) {
+      var region = WORLD.regions[i];
+      for (var fogchunk in region.fog) {
+        if (region.fog.hasOwnProperty(fogchunk)) {
+          var chunk = region.fog[fogchunk];
+          var dx = px - chunk.x;
+          var dy = py - chunk.y;
+          var d2 = dx*dx+dy*dy;
+          var md = (WORLD.regionSize/WORLD.fogDensity)*2.5;
+          if (d2<md*md){
+            delete region.fog[fogchunk];
+            region.three.remove(chunk.three);
+          }
+        }
+      }
+    }
+  },
   update: function(){
     var curx = Math.floor(GAME.camera.position.x/WORLD.regionSize);
     var cury = Math.floor(GAME.camera.position.y/WORLD.regionSize);
@@ -137,19 +155,7 @@ const WORLD = {
         //region.three.children[0].material.color = new THREE.Color(0xFF0000);
         WORLD.world.remove(region.three);
       } else {
-        for (var fogchunk in region.fog) {
-          if (region.fog.hasOwnProperty(fogchunk)) {
-            var chunk = region.fog[fogchunk];
-            var dx = GAME.camera.position.x - chunk.x;
-            var dy = GAME.camera.position.y - chunk.y;
-            var d2 = dx*dx+dy*dy;
-            var md = (WORLD.regionSize/WORLD.fogDensity)*2.5;
-            if (d2<md*md){
-              delete region.fog[fogchunk];
-              region.three.remove(chunk.three);
-            }
-          }
-        }
+        WORLD.doFog(GAME.camera.position.x,GAME.camera.position.y);
       }
       return valid;
     });
@@ -179,10 +185,12 @@ const WORLD = {
             1/WORLD.fogDensity*WORLD.regionSize
           ),
           new THREE.MeshBasicMaterial({
+            opacity: 0.65,
+            transparent: true,
             color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
         );
-        chunk.three.position.z = 10;
+        chunk.three.position.z = -3;
         region.three.add(chunk.three);
       }
     }

@@ -1,0 +1,6 @@
+doctype html
+html
+  head
+    title= "Paper Sail"
+  body
+    pre #{JSON.stringify(dump, function(key, value){ if (key=="client") return "client"; else return value }, "\t")}
