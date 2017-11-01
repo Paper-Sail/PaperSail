@@ -1,7 +1,7 @@
 <template>
   <div class="tuto pt flex">
     <h3 v-if="firstSteps" class="jim">Fabriquez votre voile</h3>
-    <h3 v-else class="jim">Quelques onseils...</h3>
+    <h3 v-else class="jim">Quelques Conseils...</h3>
       <el-carousel trigger="click" height="270px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <img class="pic" :src="`${assetsUrl}${item.url}`">

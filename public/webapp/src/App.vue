@@ -64,7 +64,7 @@ export default {
   text-align: center;
   height: 100%;
   height: 100%;
-  background-color: #0e2b5e;
+  background-color: #05267A;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: bottom;
