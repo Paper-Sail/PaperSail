@@ -4,7 +4,7 @@ var MULTI = {
   id: guid()
 };
 
-GAMEINFO.display("My ID: "+MULTI.id);
+GAMEINFO.display("id",MULTI.id);
 
 socket.on('connect', function(){
 });
