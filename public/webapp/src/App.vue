@@ -83,6 +83,10 @@ h1, h3 {
   color: white;
   font-weight: 400;
   font-size: 25px;
+  a {
+    text-decoration: underline;
+    color: white;
+  }
 }
 h2  {
   color: white;

@@ -1,11 +1,11 @@
 <template>
   <div class="home flex">
-    <h1 class="pt jim">A #VeryVeryShort exploration game<br>by <a href="https://twitter.com/cosmografik" target="_blank">Cosmografik</a> & <a href="https://twitter.com/_gaeel_" target="_blank">Gaeel</a></h1>
+    <h1 class="pt jim" v-html="t(0)"></h1>
     <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
     <img class="pic" :src="`${assetsUrl}home_picture.gif`">
     <a class="start" @click="openTuto" :style="{ 'background-image': 'url(' + start + ')' }"></a>
     <div class="footer">
-      <a class="bottom-btn bitter" @click="openAbout">À PROPOS</a>
+      <a class="bottom-btn bitter" @click="openAbout">{{t(1)}}</a>
     </div>
     <About ref="about"/>
   </div>
@@ -43,10 +43,6 @@ export default {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 0 90%;
-    h1 a {
-      text-decoration: underline;
-      color: white;
-    }
     .logo {
       width: 80%;
     }

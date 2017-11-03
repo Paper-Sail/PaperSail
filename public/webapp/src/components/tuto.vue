@@ -1,23 +1,25 @@
 <template>
   <div class="tuto pt flex">
-    <h3 v-if="firstSteps" class="jim">Fabriquez votre voile :</h3>
-    <h3 v-else class="jim">Quelques Conseils...</h3>
+    <h3 v-if="firstSteps" class="jim">{{t(8)}}</h3>
+    <h3 v-else class="jim">{{t(9)}}</h3>
       <el-carousel :interval="4000" trigger="click" height="300px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <p class="bitter sentence" v-html="item.sentence"></p>
         <img class="pic" :src="`${assetsUrl}${item.url}`">
       </el-carousel-item>
     </el-carousel>
-    <h3 class="jim loading" v-if="showStartButton" @click="go">GO !</h3>
+    <h3 class="jim loading" v-if="showStartButton" @click="go">{{t(17)}}</h3>
     <div v-else class="loading footer">
-      <div class="bitter">CHARGEMENT</div>
+      <div class="bitter">{{t(16)}}</div>
       <progress max="100" :value="progressValue"></progress>
     </div>
   </div>
 </template>
 
 <script>
+ import  translations from '../mixins/utils.js';
  export default {
+   mixins: [translations],
    props: {
      progressValue: 0,
      showStartButton: false
@@ -30,27 +32,27 @@
       return [
         {
           url:"tuto_1.gif",
-          sentence:"-1-<br>Pliez un bout de papier"
+          sentence: this.t(10)
         },
         {
           url:"tuto_1.gif",
-          sentence:"-2-<br>Découpez comme ceci"
+          sentence: this.t(11)
         },
         {
           url:"tuto_1.gif",
-          sentence:"-3-<br>Placez le sur l'écran"
+          sentence: this.t(12)
         },
         {
           url:"tuto_1.gif",
-          sentence:"-4-<br>Ajoutez à l'écran d'accueil"
+          sentence: this.t(13)
         },
         {
           url:"tuto_1.gif",
-          sentence:"-5-<br>Eteignez la lumière"
+          sentence: this.t(14)
         },
         {
           url:"tuto_1.gif",
-          sentence:"-6-<br>Explorez seul ou à plusieurs"
+          sentence: this.t(15)
         }
       ]
       }
@@ -85,7 +87,6 @@
       background: black;
     }
     .sentence {
-      opacity: .7;
       font-size: 20px;
       min-height: 80px;
     }
@@ -113,7 +114,7 @@
     }
 
     progress::-moz-progress-bar {
-        background: #1a75c1;
+      background: #1a75c1;
     }
   }
 </style>
