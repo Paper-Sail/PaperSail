@@ -10,4 +10,4 @@ Vue.mixin(Utils)
 new Vue({
   el: '#webapp',
   render: h => h(App)
-})
+});

@@ -1,17 +1,19 @@
 <template>
-  <div class="tuto pt flex">
-    <h3 v-if="firstSteps" class="jim">{{t(8)}}</h3>
-    <h3 v-else class="jim">{{t(9)}}</h3>
-      <el-carousel :interval="4000" trigger="click" height="300px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
+  <div class="tuto flex">
+    <h2 v-if="firstSteps" class="jim">{{t(8)}}</h2>
+    <h2 v-else class="jim">{{t(9)}}</h2>
+      <el-carousel :interval="4000" trigger="click" height="350px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <p class="bitter sentence" v-html="item.sentence"></p>
         <img class="pic" :src="`${assetsUrl}${item.url}`">
       </el-carousel-item>
     </el-carousel>
-    <h3 class="jim loading" v-if="showStartButton" @click="go">{{t(17)}}</h3>
-    <div v-else class="loading footer">
-      <div class="bitter">{{t(16)}}</div>
-      <progress max="100" :value="progressValue"></progress>
+    <div class="footer">
+      <h3 class="jim loading" v-if="showStartButton" @click="go">{{t(17)}}</h3>
+      <div v-else class="loading">
+        <div class="bitter">{{t(16)}}</div>
+        <progress max="100" :value="progressValue"></progress>
+      </div>
     </div>
   </div>
 </template>
@@ -31,27 +33,27 @@
     items() {
       return [
         {
-          url:"tuto_1.gif",
+          url:"tuto_2.gif",
           sentence: this.t(10)
         },
         {
-          url:"tuto_1.gif",
+          url:"tuto_2.gif",
           sentence: this.t(11)
         },
         {
-          url:"tuto_1.gif",
+          url:"tuto_2.gif",
           sentence: this.t(12)
         },
         {
-          url:"tuto_1.gif",
+          url:"tuto_2.gif",
           sentence: this.t(13)
         },
         {
-          url:"tuto_1.gif",
+          url:"tuto_2.gif",
           sentence: this.t(14)
         },
         {
-          url:"tuto_1.gif",
+          url:"tuto_2.gif",
           sentence: this.t(15)
         }
       ]
@@ -82,7 +84,6 @@
     background-position: 0 90%;
     .loading {
       color: white;
-      position: absolute;
       bottom: 0;
       background: black;
     }
@@ -100,7 +101,7 @@
       appearance: none;
       border: none;
       width: 250px;
-      height: 5px;
+      height: 2px;
     }
     progress::-webkit-progress-value { 
       background: white; 

@@ -7,6 +7,7 @@
     <div class="footer">
       <a class="bottom-btn bitter" @click="openAbout">{{t(1)}}</a>
     </div>
+    <div id="particles-js" class="particles"></div>
     <About ref="about"/>
   </div>
 </template>
@@ -30,6 +31,11 @@ export default {
       this.$emit('openTuto');
     }
   },
+  mounted() {
+    particlesJS.load('particles-js', `${publicPath}/assets/particlesjs-config.json`, function() {
+      console.log('callback - particles.js config loaded');
+    });
+  },
   data() {
     return {
       dialogVisible: false
@@ -43,6 +49,11 @@ export default {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 0 90%;
+    .particles {
+      height: 100%;
+      position: absolute;
+      z-index: 0;
+    }
     .logo {
       width: 80%;
     }
@@ -57,6 +68,7 @@ export default {
       margin: 40px auto;
       left: 50%;
       margin-left: -40px;
+      z-index: 2;
       &:before, &:after {
         content: "";
         display: block;

@@ -16,7 +16,8 @@ const translations = {
   14: "-5-<br>Eteignez la lumière",
   15: "-6-<br>Explorez seul ou à plusieurs",
   16: "CHARGEMENT",
-  17: "GO !"
+  17: "GO !",
+  18: "This website is made to be experienced in portrait mode only"
 }
 
 export default translations;

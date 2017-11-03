@@ -6,7 +6,7 @@
     custom-class="dialog"
     :show-close="false">
     <img class="close" :src="`${assetsUrl}close_button.png`" @click="handleClose">
-    <h2 class="jim">{{t(2)}}</h2>
+    <h2 class="jim" v-html="t(2)"></h2>
     <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
     <p class="jim">{{t(3)}}</p>
     <h3 class="credits bitter">{{t(4)}}</h3>
