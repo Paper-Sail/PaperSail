@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="dialogVisible"
-    :modal="false"
+    :modal="true"
     size="full"
     custom-class="dialog"
     :show-close="false">
@@ -34,10 +34,14 @@
 </script>
 
 <style lang="scss">
+.v-modal {
+  opacity: .9;
+}
 .dialog {
-  background: rgba(0, 0, 0, 0.9);
+  background: transparent;
   color: white;
   padding-top: 0;
+  max-width: 425px;
   .el-dialog__body {
     padding-top: 0;
   }
