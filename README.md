@@ -11,4 +11,12 @@ Created by [Cosmografik](http://cosmografik.fr/) and [Gaeel](http://spaceshipsin
 * Navigate your terminal to the cloned repo
 * `npm install`
 * `npm start`
-* Open [localhost:5000](http://localhost:3000) in your browser
+* Open [localhost:5000](http://localhost:8000) in your browser
+
+### If you want to use a custom port
+
+Example with port 8080:
+
+* Add a file named `.env` to the root of the repo
+* Add a line with `PORT=8080` to `.env` for port 8080
+* Open [localhost:8080](http://localhost:8080) in your browser
