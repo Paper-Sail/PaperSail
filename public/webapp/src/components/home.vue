@@ -1,12 +1,13 @@
 <template>
   <div class="home flex">
-    <h1 class="pt jim">A #VeryVeryShort exploration game<br>by <a href="https://twitter.com/cosmografik" target="_blank">Cosmografik</a> & <a href="https://twitter.com/_gaeel_" target="_blank">Gaeel</a></h1>
+    <h1 class="pt jim" v-html="t(0)"></h1>
     <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
     <img class="pic" :src="`${assetsUrl}home_picture.gif`">
     <a class="start" @click="openTuto" :style="{ 'background-image': 'url(' + start + ')' }"></a>
     <div class="footer">
-      <a class="bottom-btn bitter" @click="openAbout">À PROPOS</a>
+      <a class="bottom-btn bitter" @click="openAbout">{{t(1)}}</a>
     </div>
+    <div id="particles-js" class="particles"></div>
     <About ref="about"/>
   </div>
 </template>
@@ -30,6 +31,11 @@ export default {
       this.$emit('openTuto');
     }
   },
+  mounted() {
+    particlesJS.load('particles-js', `${publicPath}/assets/particlesjs-config.json`, function() {
+      console.log('callback - particles.js config loaded');
+    });
+  },
   data() {
     return {
       dialogVisible: false
@@ -43,9 +49,10 @@ export default {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 0 90%;
-    h1 a {
-      text-decoration: underline;
-      color: white;
+    .particles {
+      height: 100%;
+      position: absolute;
+      z-index: 0;
     }
     .logo {
       width: 80%;
@@ -61,6 +68,7 @@ export default {
       margin: 40px auto;
       left: 50%;
       margin-left: -40px;
+      z-index: 2;
       &:before, &:after {
         content: "";
         display: block;

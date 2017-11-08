@@ -1,23 +1,27 @@
 <template>
-  <div class="tuto pt flex">
-    <h3 v-if="firstSteps" class="jim">Fabriquez votre voile</h3>
-    <h3 v-else class="jim">Quelques Conseils...</h3>
-      <el-carousel trigger="click" height="270px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
+  <div class="tuto flex">
+    <h2 v-if="firstSteps" class="jim">{{t(8)}}</h2>
+    <h2 v-else class="jim">{{t(9)}}</h2>
+      <el-carousel :interval="4000" trigger="click" height="350px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
-        <img class="pic" :src="`${assetsUrl}${item.url}`">
         <p class="bitter sentence" v-html="item.sentence"></p>
+        <img class="pic" :src="`${assetsUrl}${item.url}`">
       </el-carousel-item>
     </el-carousel>
-    <h3 class="jim loading" v-if="showStartButton" @click="go">GO !</h3>
-    <div v-else class="loading">
-      <div class="bitter">CHARGEMENT</div>
-      <progress max="100" :value="progressValue"></progress>
+    <div class="footer">
+      <h3 class="jim loading" v-if="showStartButton" @click="go">{{t(17)}}</h3>
+      <div v-else class="loading">
+        <div class="bitter">{{t(16)}}</div>
+        <progress max="100" :value="progressValue"></progress>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+ import  translations from '../mixins/utils.js';
  export default {
+   mixins: [translations],
    props: {
      progressValue: 0,
      showStartButton: false
@@ -29,28 +33,28 @@
     items() {
       return [
         {
-          url:"tuto_1.gif",
-          sentence:"-1-<br>Pliez un bout de papier"
+          url:"tuto_2.gif",
+          sentence: this.t(10)
         },
         {
-          url:"tuto_1.gif",
-          sentence:"-2-<br>Découpez comme ceci"
+          url:"tuto_2.gif",
+          sentence: this.t(11)
         },
         {
-          url:"tuto_1.gif",
-          sentence:"-3-<br>Placez le sur l'écran"
+          url:"tuto_2.gif",
+          sentence: this.t(12)
         },
         {
-          url:"tuto_1.gif",
-          sentence:"-4-<br>Ajoutez à l'écran d'accueil"
+          url:"tuto_2.gif",
+          sentence: this.t(13)
         },
         {
-          url:"tuto_1.gif",
-          sentence:"-5-<br>Eteignez la lumière"
+          url:"tuto_2.gif",
+          sentence: this.t(14)
         },
         {
-          url:"tuto_1.gif",
-          sentence:"-6-<br>Explorez seul ou à plusieurs"
+          url:"tuto_2.gif",
+          sentence: this.t(15)
         }
       ]
       }
@@ -74,15 +78,18 @@
 
 <style lang="scss" scoped>
   .tuto {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 90%;
     .loading {
-      margin-bottom: 20px;
       color: white;
-      position: absolute;
       bottom: 0;
+      background: black;
     }
     .sentence {
-      opacity: .7;
       font-size: 20px;
+      min-height: 80px;
     }
     progress {
       color: white;
@@ -94,7 +101,7 @@
       appearance: none;
       border: none;
       width: 250px;
-      height: 5px;
+      height: 2px;
     }
     progress::-webkit-progress-value { 
       background: white; 
@@ -108,7 +115,7 @@
     }
 
     progress::-moz-progress-bar {
-        background: #1a75c1;
+      background: #1a75c1;
     }
   }
 </style>
