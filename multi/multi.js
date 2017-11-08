@@ -5,34 +5,80 @@ var multi = {
     }
   }
 }
-var regionSize = 300;
-var fogDensity = 12;
-var players = [];
-var fog = {}
-multi.players = players;
-multi.fog = fog;
-multi.regionSize = regionSize;
-multi.fogDensity = fogDensity;
+var timeout = 5000;
+multi.players = [];
+multi.fog = {};
+multi.regionSize = 300;
+multi.fogDensity = 12;
+
+var updateMulti = function(){
+  multi.players = multi.players.filter(function(player){
+    if (player.lastUpdate+timeout<Date.now()){
+      return true;
+      //return false;
+    } else {
+      if (player.ready){
+        for (var i = 0; i < multi.players.length; i++) {
+          var p = multi.players[i];
+          if (p.ready){
+            player.client.emit('event',{
+              name: "tick",
+              id: p.id,
+              time: Date.now(),
+              position: p.position,
+              rotation: p.rotation,
+              direction: p.direction
+            });
+            if (p.clicked){
+              player.client.emit('event',{
+                name: "click",
+                id: p.id,
+                time: Date.now(),
+                position: p.click
+              });
+            }  
+          }
+        }
+      }
+      return true;
+    }
+    return true;
+  });
+  for (var i = 0; i < multi.players.length; i++) {
+    multi.players[i].clicked = false;
+  }
+  setTimeout(updateMulti, 1000);
+}
+updateMulti();
+
 
 function Player(client) {
-  players.push(this);
-  var that = this;
-  this.client = client;
+  var that = {};
+  multi.players.push(that);
+  that.client = client;
+  that.lastUpdate = Date.now();
+  that.ready = false;
   client.on('event', function(data){
-    if (data.name && data.name=="tick"){
-      that.id = data.id;
-      that.position = data.position;
-      that.direction = data.direction;
-      that.rotation = data.rotation;
-    }
-    
-    for (var i = 0; i < players.length; i++) {
-      var player = players[i];
-      player.client.emit('event', data);
+    that.lastUpdate = Date.now();
+    switch (data.name) {
+      case "tick":
+        that.id = data.id;
+        that.ready = true;
+        that.position = data.position;
+        that.direction = data.direction;
+        that.rotation = data.rotation;
+        break;
+      case "click":
+        that.clicked = true;
+        that.click = data.position;
+        break;
+      default:
     }
   });
   client.on('disconnect', function(){
-    players.splice(players.indexOf(this, 1));
+    multi.players = multi.players.filter(function(player){
+      return player.id != that.id;
+    });
   });
 }
 

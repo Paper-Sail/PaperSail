@@ -1,21 +1,24 @@
 <template>
   <div class="home flex">
     <h1 class="pt jim" v-html="t(0)"></h1>
-    <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
-    <img class="pic" :src="`${assetsUrl}home_picture.gif`">
+    <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`" />
+    <img class="pic" :src="`${assetsUrl}home_picture.gif`" />
     <a class="start" @click="openTuto" :style="{ 'background-image': 'url(' + start + ')' }"></a>
-    <div class="footer">
+    <AppFooter>
       <a class="bottom-btn bitter" @click="openAbout">{{t(1)}}</a>
-    </div>
+    </AppFooter>
     <About ref="about"/>
   </div>
 </template>
 
 <script>
-import About from './/about.vue';
+import About from './about.vue';
+import AppFooter from './footer.vue';
+
 export default {
   components: {
-    About
+    About,
+    AppFooter
   },
   computed: {
     start() {
@@ -39,10 +42,6 @@ export default {
 </script>
 <style lang="scss" scoped>
   .home {
-    height: 100%;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 0 90%;
     .logo {
       width: 80%;
     }
@@ -57,6 +56,13 @@ export default {
       margin: 40px auto;
       left: 50%;
       margin-left: -40px;
+      z-index: 2;
+      cursor: pointer;
+      transition: all .2s ease-out;
+      &:hover {
+        transform: scale(.9); 
+      }
+
       &:before, &:after {
         content: "";
         display: block;

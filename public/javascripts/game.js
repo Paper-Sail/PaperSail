@@ -200,7 +200,6 @@ MULTI.on('tick', function(data){
     var boatglow = new THREE.Mesh(rectangle(-0.6*30,-0.9*30,1.2*30,1.8*30),GAME.materials.boatglow);
     boat.add(boatglow);
     boatglow.position.set(0,0,-0.1);
-    console.log(boatglow);
     boat.position.set(data.position.x,data.position.y,0);
     boat.rotation.z = data.rotation;
     GAME.scene.add(boat);
@@ -272,6 +271,15 @@ GAME.init = function(){
 
 var forward = new THREE.Vector3(0,0,1);
 GAME.update = function(dt){
+  
+  for (var id in GAME.ghosts) {
+    if (GAME.ghosts.hasOwnProperty(id )) {
+      var spos = Math.floor(GAME.ghosts[id].position.x)+"-"+Math.floor(GAME.ghosts[id].position.y);
+      GAMEINFO.display(GAME.ghosts[id].id.substr(0,4), spos)
+    }
+  }
+  
+  
   var desiredDirection = (GAME.target.clone().sub(GAME.camera.position)).normalize().applyAxisAngle(forward,-TAU/4);
   var currentDirection = new THREE.Vector3(Math.cos(GAME.camera.rotation.z),Math.sin(GAME.camera.rotation.z),0);
   
@@ -318,6 +326,33 @@ GAME.update = function(dt){
   }
   pushVelocity.normalize().multiplyScalar(500*dt*(maxPower/GAME.boatradius));
   GAME.boatvelocity.add(pushVelocity);
+  
+  pushVelocity = new THREE.Vector3();
+  for (var id in GAME.ghosts) {
+    if (!GAME.ghosts.hasOwnProperty(id)) return
+    var ghost = GAME.ghosts[id];
+    var cdx = GAME.camera.position.x-ghost.position.x;
+    var cdy = GAME.camera.position.y-ghost.position.y;
+    var cd = (cdx*cdx+cdy*cdy);
+    if (cd<Math.pow(collision.radius+GAME.boatradius,30)){
+      for (var ci = 0; ci < collision.points.length; ci++) {
+        var point = collision.position.clone().add(collision.points[ci]);
+        var dx = GAME.camera.position.x-point.x;
+        var dy = GAME.camera.position.y-point.y;
+        var d2 = (dx*dx+dy*dy);
+        if (d2<GAME.boatradius*GAME.boatradius){
+          var d = Math.sqrt(d2);
+          var nx = dx/d;
+          var ny = dy/d;
+          maxPower = Math.max(maxPower,GAME.boatradius-d);
+          pushVelocity.add(new THREE.Vector3(nx,ny,0));
+        }
+      }
+    }
+  }
+  pushVelocity.normalize().multiplyScalar(100*dt*(maxPower/GAME.boatradius));
+  GAME.boatvelocity.add(pushVelocity);
+  
   var curAngle = Math.atan2(currentDirection.y, currentDirection.x);
   var desiAngle = Math.atan2(desiredDirection.y, desiredDirection.x);
   currentDirection.lerp(desiredDirection,dt);
@@ -337,7 +372,7 @@ GAME.update = function(dt){
     GAME.boatangularvelocity +=  - GAME.boatangularvelocity*dt*3;  
     GAME.camera.rotation.z += GAME.boatangularvelocity*dt*1.5
   }
-  GAMEINFO.display(GAME.camera.rotation.z);
+  GAMEINFO.display("rotation",GAME.camera.rotation.z);
   if (isNaN(GAME.camera.rotation.z)){
     GAMEINFO.log("PANIC! oldrot="+oldrot);
     GAME.camera.rotation.z = oldrot;

@@ -1,7 +1,9 @@
 <template>
-  <div id="app" v-if="homePageActive">
-    <Home v-if="isHomePage" @openTuto="onOpenTuto" :style="{ 'background-image': 'url(' + footer + ')' }" />
-    <Tuto v-else :progressValue="progressValue" :showStartButton="this.showStartButton" @onStartClick="go" :style="{ 'background-image': 'url(' + footer + ')' }" />
+  <div id="app" v-if="homePageActive" >
+    <Home v-if="isHomePage" @openTuto="onOpenTuto"  v-show="isPortrait" />
+    <Tuto v-else :progressValue="progressValue" :showStartButton="this.showStartButton" @onStartClick="go" v-show="isPortrait" />
+    <div class="landscape flex" v-if="!isPortrait" v-show="isMobile"><h4>{{t(18)}}</h4></div>
+    <div id="particles-js" class="particles"></div>
   </div>
 </template>
 
@@ -15,6 +17,12 @@ export default {
     Tuto
   },
   computed: {
+    isPortrait() {
+      return this.orientation === 'portrait' || !this.isMobile;
+    },
+    isMobile() {
+      return navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
+    },
     footer() {
       return `${publicPath}/assets/footer.png`;
     },
@@ -26,13 +34,21 @@ export default {
     go() {
       this.homePageActive = false;
       go();
+    },
+    checkOrientation() {
+      if(window.innerHeight > window.innerWidth){
+        this.orientation = 'portrait'
+      }
+      else {
+        this.orientation = 'landscape'
+      }
     }
   },
   watch: {
     isHomePage(val) {
       if(!val) {
         this.interval = setInterval(() => {
-          this.progressValue = LOADER.completion*100;
+          this.progressValue = LOADER.completion * 100;
         }, 100);
       }
     },
@@ -43,8 +59,20 @@ export default {
       }
     }
   },
+  mounted() {
+    window.addEventListener('load', _=> {
+      this.checkOrientation()
+    }, false);
+    window.addEventListener('resize', _=> {
+      this.checkOrientation()
+    }, false);
+    particlesJS.load('particles-js', `${publicPath}/assets/particlesjs-config.json`, function() {
+      //console.log('callback - particles.js config loaded');
+    });
+  },
   data() {
     return {
+      orientation: 'portrait',
       isHomePage: true,
       progressValue: LOADER.completion*100,
       interval: null,
@@ -68,31 +96,44 @@ html {
     background: transparent;  /* optional: just make scrollbar invisible */
 }
 
-#app {
-  font-family: Helvetica, sans-serif;
-  text-align: center;
-  height: 100%;
-  height: 100%;
+html {
+  background: black;
+}
+body {
   background: #05267a; /* Old browsers */
   background: -moz-radial-gradient(center, ellipse cover, #05267a 20%, #000000 99%); /* FF3.6-15 */
   background: -webkit-radial-gradient(center, ellipse cover, #05267a 20%,#000000 99%); /* Chrome10-25,Safari5.1-6 */
   background: radial-gradient(ellipse at center, #05267a 20%,#000000 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05267a', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
-h1, h3 {
+#app {
+  max-width: 425px;
+  margin: 0 auto;
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+  height: 100%;
+}
+h1, h2, h3, h4 {
   color: white;
   font-weight: 400;
-  font-size: 25px;
   a {
     text-decoration: underline;
     color: white;
   }
 }
-h2  {
-  color: white;
-  font-weight: 400;
-  font-size: 20px;
+
+h1,h2 {
+  font-size: 30px;
 }
+
+h3 {
+  font-size: 26px;
+}
+
+h4 {
+  font-size: 24px;
+}
+
 p {
   font-size: 18px;
   color: white;
@@ -117,6 +158,7 @@ ul {
 }
 .pic {
   width: 80%;
+  margin-top: 20px;
 }
 .footer {
   position: absolute;
@@ -124,12 +166,16 @@ ul {
   left: 0;
   width: 100%;
   color: white;
-  background: black;
   height: 10%;
+  z-index: 1;
+  background-repeat: repeat-x;
+  background-size: contain;
+  background-position: 0 80%;
   .bottom-btn {
     margin-bottom: 10px;
     display: block;
     margin: 0 auto;
+    cursor: pointer;
   }
 }
 .flex {
@@ -139,20 +185,30 @@ ul {
   flex-wrap: wrap;
   text-align: center;
 }
+.landscape {
+  height: 100%;
+  justify-content: center;
+}
 .el-carousel {
   width: 60%;
 }
 .el-carousel__arrow--right {
   right: -15px;
-  top : 200px;
+  top : 230px;
 }
 .el-carousel__arrow--left {
   left: -15px;
-  top : 200px;
+  top : 230px;
 }
 .el-carousel__indicators--outside button{
   width: 5px;
   height: 5px;
   border-radius : 50%;
+}
+.particles {
+  height: 100%;
+  top:0;
+  position: absolute;
+  z-index: 0;
 }
 </style>
