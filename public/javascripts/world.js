@@ -185,7 +185,7 @@ const WORLD = {
             1/WORLD.fogDensity*WORLD.regionSize
           ),
           new THREE.MeshBasicMaterial({
-            opacity: 0.65,
+            opacity: 0.40,
             transparent: true,
             color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
