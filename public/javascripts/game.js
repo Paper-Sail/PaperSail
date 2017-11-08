@@ -79,7 +79,7 @@ GAME.materials = {
   ghost: new THREE.MeshBasicMaterial({
     map: GAME.textures.boat,
     transparent: true,
-    color: 0x000000
+    color: 0xFFFFFF
   }),
   stars: new THREE.MeshBasicMaterial({
     map: GAME.textures.stars,
