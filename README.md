@@ -6,7 +6,7 @@ Created by [Cosmografik](http://cosmografik.fr/) and [Gaeel](http://spaceshipsin
 
 ## Usage
 
-* Install [node.js (8.0.0 or greater)](https://nodejs.org/en/)
+* Install [node.js (7.2.1 or greater)](https://nodejs.org/en/)
 * Clone this repo
 * Navigate your terminal to the cloned repo
 * `npm install`
