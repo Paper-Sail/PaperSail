@@ -1,0 +1,45 @@
+{
+  "id": "/arte/veryveryshort/prod/papersail",
+  "cpus": 0.1,
+  "mem": 512,
+  "container": {
+    "type": "MESOS",
+    "volumes": [
+    ],
+    "docker": {}
+  },
+  "env": {
+  },
+  "healthChecks": [
+    {
+      "path": "/",
+      "protocol": "HTTP",
+      "port": 80,
+      "gracePeriodSeconds": 45,
+      "intervalSeconds": 10,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 3
+    }
+  ],
+  "labels": {
+    "HAPROXY_GROUP": "external",
+    "HAPROXY_0_AUTH": "Preprod:papersail:$1$QQU7WdRJ$mRTXbJ7AECSKBkHhr0fUL1",
+    "HAPROXY_0_REDIRECT_TO_HTTPS": true,
+    "HAPROXY_0_HTTPS_FRONTEND_ACL_WITH_AUTH": "acl host_{cleanedUpHostname} hdr(host) -i {hostname} \n  acl auth_{cleanedUpHostname} http_auth(user_{backend}) \n acl is_api_{cleanedUpHostname} path_reg '^/(assets)/?' \n  http-request auth realm \"{realm}\" if host_{cleanedUpHostname} !is_api_{cleanedUpHostname} !auth_{cleanedUpHostname} \n  use_backend {backend} if host_{cleanedUpHostname} \n",
+    "HAPROXY_0_VHOST": "papersail.lab.arte.tv"
+  },
+  "portDefinitions": [],
+  "ipAddress": {
+    "discovery": {
+      "ports": [
+        {
+          "number": 80,
+          "name": "http",
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ]
+    },
+    "networkName": "vlan"
+  }
+}
