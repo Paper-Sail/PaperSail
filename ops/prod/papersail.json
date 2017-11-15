@@ -23,10 +23,8 @@
   ],
   "labels": {
     "HAPROXY_GROUP": "external",
-    "HAPROXY_0_AUTH": "Preprod:papersail:$1$QQU7WdRJ$mRTXbJ7AECSKBkHhr0fUL1",
     "HAPROXY_0_REDIRECT_TO_HTTPS": true,
-    "HAPROXY_0_HTTPS_FRONTEND_ACL_WITH_AUTH": "acl host_{cleanedUpHostname} hdr(host) -i {hostname} \n  acl auth_{cleanedUpHostname} http_auth(user_{backend}) \n acl is_api_{cleanedUpHostname} path_reg '^/(assets)/?' \n  http-request auth realm \"{realm}\" if host_{cleanedUpHostname} !is_api_{cleanedUpHostname} !auth_{cleanedUpHostname} \n  use_backend {backend} if host_{cleanedUpHostname} \n",
-    "HAPROXY_0_VHOST": "papersail.lab.arte.tv"
+    "HAPROXY_0_VHOST": "papersail.lab.arte.tv, papersail.veryveryshort.com, papersail.trestrescourt.com, papersail.sehrsehrkurz.com"
   },
   "portDefinitions": [],
   "ipAddress": {
