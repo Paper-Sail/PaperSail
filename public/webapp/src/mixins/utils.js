@@ -1,4 +1,7 @@
-import translations from "../../translations.js";
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+Vue.use(VueResource);
+
 export default {
   computed: {
     assetsUrl() {
@@ -7,7 +10,20 @@ export default {
   },
   methods: {
     t(number) {
-      return translations[number];
+      return this.translates[number];
     }
+  },
+  mounted() {
+    this.$http.get(`${publicPath}/assets/translates.json`).then(response => {
+      // get body data
+      this.translates = response.body;
+    }, response => {
+      // error callback
+    });
+  },
+  data() {
+    return {
+      translates: {}
+    };
   },
 };
