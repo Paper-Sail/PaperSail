@@ -38,7 +38,7 @@
     items() {
       return [
         {
-          url:"tuto_2.gif",
+          url:"tuto_1.gif",
           sentence: this.t(10)
         },
         {
@@ -46,19 +46,19 @@
           sentence: this.t(11)
         },
         {
-          url:"tuto_2.gif",
+          url:"tuto_3.gif",
           sentence: this.t(12)
         },
         {
-          url:"tuto_2.gif",
+          url:"tuto_4.png",
           sentence: this.t(13)
         },
         {
-          url:"tuto_2.gif",
+          url:"tuto_5.png",
           sentence: this.t(14)
         },
         {
-          url:"tuto_2.gif",
+          url:"tuto_6.png",
           sentence: this.t(15)
         }
       ]
