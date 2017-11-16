@@ -50,15 +50,15 @@
           sentence: this.t(12)
         },
         {
-          url:"tuto_4.png",
+          url:"tuto_4.gif",
           sentence: this.t(13)
         },
         {
-          url:"tuto_5.png",
+          url:"tuto_5.gif",
           sentence: this.t(14)
         },
         {
-          url:"tuto_6.png",
+          url:"tuto_6.gif",
           sentence: this.t(15)
         }
       ]
