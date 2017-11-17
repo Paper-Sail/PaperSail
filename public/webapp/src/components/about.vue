@@ -9,11 +9,13 @@
     <h2 class="jim" v-html="t(2)"></h2>
     <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
     <p class="jim">{{t(3)}}</p>
-    <h3 class="credits bitter">{{t(4)}}</h3>
+    <p class="bitter close_btn" @click="handleClose"><img width="20px" :src="`${assetsUrl}close_button.png`">&nbsp;{{t(19)}}</p>
+    <h3 class="credits bitter">{{t(4)}}</h3> 
     <ul class="bitter">
       <li class="mt" v-html="t(5)"></li>
       <li class="mt" v-html="t(6)"></li>
       <li class="mt" v-html="t(7)"></li>
+      <li class="mt" v-for="(item, index) in credits" v-html="tc(index)" :key="item"></li>
     </ul>
   </el-dialog>
 </template>
@@ -51,6 +53,9 @@
   top: 20px;
   right: 20px;
   width: 20px;
+}
+.close_btn {
+  cursor: pointer;
 }
 .logo {
   width: 100%;

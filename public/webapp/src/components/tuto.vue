@@ -2,7 +2,7 @@
   <div class="tuto flex">
     <h2 v-if="firstSteps" class="jim mt">{{t(8)}}</h2>
     <h2 v-else class="jim mt">{{t(9)}}</h2>
-      <el-carousel :interval="4000" trigger="click" height="350px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
+      <el-carousel :interval="3100" trigger="click" height="350px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <p class="bitter sentence" v-html="item.sentence"></p>
         <img class="pic" :src="`${assetsUrl}${item.url}`">
