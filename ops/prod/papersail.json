@@ -24,7 +24,7 @@
   "labels": {
     "HAPROXY_GROUP": "external",
     "HAPROXY_0_REDIRECT_TO_HTTPS": true,
-    "HAPROXY_0_VHOST": "papersail-node.lab.arte.tv"
+    "HAPROXY_0_VHOST": "papersail.lab.arte.tv"
   },
   "portDefinitions": [],
   "ipAddress": {
