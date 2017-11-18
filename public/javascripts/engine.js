@@ -32,6 +32,9 @@ ENGINE.initialise = function(container){
           FAR
       );
   GAME.camera.position.z = 300;
+  GAME.camera.rotation.z = Math.random()*Math.PI*2;
+  GAME.camera.position.x = Math.floor(Math.random())*WORLD.regionSize;
+  GAME.camera.position.y = Math.floor(Math.random())*WORLD.regionSize;
   
   
   GAME.scene = new THREE.Scene();

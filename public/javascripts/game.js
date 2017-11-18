@@ -55,6 +55,7 @@ GAME.textures = {
   fairy: new THREE.TextureLoader().load("/images/white_glow.png"),
   fishbody: new THREE.TextureLoader().load("/images/fish_body.png"),
   fishfin: new THREE.TextureLoader().load("/images/fish_fin.png"),
+  port: new THREE.TextureLoader().load("/images/port.png"),
   islandDecorations: [
     new THREE.TextureLoader().load("/images/plants_1.png"),
     new THREE.TextureLoader().load("/images/plants_2.png"),
@@ -128,6 +129,11 @@ GAME.materials = {
     color: new THREE.Color(0x000000).lerp(GAME.backgroundcolor,0.5),
     transparent: true
   }),
+  port: new THREE.MeshBasicMaterial({
+    map: GAME.textures.port,
+    color: 0x000000,
+    transparent: true
+  }),
   islandDecorations: [],
 }
 for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
@@ -150,15 +156,15 @@ GAME.start = function(){
     GAME.tick();
   }
 }
+skipFrame = false;
 GAME.tick = function(){
   var dt = Math.min(1/20,GAME.clock.getDelta());
   GAME.update(dt);
-  
-  GAME.renderer.render(GAME.scene, GAME.camera);
-  if (document.hasFocus())
-    requestAnimationFrame(GAME.tick);
-  else
-    setTimeout(GAME.tick, 300);
+  if (document.hasFocus() || !skipFrame){
+      GAME.renderer.render(GAME.scene, GAME.camera);
+  }
+  skipFrame = !skipFrame;
+  requestAnimationFrame(GAME.tick);
 }
 
 GAME.onClick = function(pos){
@@ -258,12 +264,24 @@ GAME.init = function(){
   GAME.objects.collisions = [];
   
   WORLD.init();
+  LOADER.addEventListener("load",function(){
+    var actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
+    var actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
+    while (isInIsland(actualx, actualy,GAME.boatradius)){
+      console.log("Reroll position");
+      actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
+      actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
+    }
+    console.log("Spawning at "+actualx+", "+actualy);
+    console.log(isInIsland(actualx, actualy,GAME.boatradius));
+    GAME.camera.position.x = actualx;
+    GAME.camera.position.y = actualy;
+    GAME.target = new THREE.Vector3(GAME.camera.position.x,GAME.camera.position.y,0);
+  });
   
   
   SCROLL.newLayer(GAME.materials.stars,100,GAME.size,-10);
   
-  
-  GAME.target = new THREE.Vector3(0,5,0);
   GAME.boatvelocity = new THREE.Vector3();
   GAME.boatangularvelocity = 0;
 }
@@ -308,7 +326,7 @@ GAME.update = function(dt){
     var cdx = GAME.camera.position.x-collision.center.x;
     var cdy = GAME.camera.position.y-collision.center.y;
     var cd = (cdx*cdx+cdy*cdy);
-    if (cd<Math.pow(collision.radius+GAME.boatradius,3)){
+    if (cd<Math.pow(collision.radius+GAME.boatradius,2)){
       for (var ci = 0; ci < collision.points.length; ci++) {
         var point = collision.position.clone().add(collision.points[ci]);
         var dx = GAME.camera.position.x-point.x;
@@ -497,6 +515,20 @@ GAME.update = function(dt){
   for (var i = 0; i < GAME.callbacks.update.length; i++) {
     GAME.callbacks.update[i](dt);
   }
+}
+
+function isInIsland(x,y,radius){
+  for (var i = 0; i < GAME.objects.collisions.length; i++) {
+    //console.log("Checking "+x+", "+y);;
+    var collision = GAME.objects.collisions[i];
+    var cdx = x-collision.center.x;
+    var cdy = y-collision.center.y;
+    var cd = (cdx*cdx+cdy*cdy);
+    if (Math.sqrt(cd)<collision.radius*1+radius){
+      return true;
+    }
+  }
+  return false;
 }
 
 

@@ -17,9 +17,11 @@ const WORLD = {
     WORLD.world = new THREE.Object3D();
     WORLD.regions = [];
     GAME.scene.add(WORLD.world);
+    var curx = Math.floor(GAME.camera.position.x/WORLD.regionSize);
+    var cury = Math.floor(GAME.camera.position.y/WORLD.regionSize);
     for (var i = 0; i < kern.length; i++) {
       var p = kern[i]
-      WORLD.buildRegion(p[0],p[1]);
+      WORLD.buildRegion(curx+p[0],cury+p[1]);
     }
   },
   buildRegion: function(x, y){
@@ -91,12 +93,22 @@ const WORLD = {
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
     island.position = new THREE.Vector3(pos.x,pos.y, 1);
-    
+    var collisionpoints = [];
+    for (var i = 0; i < island.collision.vertices.length; i++) {
+      var p1 = island.collision.vertices[i];
+      var p2 = island.collision.vertices[(i+1)%island.collision.vertices.length];
+      var d = p1.distanceTo( p2 );
+      var mind = GAME.boatradius*0.5;
+      steps = Math.ceil(d/mind);
+      for (var s = 0; s < steps; s++) {
+        collisionpoints.push(p1.clone().lerp(p2, (s+0.5)/steps));
+      }
+    }
     GAME.objects.collisions.push({
       center: pos.clone().add(island.collision.boundingSphere.center),
       position: pos.clone(),
       radius: island.collision.boundingSphere.radius*1.5,
-      points: island.collision.vertices
+      points: collisionpoints
     });
     var glowCenter = island.collision.boundingSphere.center;
     var glowRadius = island.collision.boundingSphere.radius*2.5;
@@ -185,7 +197,7 @@ const WORLD = {
             1/WORLD.fogDensity*WORLD.regionSize
           ),
           new THREE.MeshBasicMaterial({
-            opacity: 0.40,
+            opacity: 0.0,
             transparent: true,
             color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
