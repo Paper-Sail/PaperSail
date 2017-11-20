@@ -1,4 +1,11 @@
 #container
   pre#gameinfo Hello, world!
-audio(src="/sounds/loop_nature_background.mp3" id="background-sound" preload="true" loop="true" autoplay="true")
+audio(id="background-sound" preload="true" loop="true" )
+  source(src="/sounds/loop_nature_background.ogg" type="audio/ogg")
+  source(src="/sounds/loop_nature_background.mp3" type="audio/mpeg")
+  source(src="/sounds/loop_nature_background.wav" type="audio/wav")
+audio(id="background-music" preload="true" loop="true" )
+  source(src="/sounds/1 - TRAME /01 - Paper Sail TRAME full .ogg" type="audio/ogg")
+  source(src="/sounds/1 - TRAME /01 - Paper Sail TRAME full .mp3" type="audio/mpeg")
+  source(src="/sounds/1 - TRAME /01 - Paper Sail TRAME full .wav" type="audio/wav")
 img.vignette(src="/images/vignette.png")

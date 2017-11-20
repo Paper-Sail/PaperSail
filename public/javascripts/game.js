@@ -152,6 +152,8 @@ GAME.start = function(){
   if (!GAME.started){
     GAME.started = true;
     GAME.container.appendChild(GAME.element);
+    document.getElementById('background-music').play()
+    document.getElementById('background-sound').play()
     GAME.clock = new THREE.Clock(true);
     GAME.tick();
   }

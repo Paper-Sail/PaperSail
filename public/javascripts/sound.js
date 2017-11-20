@@ -1,4 +1,5 @@
 var sound = {}
+var sound = {}
 var cur_playing = []
 
 function setGlobalVolume(volume) {
@@ -15,10 +16,29 @@ function setGlobalVolume(volume) {
     }
   }
 }
-
+const audioformats = [
+  {
+    extension: ".ogg",
+    mime: "audio/ogg"
+  },
+  {
+    extension: ".mp3",
+    mime: "audio/mp3"
+  },
+  {
+    extension: ".wav",
+    mime: "audio/wav"
+  },
+]
 function newSound(name, volume) {
   var elem = document.createElement("audio");
-  elem.src = "/sounds/"+name+".mp3";
+  for (var i = 0; i < audioformats.length; i++) {
+    var audioformat = audioformats[i];
+    var source = document.createElement("source");
+    source.src = "/sounds/"+name+audioformat.extension;
+    source.type = audioformat.mime;
+    elem.appendChild(source);
+  }
   elem.id = name;
   elem.preload = true;
   elem.volume = + ((volume!=undefined) ? volume : 1);
