@@ -16,8 +16,15 @@ GAME.loadTracker = {
 }
 LOADER.trackers.push(GAME.loadTracker)
 
+GAME.zoomed = false;
+
 GAME.boatradius = 8;
 GAME.backgroundcolor = new THREE.Color(0x05267A);
+GAME.zoomedbackgroundcolor = new THREE.Color(0xAA9977);
+
+function toogleZoom(){
+  
+}
 
 window.addEventListener("load", function() {
   // Get the DOM element to attach to
@@ -162,7 +169,7 @@ skipFrame = false;
 GAME.tick = function(){
   var dt = Math.min(1/20,GAME.clock.getDelta());
   GAME.update(dt);
-  if (document.hasFocus() || !skipFrame){
+  if (true || document.hasFocus() || !skipFrame){
       GAME.renderer.render(GAME.scene, GAME.camera);
   }
   skipFrame = !skipFrame;
@@ -240,6 +247,7 @@ GAME.init = function(){
     GAMEINFO.log("Spawn fish w/size "+fsize);
     FISH.spawn(75*fsize,150*fsize,30,GAME.materials.fishbody, GAME.materials.fishfin);
   }
+  GAME.curzoom = 1;
   GAME.objects = [];
   GAME.splashTime = 1;
   GAME.fairyTime = 1;
@@ -257,11 +265,11 @@ GAME.init = function(){
   
   var boat = new THREE.Sprite(GAME.materials.boat);
   var boatglow = new THREE.Mesh(rectangle(-0.6,-0.9,1.2,1.8),GAME.materials.boatglow);
-  boatglow.position.z = -9.8;
+  boatglow.position.z = -0.1;
   boat.add(boatglow);
-  //boat.renderOrder = 0;
+  boat.renderOrder = 0;
   GAME.camera.add(boat);
-  boat.position.z = -10;
+  boat.position.z = -300;
   boat.scale.set(30,30,30);
   GAME.objects.collisions = [];
   
@@ -291,7 +299,12 @@ GAME.init = function(){
 
 var forward = new THREE.Vector3(0,0,1);
 GAME.update = function(dt){
-  
+  GAME.camera.zoom = lerp(GAME.camera.zoom, GAME.zoomed ? 0.4 : 1, dt*3);
+  GAME.scene.background = GAME.scene.background.clone().lerp(GAME.zoomed ? GAME.zoomedbackgroundcolor :  GAME.backgroundcolor, dt*3);
+  GAME.materials.fishfin.opacity = lerp(GAME.materials.fishfin.opacity, GAME.zoomed ? 0 : 1, dt*10);
+  GAME.materials.fishbody.opacity = lerp(GAME.materials.fishfin.opacity, GAME.zoomed ? 0 : 1, dt*10);
+  GAME.materials.glow.opacity = lerp(GAME.materials.glow.opacity, GAME.zoomed ? 0 : 1, dt*10);
+  GAME.camera.updateProjectionMatrix();
   for (var id in GAME.ghosts) {
     if (GAME.ghosts.hasOwnProperty(id )) {
       var spos = Math.floor(GAME.ghosts[id].position.x)+"-"+Math.floor(GAME.ghosts[id].position.y);

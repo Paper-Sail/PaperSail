@@ -1,14 +1,12 @@
-kern = [
-  [-1,-1],
-  [-1,0],
-  [-1,1],
-  [0,-1],
-  [0,0],
-  [0,1],
-  [1,-1],
-  [1,0],
-  [1,1]
-]
+function createKernel(fromZero){
+  var kernel = [];
+  for (var x = -fromZero; x<=fromZero; x++){
+    for (var y = -fromZero; y<=fromZero; y++){
+      kernel.push([x,y]);
+    }
+  }
+  return kernel;
+}
 
 const WORLD = {
   regionSize: 300,
@@ -16,11 +14,13 @@ const WORLD = {
   init: function(){
     WORLD.world = new THREE.Object3D();
     WORLD.regions = [];
+    WORLD.fromZero = 1;
+    WORLD.kernel = createKernel(WORLD.fromZero);
     GAME.scene.add(WORLD.world);
     var curx = Math.floor(GAME.camera.position.x/WORLD.regionSize);
     var cury = Math.floor(GAME.camera.position.y/WORLD.regionSize);
-    for (var i = 0; i < kern.length; i++) {
-      var p = kern[i]
+    for (var i = 0; i < WORLD.kernel.length; i++) {
+      var p = WORLD.kernel[i]
       WORLD.buildRegion(curx+p[0],cury+p[1]);
     }
   },
@@ -62,11 +62,13 @@ const WORLD = {
   buildWorld: function*(region, tracker) {
     var islands = 15
     var rs = WORLD.regionSize;
+    /*
     var back = new THREE.Mesh(rectangle(region.x*rs,region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
       color: GAME.backgroundcolor
     }));
     back.position.z = -100;
     region.three.add(back);
+    */
     for (var i = 0; i < islands; i++) {
       WORLD.putIsland(region,i);
       if (tracker){
@@ -162,7 +164,7 @@ const WORLD = {
     var curx = Math.floor(GAME.camera.position.x/WORLD.regionSize);
     var cury = Math.floor(GAME.camera.position.y/WORLD.regionSize);
     WORLD.regions = WORLD.regions.filter(function(region){
-      var valid = region.x>=curx-1 && region.x<=curx+1 && region.y>=cury-1 && region.y<=cury+1;
+      var valid = region.x>=curx-WORLD.fromZero && region.x<=curx+WORLD.fromZero && region.y>=cury-WORLD.fromZero && region.y<=cury+WORLD.fromZero;
       if (!valid){
         //region.three.children[0].material.color = new THREE.Color(0xFF0000);
         WORLD.world.remove(region.three);
@@ -171,9 +173,9 @@ const WORLD = {
       }
       return valid;
     });
-    for (var i = 0; i < kern.length; i++) {
-      var cx = kern[i][0]+curx;
-      var cy = kern[i][1]+cury;
+    for (var i = 0; i < WORLD.kernel.length; i++) {
+      var cx = WORLD.kernel[i][0]+curx;
+      var cy = WORLD.kernel[i][1]+cury;
       if (!WORLD.getRegion(cx, cy)){
         WORLD.buildRegionNoTrack(cx,cy);
       }

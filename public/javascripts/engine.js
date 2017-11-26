@@ -23,6 +23,7 @@ ENGINE.initialise = function(container){
   // and a scene
   GAME.renderer = new THREE.WebGLRenderer();
   GAME.camera =
+  /*
       new THREE.OrthographicCamera(
           GAMEWIDTH/-2,
           GAMEWIDTH/2,
@@ -31,6 +32,14 @@ ENGINE.initialise = function(container){
           NEAR,
           FAR
       );
+  /*/
+    new THREE.PerspectiveCamera(
+        60,
+        ASPECT,
+        NEAR,
+        FAR
+    );
+  //*/
   GAME.camera.position.z = 300;
   GAME.camera.rotation.z = Math.random()*Math.PI*2;
   GAME.camera.position.x = Math.floor(Math.random())*WORLD.regionSize;
@@ -38,7 +47,7 @@ ENGINE.initialise = function(container){
   
   
   GAME.scene = new THREE.Scene();
-  //GAME.scene.background = GAME.backgroundcolor;
+  GAME.scene.background = GAME.backgroundcolor;
 
   // Add the camera to the scene.
   GAME.scene.add(GAME.camera);
@@ -56,6 +65,7 @@ ENGINE.initialise = function(container){
         - ( e.clientY / window.innerHeight ) * 2 + 1,
         0);
     vector.unproject( GAME.camera );
+    console.log(vector.sub(GAME.camera.position).multiplyScalar(150).add(GAME.camera.position));
     GAME.onClick(vector); 
   });
   return GAME.renderer.domElement;
