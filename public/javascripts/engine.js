@@ -34,7 +34,7 @@ ENGINE.initialise = function(container){
       );
   /*/
     new THREE.PerspectiveCamera(
-        60,
+        45,
         ASPECT,
         NEAR,
         FAR
@@ -65,7 +65,7 @@ ENGINE.initialise = function(container){
         - ( e.clientY / window.innerHeight ) * 2 + 1,
         0);
     vector.unproject( GAME.camera );
-    console.log(vector.sub(GAME.camera.position).multiplyScalar(150).add(GAME.camera.position));
+    vector.sub(GAME.camera.position).multiplyScalar(150).add(GAME.camera.position);
     GAME.onClick(vector); 
   });
   return GAME.renderer.domElement;
