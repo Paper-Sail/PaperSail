@@ -15,7 +15,6 @@ ENGINE.initialise = function(container){
   const GAMESIZE = 250;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
   const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
-  GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
   
   
   
@@ -52,13 +51,10 @@ ENGINE.initialise = function(container){
   // Add the camera to the scene.
   GAME.scene.add(GAME.camera);
   // Start the renderer.
-  GAME.renderer.setSize(WIDTH, HEIGHT);
-
-  // Attach the renderer-supplied
-  // DOM element.
-  //GAME.container.appendChild(GAME.renderer.domElement);
+  //GAME.renderer.setSize(WIDTH, HEIGHT);
+  ENGINE.setSize(container);
   
-  GAME.renderer.domElement.addEventListener("click",function(e){
+  container.addEventListener("click",function(e){
     var vector = new THREE.Vector3();
     vector.set(
         ( e.clientX / window.innerWidth ) * 2 - 1,
@@ -68,5 +64,27 @@ ENGINE.initialise = function(container){
     console.log(vector.sub(GAME.camera.position).multiplyScalar(150).add(GAME.camera.position));
     GAME.onClick(vector); 
   });
+  window.addEventListener("resize",function() {
+    ENGINE.setSize(container);
+  });
   return GAME.renderer.domElement;
+}
+
+ENGINE.setSize = function(container){
+  // Set the scene size.
+  const WIDTH = container.clientWidth;
+  const HEIGHT = container.clientHeight;
+  
+
+  // Set some camera attributes.
+  const ASPECT = WIDTH / HEIGHT;
+  const NEAR = 1;
+  const FAR = 1000;
+  
+  const GAMESIZE = 250;
+  const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
+  const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
+  GAME.camera.aspect = ASPECT;
+  GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
+  GAME.renderer.setSize(WIDTH, HEIGHT);
 }
