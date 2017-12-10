@@ -125,7 +125,6 @@ const WORLD = {
     island.mesh.add(glow);
     var cmesh = new THREE.Mesh(GAME.models.cylinder,GAME.materials.black);
     island.mesh.add(cmesh);
-    console.log(cmesh);
     cmesh.scale.x = cmesh.scale.y = cmesh.scale.z = 0.1;
     cmesh.position.z = 10;
     glow.position.z = -4;
