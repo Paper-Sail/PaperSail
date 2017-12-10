@@ -16,7 +16,7 @@ ENGINE.initialise = function(container){
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
   const GAMEHEIGHT = GAMESIZE / (ASPECT<1 ? 1 : ASPECT);
   
-  
+  var heightcm = px2cm(container.clientHeight);
   
   // Create a WebGL renderer, camera
   // and a scene
@@ -41,8 +41,8 @@ ENGINE.initialise = function(container){
   //*/
   GAME.camera.position.z = 300;
   GAME.camera.rotation.z = Math.random()*Math.PI*2;
-  GAME.camera.position.x = Math.floor(Math.random())*WORLD.regionSize;
-  GAME.camera.position.y = Math.floor(Math.random())*WORLD.regionSize;
+  GAME.camera.position.x = 0;Math.floor(Math.random())*WORLD.regionSize;
+  GAME.camera.position.y = 0;Math.floor(Math.random())*WORLD.regionSize;
   
   
   GAME.scene = new THREE.Scene();
@@ -70,12 +70,22 @@ ENGINE.initialise = function(container){
   return GAME.renderer.domElement;
 }
 
+function px2cm(px) {
+  var elem = document.createElement("div");
+  elem.style.position = "absolute";
+  elem.style.height = "1000cm";
+  document.body.appendChild(elem);
+  //var d = $("<div/>").css({ position: 'absolute', top : '-1000cm', left : '-1000cm', height : '1000cm', width : '1000cm' }).appendTo('body');
+  var px_per_cm = elem.clientHeight / 1000;
+  document.body.removeChild(elem);
+  return px / px_per_cm;
+}
+
 ENGINE.setSize = function(container){
   // Set the scene size.
   const WIDTH = container.clientWidth;
   const HEIGHT = container.clientHeight;
-  
-
+  ENGINE.screenHeight = px2cm(container.clientHeight);
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
   const NEAR = 1;
@@ -87,4 +97,5 @@ ENGINE.setSize = function(container){
   GAME.camera.aspect = ASPECT;
   GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
   GAME.renderer.setSize(WIDTH, HEIGHT);
+  GAME.camera.zoom = 25/ENGINE.screenHeight;
 }

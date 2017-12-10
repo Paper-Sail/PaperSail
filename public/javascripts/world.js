@@ -60,7 +60,14 @@ const WORLD = {
     }
   },
   buildWorld: function*(region, tracker) {
-    var islands = 15
+    var wseed = 0;
+    function n(){
+      return wseed++;
+    }
+    function rand(){
+      return ndhash(region.x, region.y, n())
+    }
+    var islands = Math.floor(rand()*20)
     var rs = WORLD.regionSize;
     /*
     var back = new THREE.Mesh(rectangle(region.x*rs,region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
@@ -69,8 +76,9 @@ const WORLD = {
     back.position.z = -100;
     region.three.add(back);
     */
+    var iscale = 0.75+rand()*2
     for (var i = 0; i < islands; i++) {
-      WORLD.putIsland(region,i);
+      WORLD.putIsland(region,i, iscale);
       if (tracker){
         tracker.value = i/islands;
         LOADER.refresh()
@@ -82,7 +90,7 @@ const WORLD = {
       LOADER.refresh();
     }
   },
-  putIsland: function(region,seed){
+  putIsland: function(region,seed, iscale){
     var rs = WORLD.regionSize;
     function n(){
       return seed++;
@@ -91,7 +99,7 @@ const WORLD = {
       return ndhash(region.x, region.y, n())
     }
     var pos = new THREE.Vector2(rand()*rs+region.x*rs,rand()*rs+region.y*rs);
-    var island = Island(rand());
+    var island = Island(rand(), iscale);
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
     island.position = new THREE.Vector3(pos.x,pos.y, 1);
@@ -130,7 +138,7 @@ const WORLD = {
     glow.position.z = -4;
     region.three.add(island.mesh);
     //*
-    for (var il=0; il<rand()*3; il++){
+    for (var il=0; il<rand()*3*iscale*iscale; il++){
       
       var seg = Math.floor(rand()*(island.collision.vertices.length-1));
       var p1 = island.collision.vertices[seg];
@@ -138,11 +146,11 @@ const WORLD = {
       var av = p1.clone().lerp(p2,0.5);
       var d = p2.clone().sub(p1).normalize();
       var ang = Math.atan2(d.y, d.x);
-      var size = 7+rand()*10
+      var size = 7+rand()*10*iscale
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),GAME.materials.islandDecorations.pickFloaty(rand()));
       deco.rotation.z = ang;
       deco.position.copy(av);
-      deco.position.z = Math.random()*30;
+      //deco.position.z = Math.random()*30;
       island.mesh.add(deco);
     }
     //*/
@@ -227,7 +235,7 @@ const WORLD = {
 
 
 
-function Island(seed){
+function Island(seed, scale){
   function n(){
     return seed++;
   }
@@ -239,14 +247,15 @@ function Island(seed){
   var v = 5;
   var md = 10;
   var Md = 40;
+  var s = scale;
   var aoff = rand()*TAU
   for (var a = 0; a < Math.PI*2-0.3; a+=0.2+rand()*0.1) {
     d = Math.max(md,Math.min(Md,d+(rand()*2-1)*v));
-    ipoints.push(d*Math.cos(a+aoff));
-    ipoints.push(d*Math.sin(a+aoff));
+    ipoints.push(d*Math.cos(a+aoff)*s);
+    ipoints.push(d*Math.sin(a+aoff)*s);
   }
   
-  var outergeometry = convexShell(ipoints,12,100);
+  var outergeometry = convexShell(ipoints,12*scale,100*scale);
   var innergeometry = shapeFromPoints(ipoints);
   innergeometry.computeBoundingSphere();
   var geometry = new THREE.Geometry();

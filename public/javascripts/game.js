@@ -17,7 +17,7 @@ GAME.loadTracker = {
 LOADER.trackers.push(GAME.loadTracker)
 
 GAME.zoomed = false;
-
+GAME.zoomout = 0.2;
 GAME.boatradius = 8;
 GAME.backgroundcolor = new THREE.Color(0x05267A);
 GAME.zoomedbackgroundcolor = new THREE.Color(0xAA9977);
@@ -190,6 +190,10 @@ GAME.tick = function(){
 }
 
 GAME.onClick = function(pos){
+  GAME.moveTo(pos);
+}
+
+GAME.moveTo = function(pos){
   var bell = 1+Math.floor(Math.random()*3);
   var plop = 1+Math.floor(Math.random()*3);
   //sound["touch_bell_"+bell].play();
@@ -251,6 +255,7 @@ MULTI.on('tick', function(data){
 });
 
 GAME.init = function(){
+  GAME.zoomLevel = 1;
   GAME.ghosts = {};
   GAME.tickIn = 0;
   GAME.tickRate = 2;
@@ -312,8 +317,9 @@ GAME.init = function(){
 
 var forward = new THREE.Vector3(0,0,1);
 GAME.update = function(dt){
-  GAME.camera.zoom = lerp(GAME.camera.zoom, GAME.zoomed ? 0.4 : 1, dt*3);
-  GAME.scene.background = GAME.scene.background.clone().lerp(GAME.zoomed ? GAME.zoomedbackgroundcolor :  GAME.backgroundcolor, dt*3);
+  GAME.zoomLevel = lerp(GAME.zoomLevel, GAME.zoomed ? GAME.zoomout : 1, dt*3);
+  GAME.camera.zoom = GAME.zoomLevel*(25/ENGINE.screenHeight);
+  GAME.scene.background = GAME.scene.background.clone().lerp(GAME.zoomed ? GAME.backgroundcolor :  GAME.backgroundcolor, dt*3);
   GAME.materials.fishfin.opacity = lerp(GAME.materials.fishfin.opacity, GAME.zoomed ? 0 : 1, dt*10);
   GAME.materials.fishbody.opacity = lerp(GAME.materials.fishfin.opacity, GAME.zoomed ? 0 : 1, dt*10);
   GAME.materials.glow.opacity = lerp(GAME.materials.glow.opacity, GAME.zoomed ? 0 : 1, dt*10);
