@@ -123,6 +123,11 @@ const WORLD = {
       GAME.materials.glow
     );
     island.mesh.add(glow);
+    var cmesh = new THREE.Mesh(GAME.models.cylinder,GAME.materials.black);
+    island.mesh.add(cmesh);
+    console.log(cmesh);
+    cmesh.scale.x = cmesh.scale.y = cmesh.scale.z = 0.1;
+    cmesh.position.z = 10;
     glow.position.z = -4;
     region.three.add(island.mesh);
     //*
@@ -138,6 +143,7 @@ const WORLD = {
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),GAME.materials.islandDecorations.pickFloaty(rand()));
       deco.rotation.z = ang;
       deco.position.copy(av);
+      deco.position.z = Math.random()*30;
       island.mesh.add(deco);
     }
     //*/

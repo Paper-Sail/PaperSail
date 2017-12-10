@@ -20,6 +20,7 @@ const SPARTICLE = {
     p.mesh.material.opacity = 0;
     SPARTICLE.all.push(p);
     GAME.scene.add(p.mesh);
+    return p;
   },
   update: function(dt){
     SPARTICLE.all = SPARTICLE.all.filter(function(p){

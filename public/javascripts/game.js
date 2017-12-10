@@ -50,7 +50,13 @@ window.addEventListener("load", function() {
   GAME.loadTracker.value = 1;
   LOADER.refresh();
 });
-
+GAME.models = {}
+function loadModel(name) {
+  var loader = new THREE.BufferGeometryLoader();
+  loader.load("/models/"+name+".json",function(geometry){
+    GAME.models[name] = geometry;
+  });
+}
 GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
@@ -72,6 +78,12 @@ GAME.textures = {
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
 GAME.materials = {
+  black: new THREE.MeshBasicMaterial({
+    color: 0x000000
+  }),
+  white: new THREE.MeshBasicMaterial({
+    color: 0xFFFFFF
+  }),
   background: new THREE.MeshBasicMaterial({
     color: GAME.backgroundcolor
   }),
@@ -80,8 +92,9 @@ GAME.materials = {
     map: GAME.textures.islandtex,
     transparent: true
   }),
-  boat: new THREE.SpriteMaterial({
+  boat: new THREE.MeshBasicMaterial({
     map: GAME.textures.boat,
+    transparent: true,
     color: 0xFFFFFF
   }),
   ghost: new THREE.MeshBasicMaterial({
@@ -263,7 +276,7 @@ GAME.init = function(){
   GAME.cursorTime = 1000;
   GAME.scene.add(GAME.cursor);
   
-  var boat = new THREE.Sprite(GAME.materials.boat);
+  var boat = new THREE.Mesh(rectangle(-0.5,-0.5,1,1),GAME.materials.boat);
   var boatglow = new THREE.Mesh(rectangle(-0.6,-0.9,1.2,1.8),GAME.materials.boatglow);
   boatglow.position.z = -0.1;
   boat.add(boatglow);
@@ -470,19 +483,21 @@ GAME.update = function(dt){
   //*/
   GAME.fairyTime-=dt*GAME.fairyTimeScale;
   if (GAME.fairyTime<0){
-    GAME.fairyTime=Math.random()+0.5;
+    GAME.fairyTime=(Math.random()+0.5)*0.1;
     var ang = Math.random()*TAU;
     var dist = Math.sqrt(Math.random())*200;
     var partpos = GAME.camera.position.clone().add(new THREE.Vector3(Math.cos(ang)*dist, Math.sin(ang)*dist, 0));
-    partpos.z = 1;
-    var size = 0.5+Math.random()*0.5;
-    SPARTICLE.spawn(partpos,GAME.materials.fairy,{
+    partpos.z = 100+Math.random()*200;
+    var size = 1;
+    var speed = 50+Math.random()*50;
+    var part = SPARTICLE.spawn(partpos,GAME.materials.fairy,{
       minScale: 1.5*size,
       maxScale: 1.5*size,
       maxAge: size*15,
-      alphaFunc: function(x){ return 1*(1-(Math.pow(1-(x*2),2)))},
-      roam: 100*size
+      alphaFunc: function(x){ return 0.5*(1-(Math.pow(1-(x*2),2)))},
+      roam: speed*size
     });
+    part.roam.z = -200;
   }
   
   
