@@ -153,6 +153,9 @@ const WORLD = {
       //deco.position.z = Math.random()*30;
       island.mesh.add(deco);
     }
+    if (false && rand()<0.25){
+      DRAGON.spawn(island.mesh.position.x,island.mesh.position.y)
+    }
     //*/
   },
   doFog: function(px, py){

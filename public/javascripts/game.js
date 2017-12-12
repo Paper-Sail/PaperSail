@@ -1,3 +1,13 @@
+// framed.htm:
+function notify_host(){}
+window.addEventListener("message",function(event) {
+    console.log("Got a message: "+event.data);
+    if (event.data == "host"){
+      notify_host = function(data){
+          event.source.postMessage(data, event.origin);
+      }
+    }
+});
 const GAME = {
   addEventListener: function(event, cb){
     if (GAME.callbacks.hasOwnProperty(event) && typeof(cb)=="function"){
@@ -60,6 +70,8 @@ function loadModel(name) {
 GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
+  dragon1: new THREE.TextureLoader().load("/images/libellule_1.png"),
+  dragon2: new THREE.TextureLoader().load("/images/libellule_2.png"),
   stars: new THREE.TextureLoader().load("/images/stars_trans.png"),
   touch: new THREE.TextureLoader().load("/images/white_glow_touch.png"),
   splash: new THREE.TextureLoader().load("/images/water_circle_trail.png"),
@@ -74,6 +86,7 @@ GAME.textures = {
     new THREE.TextureLoader().load("/images/plants_2.png"),
     new THREE.TextureLoader().load("/images/plants_3.png"),
     new THREE.TextureLoader().load("/images/roots.png"),
+    new THREE.TextureLoader().load("/images/port.png"),
   ]
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
@@ -90,6 +103,11 @@ GAME.materials = {
   islandmat: new THREE.MeshBasicMaterial({
     color: 0x000000,
     map: GAME.textures.islandtex,
+    transparent: true
+  }),
+  dragon: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    map: GAME.textures.dragon1,
     transparent: true
   }),
   boat: new THREE.MeshBasicMaterial({
@@ -170,6 +188,9 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 GAME.started = false;
 GAME.start = function(){
   if (!GAME.started){
+    notify_host({
+      event: "gamestart"
+    });
     GAME.started = true;
     GAME.container.appendChild(GAME.element);
     document.getElementById('background-music').play()
@@ -296,12 +317,12 @@ GAME.init = function(){
     var actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
     var actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
     while (isInIsland(actualx, actualy,GAME.boatradius)){
-      console.log("Reroll position");
+      //console.log("Reroll position");
       actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
       actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
     }
-    console.log("Spawning at "+actualx+", "+actualy);
-    console.log(isInIsland(actualx, actualy,GAME.boatradius));
+    //console.log("Spawning at "+actualx+", "+actualy);
+    //console.log(isInIsland(actualx, actualy,GAME.boatradius));
     GAME.camera.position.x = actualx;
     GAME.camera.position.y = actualy;
     GAME.target = new THREE.Vector3(GAME.camera.position.x,GAME.camera.position.y,0);
@@ -516,6 +537,7 @@ GAME.update = function(dt){
   //GAME.camera.rotation.z = 0;
   SPARTICLE.update(dt);
   SCROLL.update(dt);
+  DRAGON.update(dt);
   FISH.update(dt);
   WORLD.update(dt);
   
