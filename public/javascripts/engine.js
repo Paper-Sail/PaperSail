@@ -53,7 +53,7 @@ ENGINE.initialise = function(container){
   // Start the renderer.
   //GAME.renderer.setSize(WIDTH, HEIGHT);
   ENGINE.setSize(container);
-  
+	FastClick.attach(container);
   container.addEventListener("click",function(e){
     var vector = new THREE.Vector3();
     vector.set(
