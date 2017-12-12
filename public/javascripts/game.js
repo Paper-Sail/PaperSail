@@ -272,7 +272,7 @@ GAME.init = function(){
   GAME.semiSplashTime = 1;
   GAME.targetSplashTime = 1;
   GAME.splashTimeScale = 0.25;
-  GAME.fairyTimeScale = 2;
+  GAME.fairyTimeScale = 1;
   GAME.semiSplashTimeScale = 0.5;
   GAME.targetSplashTimeScale = 0.5;
   
