@@ -1,13 +1,17 @@
-// framed.htm:
+const notification_buffer = []
+
 function notify_host(data){
-  console.log("No host window found");
-  console.log(data);
+  console.log("No host window found, queuing message");
+  notification_buffer.push(data);
 }
 window.addEventListener("message",function(event) {
     console.log("Got a message: "+event.data);
     if (event.data == "host"){
       notify_host = function(data){
           event.source.postMessage(data, event.origin);
+      }
+      while (notification_buffer.length>0) {
+        notify_host(notification_buffer.pop());
       }
     }
 });
