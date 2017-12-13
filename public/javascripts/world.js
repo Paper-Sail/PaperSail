@@ -141,15 +141,16 @@ const WORLD = {
     for (var il=0; il<rand()*3*iscale*iscale; il++){
       
       var seg = Math.floor(rand()*(island.collision.vertices.length-1));
+      var p0 = island.collision.vertices[mod(seg-1,island.collision.vertices.length)];
       var p1 = island.collision.vertices[seg];
       var p2 = island.collision.vertices[seg+1];
-      var av = p1.clone().lerp(p2,0.5);
-      var d = p2.clone().sub(p1).normalize();
+      //var av = p1.clone().lerp(p2,0.5);
+      var d = p2.clone().sub(p0).normalize();
       var ang = Math.atan2(d.y, d.x);
       var size = 7+rand()*10*iscale
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),GAME.materials.islandDecorations.pickFloaty(rand()));
       deco.rotation.z = ang;
-      deco.position.copy(av);
+      deco.position.copy(p1);
       //deco.position.z = Math.random()*30;
       island.mesh.add(deco);
     }
