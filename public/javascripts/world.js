@@ -147,8 +147,12 @@ const WORLD = {
       //var av = p1.clone().lerp(p2,0.5);
       var d = p2.clone().sub(p0).normalize();
       var ang = Math.atan2(d.y, d.x);
-      var size = 7+rand()*10*iscale
-      var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),GAME.materials.islandDecorations.pickFloaty(rand()));
+      var decomat = GAME.materials.islandDecorations.pickFloaty(rand());
+      var size = 7+rand()*10*iscale;
+      if (decomat==GAME.materials.islandDecorations[4]){
+        size = 18;
+      }
+      var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),decomat);
       deco.rotation.z = ang;
       deco.position.copy(p1);
       //deco.position.z = Math.random()*30;
