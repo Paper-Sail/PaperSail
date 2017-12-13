@@ -1,5 +1,8 @@
 // framed.htm:
-function notify_host(){}
+function notify_host(data){
+  console.log("No host window found");
+  console.log(data);
+}
 window.addEventListener("message",function(event) {
     console.log("Got a message: "+event.data);
     if (event.data == "host"){
