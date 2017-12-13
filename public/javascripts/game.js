@@ -93,7 +93,7 @@ GAME.textures = {
     new THREE.TextureLoader().load("/images/plants_2.png"),
     new THREE.TextureLoader().load("/images/plants_3.png"),
     new THREE.TextureLoader().load("/images/roots.png"),
-    new THREE.TextureLoader().load("/images/port.png"),
+    //new THREE.TextureLoader().load("/images/port.png"),
   ]
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
