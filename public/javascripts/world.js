@@ -161,7 +161,7 @@ const WORLD = {
       var decomat = GAME.materials.islandDecorations.pickFloaty(rand());
       var size = 7+rand()*10*iscale;
       if (decomat==GAME.materials.islandDecorations[4]){
-        size = 18;
+        size = 14;
       }
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),decomat);
       deco.rotation.z = ang;
