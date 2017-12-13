@@ -195,10 +195,12 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 GAME.started = false;
 GAME.start = function(){
   if (!GAME.started){
+    GAME.started = true;
+    GAME.container.classList.remove("paused");
+    ENGINE.setSize(GAME.container);
     notify_host({
       event: "gamestart"
     });
-    GAME.started = true;
     GAME.container.appendChild(GAME.element);
     document.getElementById('background-music').play()
     document.getElementById('background-sound').play()
