@@ -76,6 +76,7 @@ function loadModel(name) {
 }
 GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
+  fog: new THREE.TextureLoader().load("/images/fogpatch.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
   dragon: new THREE.TextureLoader().load("/images/libellule_1.png"),
   dragonwingright: new THREE.TextureLoader().load("/images/libellule_2.png"),
@@ -339,7 +340,6 @@ GAME.init = function(){
   GAME.camera.add(boat);
   boat.position.z = -300;
   boat.scale.set(30,30,30);
-  GAME.objects.collisions = [];
   
   WORLD.init();
   LOADER.addEventListener("load",function(){
@@ -405,8 +405,9 @@ GAME.update = function(dt){
   }
   var pushVelocity = new THREE.Vector3();
   var maxPower = 0;
-  for (var i = 0; i < GAME.objects.collisions.length; i++) {
-    var collision = GAME.objects.collisions[i];
+  var region = WORLD.getRegionAtWorldPos(GAME.camera.position.x,GAME.camera.position.y);
+  for (var i = 0; i < region.collisions.length; i++) {
+    var collision = region.collisions[i];
     var cdx = GAME.camera.position.x-collision.center.x;
     var cdy = GAME.camera.position.y-collision.center.y;
     var cd = (cdx*cdx+cdy*cdy);
@@ -605,9 +606,10 @@ GAME.update = function(dt){
 }
 
 function isInIsland(x,y,radius){
-  for (var i = 0; i < GAME.objects.collisions.length; i++) {
+  var region = WORLD.getRegionAtWorldPos(x,y);
+  for (var i = 0; i < region.collisions.length; i++) {
     //console.log("Checking "+x+", "+y);;
-    var collision = GAME.objects.collisions[i];
+    var collision = region.collisions[i];
     var cdx = x-collision.center.x;
     var cdy = y-collision.center.y;
     var cd = (cdx*cdx+cdy*cdy);
