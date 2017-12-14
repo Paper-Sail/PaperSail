@@ -26,9 +26,11 @@ const WORLD = {
   },
   buildRegion: function(x, y){
     var region = {
+      collisions: [],
       three: new THREE.Object3D(),
       x: x,
-      y: y
+      y: y,
+      islands: []
     }
     //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
     WORLD.makeFog(region);
@@ -43,15 +45,23 @@ const WORLD = {
   },
   buildRegionNoTrack: function(x, y){
     var region = {
+      collisions: [],
       three: new THREE.Object3D(),
       x: x,
-      y: y
+      y: y,
+      islands: []
     }
     //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
     WORLD.makeFog(region);
     WORLD.world.add(region.three);
     WORLD.regions.push(region);
     iterateCoroutine(WORLD.buildWorld(region), 10, 1);
+  },
+  getRegionAtWorldPos(x,y){
+    return WORLD.getRegion(
+      Math.floor(x/WORLD.regionSize),
+      Math.floor(y/WORLD.regionSize),
+    );
   },
   getRegion: function(x,y) {
     for (var i = 0; i < WORLD.regions.length; i++) {
@@ -100,6 +110,7 @@ const WORLD = {
     }
     var pos = new THREE.Vector2(rand()*rs+region.x*rs,rand()*rs+region.y*rs);
     var island = Island(rand(), iscale);
+    region.islands.push(island);
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
     island.position = new THREE.Vector3(pos.x,pos.y, 1);
@@ -114,7 +125,7 @@ const WORLD = {
         collisionpoints.push(p1.clone().lerp(p2, (s+0.5)/steps));
       }
     }
-    GAME.objects.collisions.push({
+    region.collisions.push({
       center: pos.clone().add(island.collision.boundingSphere.center),
       position: pos.clone(),
       radius: island.collision.boundingSphere.radius*1.5,
@@ -158,8 +169,8 @@ const WORLD = {
       //deco.position.z = Math.random()*30;
       island.mesh.add(deco);
     }
-    if (false && rand()<0.25){
-      DRAGON.spawn(island.mesh.position.x,island.mesh.position.y)
+    if (true || rand()<0.25){
+      //DRAGON.spawn(island.mesh.position.x,island.mesh.position.y)
     }
     //*/
   },
@@ -169,13 +180,17 @@ const WORLD = {
       for (var fogchunk in region.fog) {
         if (region.fog.hasOwnProperty(fogchunk)) {
           var chunk = region.fog[fogchunk];
-          var dx = px - chunk.x;
-          var dy = py - chunk.y;
-          var d2 = dx*dx+dy*dy;
-          var md = (WORLD.regionSize/WORLD.fogDensity)*2.5;
-          if (d2<md*md){
-            delete region.fog[fogchunk];
-            region.three.remove(chunk.three);
+          if (!chunk.faded){
+            var dx = px - chunk.x;
+            var dy = py - chunk.y;
+            var d2 = dx*dx+dy*dy;
+            var md = (WORLD.regionSize/WORLD.fogDensity)*3.5;
+            if (d2<md*md){
+              chunk.faded = true;
+              //WORLD.fadeFog(chunk);
+              delete region.fog[fogchunk];
+              region.three.remove(chunk.three);
+            }
           }
         }
       }
@@ -202,7 +217,18 @@ const WORLD = {
       }
     }
   },
+  fadeFog: function(chunk,fogchunk,region){
+    chunk.three.material.opacity = lerp(chunk.three.material.opacity, 0, 0.2);
+    if (chunk.three.material.opacity>0.02){
+      setTimeout(function(){
+        WORLD.fadeFog(chunk)
+      },100*Math.random());
+    } else {
+      chunk.three.parent.remove(chunk.three);
+    }
+  },
   makeFog: function(region){
+    var overlap = (WORLD.regionSize/WORLD.fogDensity);
     region.fog = {};
     for(var i = 0; i<WORLD.fogDensity; i++){
       for (var j=0; j<WORLD.fogDensity; j++){
@@ -211,21 +237,25 @@ const WORLD = {
         chunk.x = ((i+0.5)/WORLD.fogDensity+region.x)*WORLD.regionSize;
         chunk.y = ((j+0.5)/WORLD.fogDensity+region.y)*WORLD.regionSize;
         region.fog[i+"-"+j] = chunk;
-        
         chunk.three = new THREE.Mesh(
           rectangle(
-            (i/WORLD.fogDensity+region.x)*WORLD.regionSize,
-            (j/WORLD.fogDensity+region.y)*WORLD.regionSize,
-            1/WORLD.fogDensity*WORLD.regionSize,
-            1/WORLD.fogDensity*WORLD.regionSize
+            (i/WORLD.fogDensity+region.x)*WORLD.regionSize-overlap,
+            (j/WORLD.fogDensity+region.y)*WORLD.regionSize-overlap,
+            1/WORLD.fogDensity*WORLD.regionSize+2*overlap,
+            1/WORLD.fogDensity*WORLD.regionSize+2*overlap
           ),
           new THREE.MeshBasicMaterial({
-            opacity: 0.0,
+            map: GAME.textures.fog,
+            opacity: 0.2,
             transparent: true,
             color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
         );
-        chunk.three.position.z = -3;
+        chunk.three.position.add(new THREE.Vector3(
+            (Math.random()*2-1)*(overlap/3),
+            (Math.random()*2-1)*(overlap/3),
+            Math.random()*300
+        ));
         region.three.add(chunk.three);
       }
     }
@@ -256,8 +286,9 @@ function Island(seed, scale){
   var md = 10;
   var Md = 40;
   var s = scale;
-  var aoff = rand()*TAU
-  for (var a = 0; a < Math.PI*2-0.3; a+=0.2+rand()*0.1) {
+  var aoff = rand()*TAU;
+  var steps = Math.ceil(Math.pow(d/30,2)*5)
+  for (var a = 0; a < Math.PI*2; a+=1/steps) {
     d = Math.max(md,Math.min(Md,d+(rand()*2-1)*v));
     ipoints.push(d*Math.cos(a+aoff)*s);
     ipoints.push(d*Math.sin(a+aoff)*s);
@@ -272,6 +303,14 @@ function Island(seed, scale){
   geometry.uvsNeedUpdate = true;
   geometry.computeBoundingSphere();
   var island = new THREE.Mesh(geometry, GAME.materials.islandmat);
+  var islandwire = new THREE.WireframeGeometry(outergeometry);
+  var line = new THREE.LineSegments( islandwire );
+  line.material.depthTest = false;
+  line.material.opacity = 0.5;
+  line.material.color = new THREE.Color(0x00FFFF);
+  line.material.transparent = true;
+  line.position.setZ(4);
+  island.add(line);
   return {
     mesh: island,
     collision: innergeometry

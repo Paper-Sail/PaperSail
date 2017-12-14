@@ -76,9 +76,11 @@ function loadModel(name) {
 }
 GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
+  fog: new THREE.TextureLoader().load("/images/fogpatch.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
-  dragon1: new THREE.TextureLoader().load("/images/libellule_1.png"),
-  dragon2: new THREE.TextureLoader().load("/images/libellule_2.png"),
+  dragon: new THREE.TextureLoader().load("/images/libellule_1.png"),
+  dragonwingright: new THREE.TextureLoader().load("/images/libellule_2.png"),
+  dragonwingleft: new THREE.TextureLoader().load("/images/libellule_3.png"),
   stars: new THREE.TextureLoader().load("/images/stars_trans.png"),
   touch: new THREE.TextureLoader().load("/images/white_glow_touch.png"),
   splash: new THREE.TextureLoader().load("/images/water_circle_trail.png"),
@@ -93,7 +95,7 @@ GAME.textures = {
     new THREE.TextureLoader().load("/images/plants_2.png"),
     new THREE.TextureLoader().load("/images/plants_3.png"),
     new THREE.TextureLoader().load("/images/roots.png"),
-    new THREE.TextureLoader().load("/images/port.png"),
+    //new THREE.TextureLoader().load("/images/port.png"),
   ]
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
@@ -112,9 +114,24 @@ GAME.materials = {
     map: GAME.textures.islandtex,
     transparent: true
   }),
+  token: new THREE.MeshBasicMaterial({
+    color: 0xFF00FF,
+    map: GAME.textures.touch,
+    transparent: true
+  }),
   dragon: new THREE.MeshBasicMaterial({
     color: 0x000000,
-    map: GAME.textures.dragon1,
+    map: GAME.textures.dragon,
+    transparent: true
+  }),
+  dragonwingright: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    map: GAME.textures.dragonwingright,
+    transparent: true
+  }),
+  dragonwingleft: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    map: GAME.textures.dragonwingleft,
     transparent: true
   }),
   boat: new THREE.MeshBasicMaterial({
@@ -195,15 +212,21 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 GAME.started = false;
 GAME.start = function(){
   if (!GAME.started){
+    GAME.started = true;
+    GAME.container.classList.remove("paused");
+    ENGINE.setSize(GAME.container);
     notify_host({
       event: "gamestart"
     });
-    GAME.started = true;
     GAME.container.appendChild(GAME.element);
     document.getElementById('background-music').play()
     document.getElementById('background-sound').play()
     GAME.clock = new THREE.Clock(true);
     GAME.tick();
+    for (var i = 0; i <= 1; i+=(1/4)) {
+      console.log("Dragon: "+i);
+        DRAGON.spawn(lerp(20,65, i));
+    }
   }
 }
 skipFrame = false;
@@ -317,7 +340,6 @@ GAME.init = function(){
   GAME.camera.add(boat);
   boat.position.z = -300;
   boat.scale.set(30,30,30);
-  GAME.objects.collisions = [];
   
   WORLD.init();
   LOADER.addEventListener("load",function(){
@@ -383,8 +405,9 @@ GAME.update = function(dt){
   }
   var pushVelocity = new THREE.Vector3();
   var maxPower = 0;
-  for (var i = 0; i < GAME.objects.collisions.length; i++) {
-    var collision = GAME.objects.collisions[i];
+  var region = WORLD.getRegionAtWorldPos(GAME.camera.position.x,GAME.camera.position.y);
+  for (var i = 0; i < region.collisions.length; i++) {
+    var collision = region.collisions[i];
     var cdx = GAME.camera.position.x-collision.center.x;
     var cdy = GAME.camera.position.y-collision.center.y;
     var cd = (cdx*cdx+cdy*cdy);
@@ -583,9 +606,10 @@ GAME.update = function(dt){
 }
 
 function isInIsland(x,y,radius){
-  for (var i = 0; i < GAME.objects.collisions.length; i++) {
+  var region = WORLD.getRegionAtWorldPos(x,y);
+  for (var i = 0; i < region.collisions.length; i++) {
     //console.log("Checking "+x+", "+y);;
-    var collision = GAME.objects.collisions[i];
+    var collision = region.collisions[i];
     var cdx = x-collision.center.x;
     var cdy = y-collision.center.y;
     var cd = (cdx*cdx+cdy*cdy);

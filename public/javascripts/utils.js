@@ -27,14 +27,24 @@ function ndhash(){
   return (parseInt(md5(str),16)%(1000000000))/1000000000
 }
 
-function rectangle(x,y,w,h) {
+function rectangle(x,y,w,h,flip) {
+  var flip = flip ? true : false;
   var geometry = new THREE.Geometry();
-  geometry.vertices.push(
-    new THREE.Vector3(x,y,0),
-    new THREE.Vector3(x+w,y,0),
-    new THREE.Vector3(x,y+h,0),
-    new THREE.Vector3(x+w,y+h,0)
-  );
+  if (flip){
+    geometry.vertices.push(
+      new THREE.Vector3(x,y,0),
+      new THREE.Vector3(x,y+h,0),
+      new THREE.Vector3(x+w,y,0),
+      new THREE.Vector3(x+w,y+h,0)
+    );
+  } else {
+    geometry.vertices.push(
+      new THREE.Vector3(x,y,0),
+      new THREE.Vector3(x+w,y,0),
+      new THREE.Vector3(x,y+h,0),
+      new THREE.Vector3(x+w,y+h,0)
+    );
+  }
   geometry.faces.push(
     new THREE.Face3(0,1,2),
     new THREE.Face3(1,3,2)
