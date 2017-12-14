@@ -246,7 +246,7 @@ const WORLD = {
           ),
           new THREE.MeshBasicMaterial({
             map: GAME.textures.fog,
-            opacity: 0.2,
+            opacity: 0,
             transparent: true,
             color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
@@ -310,7 +310,7 @@ function Island(seed, scale){
   line.material.color = new THREE.Color(0x00FFFF);
   line.material.transparent = true;
   line.position.setZ(4);
-  island.add(line);
+  //island.add(line);
   return {
     mesh: island,
     collision: innergeometry
