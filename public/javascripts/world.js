@@ -28,7 +28,8 @@ const WORLD = {
     var region = {
       three: new THREE.Object3D(),
       x: x,
-      y: y
+      y: y,
+      islands: []
     }
     //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
     WORLD.makeFog(region);
@@ -45,13 +46,20 @@ const WORLD = {
     var region = {
       three: new THREE.Object3D(),
       x: x,
-      y: y
+      y: y,
+      islands: []
     }
     //region.three.position.set(x*WORLD.regionSize, y*WORLD.regionSize, 0);
     WORLD.makeFog(region);
     WORLD.world.add(region.three);
     WORLD.regions.push(region);
     iterateCoroutine(WORLD.buildWorld(region), 10, 1);
+  },
+  getRegionAtWorldPos(x,y){
+    return WORLD.getRegion(
+      Math.floor(x/WORLD.regionSize),
+      Math.floor(y/WORLD.regionSize),
+    );
   },
   getRegion: function(x,y) {
     for (var i = 0; i < WORLD.regions.length; i++) {
@@ -100,6 +108,7 @@ const WORLD = {
     }
     var pos = new THREE.Vector2(rand()*rs+region.x*rs,rand()*rs+region.y*rs);
     var island = Island(rand(), iscale);
+    region.islands.push(island);
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
     island.position = new THREE.Vector3(pos.x,pos.y, 1);
@@ -141,20 +150,21 @@ const WORLD = {
     for (var il=0; il<rand()*3*iscale*iscale; il++){
       
       var seg = Math.floor(rand()*(island.collision.vertices.length-1));
+      var p0 = island.collision.vertices[mod(seg-1,island.collision.vertices.length)];
       var p1 = island.collision.vertices[seg];
       var p2 = island.collision.vertices[seg+1];
-      var av = p1.clone().lerp(p2,0.5);
-      var d = p2.clone().sub(p1).normalize();
+      //var av = p1.clone().lerp(p2,0.5);
+      var d = p2.clone().sub(p0).normalize();
       var ang = Math.atan2(d.y, d.x);
       var size = 7+rand()*10*iscale
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),GAME.materials.islandDecorations.pickFloaty(rand()));
       deco.rotation.z = ang;
-      deco.position.copy(av);
+      deco.position.copy(p1);
       //deco.position.z = Math.random()*30;
       island.mesh.add(deco);
     }
-    if (false && rand()<0.25){
-      DRAGON.spawn(island.mesh.position.x,island.mesh.position.y)
+    if (true || rand()<0.25){
+      //DRAGON.spawn(island.mesh.position.x,island.mesh.position.y)
     }
     //*/
   },
@@ -251,8 +261,9 @@ function Island(seed, scale){
   var md = 10;
   var Md = 40;
   var s = scale;
-  var aoff = rand()*TAU
-  for (var a = 0; a < Math.PI*2-0.3; a+=0.2+rand()*0.1) {
+  var aoff = rand()*TAU;
+  var steps = 10
+  for (var a = 0; a < Math.PI*2; a+=1/steps) {
     d = Math.max(md,Math.min(Md,d+(rand()*2-1)*v));
     ipoints.push(d*Math.cos(a+aoff)*s);
     ipoints.push(d*Math.sin(a+aoff)*s);

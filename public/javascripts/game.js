@@ -1,10 +1,17 @@
-// framed.htm:
-function notify_host(){}
+const notification_buffer = []
+
+function notify_host(data){
+  console.log("No host window found, queuing message");
+  notification_buffer.push(data);
+}
 window.addEventListener("message",function(event) {
     console.log("Got a message: "+event.data);
     if (event.data == "host"){
       notify_host = function(data){
           event.source.postMessage(data, event.origin);
+      }
+      while (notification_buffer.length>0) {
+        notify_host(notification_buffer.pop());
       }
     }
 });
@@ -70,8 +77,9 @@ function loadModel(name) {
 GAME.textures = {
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
-  dragon1: new THREE.TextureLoader().load("/images/libellule_1.png"),
-  dragon2: new THREE.TextureLoader().load("/images/libellule_2.png"),
+  dragon: new THREE.TextureLoader().load("/images/libellule_1.png"),
+  dragonwingright: new THREE.TextureLoader().load("/images/libellule_2.png"),
+  dragonwingleft: new THREE.TextureLoader().load("/images/libellule_3.png"),
   stars: new THREE.TextureLoader().load("/images/stars_trans.png"),
   touch: new THREE.TextureLoader().load("/images/white_glow_touch.png"),
   splash: new THREE.TextureLoader().load("/images/water_circle_trail.png"),
@@ -86,7 +94,7 @@ GAME.textures = {
     new THREE.TextureLoader().load("/images/plants_2.png"),
     new THREE.TextureLoader().load("/images/plants_3.png"),
     new THREE.TextureLoader().load("/images/roots.png"),
-    new THREE.TextureLoader().load("/images/port.png"),
+    //new THREE.TextureLoader().load("/images/port.png"),
   ]
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
@@ -105,9 +113,24 @@ GAME.materials = {
     map: GAME.textures.islandtex,
     transparent: true
   }),
+  token: new THREE.MeshBasicMaterial({
+    color: 0xFF00FF,
+    map: GAME.textures.touch,
+    transparent: true
+  }),
   dragon: new THREE.MeshBasicMaterial({
     color: 0x000000,
-    map: GAME.textures.dragon1,
+    map: GAME.textures.dragon,
+    transparent: true
+  }),
+  dragonwingright: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    map: GAME.textures.dragonwingright,
+    transparent: true
+  }),
+  dragonwingleft: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    map: GAME.textures.dragonwingleft,
     transparent: true
   }),
   boat: new THREE.MeshBasicMaterial({
@@ -188,15 +211,21 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
 GAME.started = false;
 GAME.start = function(){
   if (!GAME.started){
+    GAME.started = true;
+    GAME.container.classList.remove("paused");
+    ENGINE.setSize(GAME.container);
     notify_host({
       event: "gamestart"
     });
-    GAME.started = true;
     GAME.container.appendChild(GAME.element);
     document.getElementById('background-music').play()
     document.getElementById('background-sound').play()
     GAME.clock = new THREE.Clock(true);
     GAME.tick();
+    for (var i = 0; i <= 1; i+=(1/4)) {
+      console.log("Dragon: "+i);
+        DRAGON.spawn(lerp(20,65, i));
+    }
   }
 }
 skipFrame = false;
