@@ -27,6 +27,35 @@ app.use(require('node-sass-middleware')({
   indentedSyntax: true,
   sourceMap: true
 }));
+
+String.prototype.endsWith = function (str) {
+  return this.substr(-str.length,str.length)==str;
+};
+
+app.use('/', function(req, res, next){
+  if (req.url.endsWith("translates.json") || req.url.endsWith("the_paper_sail_logo.png")){
+    var lang = req.get("Accept-Language").split("-")[0];
+    
+    var infix = "";
+    switch (lang) {
+      case "de":
+        infix = "_de";
+        break;
+      case "fr":
+        infix = "_fr";
+        break;
+      default:
+        infix = "_eng";
+        break;  
+    }
+    req.url = req.url.replace("translates.json",`translates${infix}.json`);
+    req.url = req.url.replace("the_paper_sail_logo.png",`the_paper_sail_logo${infix}.png`);
+  }
+  next();
+});
+
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
