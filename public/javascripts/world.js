@@ -55,7 +55,7 @@ const WORLD = {
     WORLD.makeFog(region);
     WORLD.world.add(region.three);
     WORLD.regions.push(region);
-    iterateCoroutine(WORLD.buildWorld(region), 10, 1);
+    iterateCoroutine(WORLD.buildWorld(region), 5, 1);
   },
   getRegionAtWorldPos(x,y){
     return WORLD.getRegion(
@@ -81,11 +81,12 @@ const WORLD = {
     var rs = WORLD.regionSize;
     /*
     var back = new THREE.Mesh(rectangle(region.x*rs,region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
-      color: GAME.backgroundcolor
+      color: new THREE.Color(Math.random(),Math.random(),Math.random())
     }));
-    back.position.z = -100;
+    back.position.z = -1;
     region.three.add(back);
-    */
+    //*/
+    
     var iscale = 0.75+rand()*2
     for (var i = 0; i < islands; i++) {
       WORLD.putIsland(region,i, iscale);
@@ -114,6 +115,18 @@ const WORLD = {
     //island.mesh.renderOrder = 0;
     island.mesh.position.set(pos.x, pos.y, 0);
     island.position = new THREE.Vector3(pos.x,pos.y, 1);
+    
+    var islandwire = new THREE.WireframeGeometry(island.mesh.geometry);
+    var line = new THREE.LineSegments( islandwire );
+    line.material.depthTest = false;
+    line.material.opacity = 0.5;
+    line.material.color = new THREE.Color(0x00FFFF);
+    line.material.transparent = true;
+    //line.position.copy(island.mesh.position)
+    line.position.setZ(4);
+    //island.mesh.add(line);
+    
+    
     var collisionpoints = [];
     for (var i = 0; i < island.collision.vertices.length; i++) {
       var p1 = island.collision.vertices[i];
@@ -125,12 +138,29 @@ const WORLD = {
         collisionpoints.push(p1.clone().lerp(p2, (s+0.5)/steps));
       }
     }
-    region.collisions.push({
+    var collisions = {
       center: pos.clone().add(island.collision.boundingSphere.center),
       position: pos.clone(),
       radius: island.collision.boundingSphere.radius*1.5,
-      points: collisionpoints
-    });
+      points: collisionpoints,
+      island: island
+    };
+    island.collisions = collisions;
+    region.collisions.push(collisions);
+    for (var i = 0; i < collisionpoints.length; i++) {
+      var pt = collisionpoints[i];
+      var pgeom = rectangle(-1,-1,2,2);
+      var pline = new THREE.LineSegments(pgeom);
+      pline.material.depthTest = false;
+      pline.material.opacity = 0.5;
+      pline.material.color = new THREE.Color(0xFF00FF);
+      pline.material.transparent = true;
+      pline.position.copy(pos.clone().add(pt))
+      pline.position.setZ(5);
+      //GAME.scene.add(pline);
+    }
+    
+    
     var glowCenter = island.collision.boundingSphere.center;
     var glowRadius = island.collision.boundingSphere.radius*2.5;
     var glow = new THREE.Mesh(rectangle(
@@ -149,8 +179,7 @@ const WORLD = {
     glow.position.z = -4;
     region.three.add(island.mesh);
     //*
-    for (var il=0; il<rand()*3*iscale*iscale; il++){
-      
+    for (var il=0; il<rand()*3*iscale*iscale; il++){      
       var seg = Math.floor(rand()*(island.collision.vertices.length-1));
       var p0 = island.collision.vertices[mod(seg-1,island.collision.vertices.length)];
       var p1 = island.collision.vertices[seg];
@@ -168,11 +197,12 @@ const WORLD = {
       deco.position.copy(p1);
       //deco.position.z = Math.random()*30;
       island.mesh.add(deco);
-    }
-    if (true || rand()<0.25){
-      //DRAGON.spawn(island.mesh.position.x,island.mesh.position.y)
-    }
+    }s
     //*/
+  },
+  removeIsland(region, island){
+    region.three.remove(island.mesh);
+    region.collisions.remove(island.collisions);    
   },
   doFog: function(px, py){
     for (var i = 0; i < WORLD.regions.length; i++) {
@@ -187,9 +217,9 @@ const WORLD = {
             var md = (WORLD.regionSize/WORLD.fogDensity)*3.5;
             if (d2<md*md){
               chunk.faded = true;
-              //WORLD.fadeFog(chunk);
+              WORLD.fadeFog(chunk);
               delete region.fog[fogchunk];
-              region.three.remove(chunk.three);
+              //region.three.remove(chunk.three);
             }
           }
         }
@@ -228,7 +258,7 @@ const WORLD = {
     }
   },
   makeFog: function(region){
-    var overlap = (WORLD.regionSize/WORLD.fogDensity);
+    var overlap = (WORLD.regionSize/WORLD.fogDensity)*2;
     region.fog = {};
     for(var i = 0; i<WORLD.fogDensity; i++){
       for (var j=0; j<WORLD.fogDensity; j++){
@@ -246,15 +276,15 @@ const WORLD = {
           ),
           new THREE.MeshBasicMaterial({
             map: GAME.textures.fog,
-            opacity: 0,
+            opacity: 0.4,
             transparent: true,
             color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
         );
         chunk.three.position.add(new THREE.Vector3(
-            (Math.random()*2-1)*(overlap/3),
-            (Math.random()*2-1)*(overlap/3),
-            Math.random()*300
+            (Math.random()*2-1)*(overlap*0.25),
+            (Math.random()*2-1)*(overlap*0.25),
+            Math.random()*100
         ));
         region.three.add(chunk.three);
       }
@@ -303,14 +333,6 @@ function Island(seed, scale){
   geometry.uvsNeedUpdate = true;
   geometry.computeBoundingSphere();
   var island = new THREE.Mesh(geometry, GAME.materials.islandmat);
-  var islandwire = new THREE.WireframeGeometry(outergeometry);
-  var line = new THREE.LineSegments( islandwire );
-  line.material.depthTest = false;
-  line.material.opacity = 0.5;
-  line.material.color = new THREE.Color(0x00FFFF);
-  line.material.transparent = true;
-  line.position.setZ(4);
-  //island.add(line);
   return {
     mesh: island,
     collision: innergeometry

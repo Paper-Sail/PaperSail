@@ -37,7 +37,7 @@ const DRAGON = {
     //dragon.wingright.rotation.z = Math.PI/2;
     dragon.winganchor.add(dragon.rightanchor);
     dragon.rightanchor.add(dragon.wingright);
-    
+    dragon.changedir = 0;
     dragon.power = 400;
     dragon.friction = 2;
     dragon.speed = 0;
@@ -46,6 +46,7 @@ const DRAGON = {
     dragon.mesh.add(dragon.winganchor);
     dragon.wingtime = 0;
     dragon.twitch = 0;
+    dragon.turn = 0;
     dragon.resting = true;
     dragon.flytime = 1+Math.random();
     GAME.scene.add(dragon.obj);
@@ -59,6 +60,8 @@ const DRAGON = {
         dragon.token.position.copy(dragon.target);
         dragon.token.position.setZ(3);
         dragon.twitch = lerp(dragon.twitch,0,dt*10);
+        dragon.turn = lerp(dragon.turn,0,dt*10);
+        dragon.obj.rotation.z += (dragon.turn)*dt;
         dragon.wingtime += (dragon.speed*0.3+1.5+dragon.twitch*40)*dt;
         dragon.leftanchor.rotation.z = lerp(-0.25,0.3,Math.sin(dragon.wingtime)*0.5+0.5 );
         dragon.rightanchor.rotation.z = lerp(0.25,-0.3,Math.sin(dragon.wingtime)*0.5+0.5 );
@@ -67,6 +70,7 @@ const DRAGON = {
           dragon.flytime-=dt*0.25;
           if (dragon.flytime<=0){
             dragon.twitch = 1;
+            dragon.turn = (5+Math.random()*5)*Math.sign(Math.random()-0.5);
             if (Math.random()<0.75){
               dragon.flytime=1+Math.random();
             } else {
@@ -80,8 +84,18 @@ const DRAGON = {
             dragon.resting = true;
             dragon.flytime = 1+Math.random()
           } else {
+            dragon.changedir-=dt;
+            if (dragon.changedir<=0){
+              dragon.target = DRAGON.getTarget(dragon);
+              dragon.changedir = Math.random()
+            }
             dragon.speed+= (dragon.power-dragon.speed*dragon.friction)*dt;
-            var move = dragon.target.clone().sub(dragon.obj.position);
+            var move = null
+            if (dragon.target){
+              move  = dragon.target.clone().sub(dragon.obj.position);
+            } else {
+              move = new THREE.Vector3(Math.cos(dragon.mesh.rotation.z), Math.sin(dragon.mesh.rotation.z),0);
+            }
             var mangle = Math.atan2(move.y, move.x);
             if (Math.abs(dragon.obj.rotation.z-mangle)>0.1){
               var dangle = dragon.obj.rotation.z;
@@ -111,9 +125,12 @@ const DRAGON = {
   getTarget(){
     var region = WORLD.regions.pickRandom();
     if (region){
-      var targetIsland = region.islands.pickRandom();
-      if (targetIsland){
-        return new THREE.Vector3(targetIsland.position.x, targetIsland.position.y);
+      var targetcol = region.collisions.pickRandom();
+      if (targetcol){
+        var target = targetcol.position.clone().add(targetcol.points.pickRandom());
+        if (target){
+          return new THREE.Vector3(target.x, target.y);
+        }
       }
     }
   }

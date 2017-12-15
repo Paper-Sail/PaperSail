@@ -203,6 +203,10 @@ Array.prototype.pickRandom = function () {
 Array.prototype.pickFloaty = function (val) {
   return this[Math.floor(mod(val,1)*this.length)];
 };
+Array.prototype.remove = function (element) {
+  const index = this.indexOf(element);
+  this.splice(index, 1);
+};
 
 function guid() {
   function s4() {
