@@ -95,7 +95,7 @@ GAME.textures = {
     new THREE.TextureLoader().load("/images/plants_2.png"),
     new THREE.TextureLoader().load("/images/plants_3.png"),
     new THREE.TextureLoader().load("/images/roots.png"),
-    new THREE.TextureLoader().load("/images/port.png"),
+    //new THREE.TextureLoader().load("/images/port.png"),
   ]
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
@@ -111,6 +111,7 @@ GAME.materials = {
   }),
   islandmat: new THREE.MeshBasicMaterial({
     color: 0x000000,
+    //opacity: 0,
     map: GAME.textures.islandtex,
     transparent: true
   }),
@@ -223,9 +224,9 @@ GAME.start = function(){
     document.getElementById('background-sound').play()
     GAME.clock = new THREE.Clock(true);
     GAME.tick();
-    for (var i = 0; i <= 1; i+=(1/4)) {
-      console.log("Dragon: "+i);
-        DRAGON.spawn(lerp(20,65, i));
+    for (var i = 0; i <= 1; i+=(1/5)) {
+      
+      DRAGON.spawn(lerp(20,45, i));
     }
   }
 }
@@ -346,12 +347,12 @@ GAME.init = function(){
     var actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
     var actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
     while (isInIsland(actualx, actualy,GAME.boatradius)){
-      //console.log("Reroll position");
+      console.log("Reroll position");
       actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
       actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
     }
-    //console.log("Spawning at "+actualx+", "+actualy);
-    //console.log(isInIsland(actualx, actualy,GAME.boatradius));
+    console.log("Spawning at "+actualx+", "+actualy);
+    console.log(isInIsland(actualx, actualy,GAME.boatradius));
     GAME.camera.position.x = actualx;
     GAME.camera.position.y = actualy;
     GAME.target = new THREE.Vector3(GAME.camera.position.x,GAME.camera.position.y,0);
@@ -405,24 +406,27 @@ GAME.update = function(dt){
   }
   var pushVelocity = new THREE.Vector3();
   var maxPower = 0;
-  var region = WORLD.getRegionAtWorldPos(GAME.camera.position.x,GAME.camera.position.y);
-  for (var i = 0; i < region.collisions.length; i++) {
-    var collision = region.collisions[i];
-    var cdx = GAME.camera.position.x-collision.center.x;
-    var cdy = GAME.camera.position.y-collision.center.y;
-    var cd = (cdx*cdx+cdy*cdy);
-    if (cd<Math.pow(collision.radius+GAME.boatradius,2)){
-      for (var ci = 0; ci < collision.points.length; ci++) {
-        var point = collision.position.clone().add(collision.points[ci]);
-        var dx = GAME.camera.position.x-point.x;
-        var dy = GAME.camera.position.y-point.y;
-        var d2 = (dx*dx+dy*dy);
-        if (d2<GAME.boatradius*GAME.boatradius){
-          var d = Math.sqrt(d2);
-          var nx = dx/d;
-          var ny = dy/d;
-          maxPower = Math.max(maxPower,GAME.boatradius-d);
-          pushVelocity.add(new THREE.Vector3(nx,ny,0));
+  for (var r = 0; r < WORLD.regions.length; r++){
+    var region = WORLD.regions[r];    
+    for (var i = 0; i < region.collisions.length; i++) {
+      var collision = region.collisions[i];
+      var cdx = GAME.camera.position.x-collision.center.x;
+      var cdy = GAME.camera.position.y-collision.center.y;
+      var cd = (cdx*cdx+cdy*cdy);
+      if (cd<Math.pow(collision.radius+GAME.boatradius,2)){
+        for (var ci = 0; ci < collision.points.length; ci++) {
+          var point = collision.position.clone().add(collision.points[ci]);
+          var dx = GAME.camera.position.x-point.x;
+          var dy = GAME.camera.position.y-point.y;
+          var d2 = (dx*dx+dy*dy);
+          if (d2<GAME.boatradius*GAME.boatradius){
+            //WORLD.removeIsland(region, collision.island)
+            var d = Math.sqrt(d2);
+            var nx = dx/d;
+            var ny = dy/d;
+            maxPower = Math.max(maxPower,GAME.boatradius-d);
+            pushVelocity.add(new THREE.Vector3(nx,ny,0));
+          }
         }
       }
     }
@@ -606,15 +610,17 @@ GAME.update = function(dt){
 }
 
 function isInIsland(x,y,radius){
-  var region = WORLD.getRegionAtWorldPos(x,y);
-  for (var i = 0; i < region.collisions.length; i++) {
-    //console.log("Checking "+x+", "+y);;
-    var collision = region.collisions[i];
-    var cdx = x-collision.center.x;
-    var cdy = y-collision.center.y;
-    var cd = (cdx*cdx+cdy*cdy);
-    if (Math.sqrt(cd)<collision.radius*1+radius){
-      return true;
+  for (var r = 0; r < WORLD.regions.length; r++){
+    var region = WORLD.regions[r];
+    for (var i = 0; i < region.collisions.length; i++) {
+      //console.log("Checking "+x+", "+y);;
+      var collision = region.collisions[i];
+      var cdx = x-collision.center.x;
+      var cdy = y-collision.center.y;
+      var cd = (cdx*cdx+cdy*cdy);
+      if (Math.sqrt(cd)<collision.radius*1+radius){
+        return true;
+      }
     }
   }
   return false;
