@@ -11,6 +11,26 @@ var index = require('./routes/index');
 
 var app = express();
 
+app.use('/', function(req, res, next){
+  //console.log(req);
+  //res.send("nope")
+  next();
+});
+
+const cheatLang = ["en","de","fr"]
+
+app.use('/', function(req, res, next){
+  for (var i = 0; i < cheatLang.length; i++) {
+    var lang = cheatLang[i]
+    var oldUrl = req.url;
+    req.url = req.url.replace("/"+lang+"/", "/");
+    if (oldUrl!=req.url){
+      req.cheatLang = lang;
+    }
+  }
+  next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -34,8 +54,15 @@ String.prototype.endsWith = function (str) {
 
 app.use('/', function(req, res, next){
   if (req.url.endsWith("translates.json") || req.url.endsWith("the_paper_sail_logo.png")){
-    var lang = req.get("Accept-Language").split("-")[0];
-    
+    console.log("Translation");
+    var lang = "en";
+    var acceptLanguage = req.get("Accept-Language")
+    if (acceptLanguage){
+        lang = acceptLanguage.split("-")[0];
+    }
+    if (req.cheatLang){
+      lang = req.cheatLang;
+    }
     var infix = "";
     switch (lang) {
       case "de":
