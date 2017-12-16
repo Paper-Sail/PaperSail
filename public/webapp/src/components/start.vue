@@ -29,6 +29,9 @@ export default {
     cursor: pointer;
     transition: all .2s ease-out;
     transform: scale(.9);
+    @media only screen and (device-width: 768px) and (device-height: 1024px) {
+      bottom: 15%;
+    }
     &:hover {
       transform: scale(.8); 
     }

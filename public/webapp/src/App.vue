@@ -123,7 +123,7 @@ h1, h2, h3, h4 {
 }
 
 h1,h2 {
-  font-size: 20px;
+  font-size: 25px;
 }
 
 h3 {
