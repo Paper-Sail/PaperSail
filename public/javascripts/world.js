@@ -60,7 +60,7 @@ const WORLD = {
   getRegionAtWorldPos(x,y){
     return WORLD.getRegion(
       Math.floor(x/WORLD.regionSize),
-      Math.floor(y/WORLD.regionSize),
+      Math.floor(y/WORLD.regionSize)
     );
   },
   getRegion: function(x,y) {
