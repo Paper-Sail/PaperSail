@@ -2,14 +2,14 @@
   <div class="tuto flex">
     <h2 v-if="firstSteps" class="jim mt">{{t(8)}}</h2>
     <h2 v-else class="jim mt">{{t(9)}}</h2>
-      <el-carousel :interval="3100" trigger="click" height="350px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
+      <el-carousel :interval="3500" trigger="click" height="350px" indicator-position="outside" arrow="always" :autoplay="true" @change="changeSlide">
       <el-carousel-item v-for="item in items" :key="item.url">
         <p class="bitter sentence" v-html="item.sentence"></p>
         <img class="pic" :src="`${assetsUrl}${item.url}`">
       </el-carousel-item>
     </el-carousel>
     <AppFooter>
-      <h3 class="jim loading" v-if="showStartButton" @click="go">{{t(17)}}</h3>
+      <Start v-if="showStartButton" :onClick="go" class="start" />
       <div v-else class="loading">
         <div class="bitter">{{t(16)}}</div>
         <progress max="100" :value="progressValue"></progress>
@@ -21,11 +21,13 @@
 <script>
  import  translations from '../mixins/utils.js';
  import AppFooter from './footer.vue';
+ import Start from './start.vue';
 
  export default {
    mixins: [translations],
    components: {
-     AppFooter
+     AppFooter,
+     Start
    },
    props: {
      progressValue: 0,
@@ -117,6 +119,10 @@
 
     progress::-moz-progress-bar {
       background: #1a75c1;
+    }
+    .start {
+      transform: scale(.6);
+      bottom: 0;
     }
   }
 </style>

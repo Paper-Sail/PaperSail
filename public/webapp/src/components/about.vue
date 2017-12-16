@@ -9,7 +9,7 @@
     <h2 class="jim" v-html="t(2)"></h2>
     <img class="logo" :src="`${assetsUrl}the_paper_sail_logo.png`">
     <p class="jim">{{t(3)}}</p>
-    <p class="bitter close_btn" @click="handleClose"><img width="20px" :src="`${assetsUrl}close_button.png`">&nbsp;{{t(19)}}</p>
+    <p class="bitter close_btn" @click="handleClose"><img width="20px" :src="`${assetsUrl}close_button.png`">&nbsp;{{t(64)}}</p>
     <h3 class="credits bitter">{{t(4)}}</h3> 
     <ul class="bitter">
       <li class="mt" v-html="t(5)"></li>

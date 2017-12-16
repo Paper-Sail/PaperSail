@@ -123,7 +123,7 @@ h1, h2, h3, h4 {
 }
 
 h1,h2 {
-  font-size: 30px;
+  font-size: 20px;
 }
 
 h3 {
@@ -184,6 +184,12 @@ ul {
   align-items: center;
   flex-wrap: wrap;
   text-align: center;
+  &.center {
+    @media only screen and (device-width: 768px) and (device-height: 1024px) {
+      height: 40%;
+    }
+    justify-content: center;  
+  }
 }
 .landscape {
   height: 100%;
@@ -191,6 +197,7 @@ ul {
 }
 .el-carousel {
   width: 60%;
+  bottom: 30px;
 }
 .el-carousel__arrow--right {
   right: -15px;
@@ -200,15 +207,18 @@ ul {
   left: -15px;
   top : 230px;
 }
-.el-carousel__indicators--outside button{
-  width: 5px;
-  height: 5px;
-  border-radius : 50%;
+.el-carousel__indicators--outside {
+  button{
+    width: 5px;
+    height: 5px;
+    border-radius : 50%;
+  }
 }
 .particles {
-  height: 100%;
-  top:0;
+  bottom:0;
   position: absolute;
   z-index: 0;
+  min-height: 70%;
+  left:0;
 }
 </style>
