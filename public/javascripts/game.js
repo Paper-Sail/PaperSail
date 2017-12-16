@@ -347,12 +347,12 @@ GAME.init = function(){
     var actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
     var actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
     while (isInIsland(actualx, actualy,GAME.boatradius)){
-      console.log("Reroll position");
+      //console.log("Reroll position");
       actualx = GAME.camera.position.x + Math.random()*WORLD.regionSize;
       actualy = GAME.camera.position.y + Math.random()*WORLD.regionSize;
     }
-    console.log("Spawning at "+actualx+", "+actualy);
-    console.log(isInIsland(actualx, actualy,GAME.boatradius));
+    //console.log("Spawning at "+actualx+", "+actualy);
+    //console.log(isInIsland(actualx, actualy,GAME.boatradius));
     GAME.camera.position.x = actualx;
     GAME.camera.position.y = actualy;
     GAME.target = new THREE.Vector3(GAME.camera.position.x,GAME.camera.position.y,0);
