@@ -229,7 +229,7 @@ function iterateCoroutine(coroutine, skipTime, pauseTime) {
           return;
     }
     if (pauseTime>0){
-      setTimeout(iterator, )
+      setTimeout(iterator, skipTime)
     } else {
       requestAnimationFrame(iterator);
     }

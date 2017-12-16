@@ -28,6 +28,8 @@ html
 
   body
     block content
+    if(process.env.NODE_ENV=="development")
+      script(src="/reload/reload.js")
     script(src="/webapp/dist/manifest.js")
     script(src="/webapp/dist/vendor.js")
     script(src="/webapp/dist/index.js")
