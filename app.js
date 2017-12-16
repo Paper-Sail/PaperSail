@@ -54,7 +54,6 @@ String.prototype.endsWith = function (str) {
 
 app.use('/', function(req, res, next){
   if (req.url.endsWith("translates.json") || req.url.endsWith("the_paper_sail_logo.png")){
-    console.log("Translation");
     var lang = "en";
     var acceptLanguage = req.get("Accept-Language")
     if (acceptLanguage){
