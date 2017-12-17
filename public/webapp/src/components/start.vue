@@ -17,7 +17,7 @@ export default {
   .start {
     display: block;
     position: absolute;
-    bottom: 50px; 
+    bottom: 70px; 
     width: 80px;
     height: 80px;
     background-repeat: no-repeat;

@@ -4,31 +4,33 @@ Vue.use(VueResource);
 
 export default {
   computed: {
-    assetsUrl() {
-      return `${publicPath}/assets/`;
+    assetsUrl: function() {
+      return publicPath + "/assets/";
     },
   },
   methods: {
-    t(number) {
+    t:function(number) {
       return this.translates[number];
     },
-    tc(number) {
+    tc:function(number) {
       return this.credits[number];
     }
   },
-  mounted() {
-    this.$http.get(`${publicPath}/assets/translates.json`).then(response => {
+  mounted:function() {
+    this.$http.get(publicPath +'/assets/translates.json').then(function(response) {
       this.translates = response.body;
-      function* values(obj) {
-        for (let prop of Object.keys(response.body.credits))
-        yield response.body.credits[prop];
+      function values(obj) {
+        var arr = [];
+        for(var val in obj) {       
+          var trad = obj[val];
+          arr.push(trad);
+        }
+        return arr;
       }
-      this.credits = Array.from(values(response.body.credits));
-    }, response => {
-      // error callback
+      this.credits = values(response.body.credits)
     });
   },
-  data() {
+  data: function() {
     return {
       translates: {
       },

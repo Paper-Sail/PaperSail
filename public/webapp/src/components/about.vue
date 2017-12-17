@@ -15,7 +15,7 @@
       <li class="mt" v-html="t(5)"></li>
       <li class="mt" v-html="t(6)"></li>
       <li class="mt" v-html="t(7)"></li>
-      <li class="mt" v-for="(item, index) in credits" v-html="tc(index)" :key="item"></li>
+      <li class="mt" v-for="(item, index) in credits" v-html="tc(index)" :key="index"></li>
     </ul>
   </el-dialog>
 </template>
