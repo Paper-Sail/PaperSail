@@ -185,6 +185,9 @@ ul {
   flex-wrap: wrap;
   text-align: center;
   &.center {
+    @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+      height: 40%;
+    }
     @media only screen and (device-width: 768px) and (device-height: 1024px) {
       height: 40%;
     }
