@@ -218,22 +218,23 @@ function guid() {
     s4() + '-' + s4() + s4() + s4();
 }
 
-function iterateCoroutine(coroutine, skipTime, pauseTime) {
+function iterateCoroutine(next, skipTime, pauseTime) {
   var skipTime = skipTime ? skipTime : 1000/60;
   var pauseTime = pauseTime ? pauseTime : 0;
-  function iterator(){
-    var start = Date.now();
-    while (Date.now()-start<skipTime){
-        var status = coroutine.next();
-        if (status.done)
-          return;
-    }
-    if (pauseTime>0){
-      setTimeout(iterator, skipTime)
-    } else {
-      requestAnimationFrame(iterator);
-    }
+  var start = Date.now();
+  while (Date.now()-start<skipTime){
+      var next = next();
+      if (!next)
+        return false;
   }
-  iterator();
+  if (pauseTime>0){
+    setTimeout(function(){
+      iterateCoroutine(next, skipTime, pauseTime);
+    }, skipTime)
+  } else {
+    requestAnimationFrame(function(){
+      iterateCoroutine(next, skipTime, pauseTime);
+    });
+  }
 }
 

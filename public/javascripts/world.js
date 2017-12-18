@@ -41,7 +41,7 @@ const WORLD = {
     }
     LOADER.trackers.push(tracker);
     LOADER.refresh();
-    iterateCoroutine(WORLD.buildWorld(region, tracker), 10, 1);
+    iterateCoroutine(WORLD.buildWorld(region,tracker), 10, 1);
   },
   buildRegionNoTrack: function(x, y){
     var region = {
@@ -69,7 +69,7 @@ const WORLD = {
         return WORLD.regions[i];
     }
   },
-  buildWorld: function*(region, tracker) {
+  buildWorld: function(region, tracker) {
     var wseed = 0;
     function n(){
       return wseed++;
@@ -86,20 +86,28 @@ const WORLD = {
     back.position.z = -1;
     region.three.add(back);
     //*/
-    
+    var i = 0;
     var iscale = 0.75+rand()*2
-    for (var i = 0; i < islands; i++) {
+    function end(){
+      if (tracker){
+        tracker.value = 1;
+        LOADER.refresh();
+      }
+    }
+    function iter(){
       WORLD.putIsland(region,i, iscale);
       if (tracker){
         tracker.value = i/islands;
         LOADER.refresh()
       }
-      yield;
+      if (i < islands){
+          i++;
+          return iter;
+      } else {
+        end();
+      }
     }
-    if (tracker){
-      tracker.value = 1;
-      LOADER.refresh();
-    }
+    return iter;
   },
   putIsland: function(region,seed, iscale){
     var rs = WORLD.regionSize;
