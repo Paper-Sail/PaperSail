@@ -38,7 +38,7 @@ export default {
       and (-webkit-min-device-pixel-ratio: 2)
       and (orientation: portrait) {
         transform: scale(.7);
-        bottom: 60px;
+        bottom: 40px;
     }
     @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
       transform: scale(1.5);

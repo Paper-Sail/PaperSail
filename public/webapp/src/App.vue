@@ -218,13 +218,7 @@ ul {
     @media only screen and (device-width: 768px) and (device-height: 1024px) {
       height: 40%;
     }
-    @media only screen 
-      and (max-device-width: 640px), 
-      only screen and (max-device-width: 667px), 
-      only screen and (max-width: 480px)
-    { 
-      height: 40%;
-    }
+
     justify-content: center;  
   }
 }
