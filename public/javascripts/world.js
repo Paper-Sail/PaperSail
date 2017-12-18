@@ -7,6 +7,13 @@ function createKernel(fromZero){
   }
   return kernel;
 }
+window.addEventListener("load",function(){
+  ENGINE.quality = true;
+  if (iOS && iOS<10){
+    ENGINE.quality = false;
+  }
+});
+
 
 const WORLD = {
   regionSize: 300,
@@ -180,6 +187,7 @@ const WORLD = {
     glow.position.z = -4;
     region.three.add(island.mesh);
     //*
+    if (!ENGINE.quality) return;
     for (var il=0; il<rand()*3*iscale*iscale; il++){      
       var seg = Math.floor(rand()*(island.collision.vertices.length-1));
       var p0 = island.collision.vertices[mod(seg-1,island.collision.vertices.length)];
@@ -206,6 +214,7 @@ const WORLD = {
     region.collisions.remove(island.collisions);    
   },
   doFog: function(px, py){
+    if (!ENGINE.quality) return;
     for (var i = 0; i < WORLD.regions.length; i++) {
       var region = WORLD.regions[i];
       for (var fogchunk in region.fog) {
@@ -249,6 +258,7 @@ const WORLD = {
     }
   },
   fadeFog: function(chunk,fogchunk,region){
+    if (!ENGINE.quality) return;
     chunk.three.material.opacity = lerp(chunk.three.material.opacity, 0, 0.2);
     if (chunk.three.material.opacity>0.02){
       setTimeout(function(){
@@ -259,6 +269,7 @@ const WORLD = {
     }
   },
   makeFog: function(region){
+    if (!ENGINE.quality) return;
     var overlap = (WORLD.regionSize/WORLD.fogDensity)*2;
     region.fog = {};
     for(var i = 0; i<WORLD.fogDensity; i++){

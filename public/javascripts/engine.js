@@ -1,4 +1,7 @@
 const ENGINE = {}
+const near_plane = 1;
+const far_plane = 1000;
+
 
 ENGINE.initialise = function(container){
   
@@ -9,8 +12,8 @@ ENGINE.initialise = function(container){
 
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
-  const NEAR = 1;
-  const FAR = 1000;
+  const NEAR = near_plane;
+  const FAR = far_plane;
   
   const GAMESIZE = 250;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);
@@ -88,8 +91,8 @@ ENGINE.setSize = function(container){
   ENGINE.screenHeight = px2cm(container.clientHeight);
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
-  const NEAR = 1;
-  const FAR = 1000;
+  const NEAR = near_plane;
+  const FAR = far_plane;
   
   const GAMESIZE = 250;
   const GAMEWIDTH = GAMESIZE * (ASPECT>1 ? 1 : ASPECT);

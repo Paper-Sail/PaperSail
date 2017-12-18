@@ -543,7 +543,7 @@ GAME.update = function(dt){
   }
   //*/
   GAME.fairyTime-=dt*GAME.fairyTimeScale;
-  if (GAME.fairyTime<0){
+  if (GAME.fairyTime<0 && ENGINE.quality){
     GAME.fairyTime=(Math.random()+0.5)*0.1;
     var ang = Math.random()*TAU;
     var dist = Math.sqrt(Math.random())*200;
