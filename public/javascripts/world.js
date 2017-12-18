@@ -79,13 +79,6 @@ const WORLD = {
     }
     var islands = Math.floor(rand()*20)
     var rs = WORLD.regionSize;
-    /*
-    var back = new THREE.Mesh(rectangle(region.x*rs,region.y*rs,rs,rs), new THREE.MeshBasicMaterial({
-      color: new THREE.Color(Math.random(),Math.random(),Math.random())
-    }));
-    back.position.z = -1;
-    region.three.add(back);
-    //*/
     var i = 0;
     var iscale = 0.75+rand()*2
     function end(){
