@@ -32,6 +32,20 @@ export default {
     @media only screen and (device-width: 768px) and (device-height: 1024px) {
       bottom: 15%;
     }
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2)
+      and (orientation: portrait) {
+        transform: scale(.7);
+        bottom: 60px;
+    }
+    @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+      transform: scale(1.5);
+    }
+    @media only screen and (device-width: 768px) and (device-height: 1024px) {
+      transform: scale(1.5);
+    }
     &:hover {
       transform: scale(.8); 
     }

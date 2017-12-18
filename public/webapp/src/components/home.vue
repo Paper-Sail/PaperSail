@@ -44,6 +44,20 @@ export default {
     height: 100%;
     .logo {
       width: 80%;
+      @media only screen 
+        and (min-device-width: 320px) 
+        and (max-device-width: 480px)
+        and (-webkit-min-device-pixel-ratio: 2)
+        and (orientation: portrait) {
+          width: 60%;
+      }
+      @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+         width: 100%;
+      }
+      @media only screen and (device-width: 768px) and (device-height: 1024px) {
+        width: 100%;
+      }
     }
+  
   }
 </style>

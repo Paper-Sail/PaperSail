@@ -124,6 +124,12 @@ h1, h2, h3, h4 {
 
 h1,h2 {
   font-size: 25px;
+  @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+    font-size: 50px;
+  }
+  @media only screen and (device-width: 768px) and (device-height: 1024px) {
+    font-size: 50px;
+  }
 }
 
 h3 {
@@ -146,6 +152,13 @@ ul {
 
 .pt {
   padding-top: 20px;
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      padding: 0;
+  }
 }
 .mt {
   margin-top: 20px;
@@ -159,6 +172,20 @@ ul {
 .pic {
   width: 80%;
   margin-top: 20px;
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      width: 60%;
+      margin-top: 0;
+  }
+  @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+    width: 100%;
+  }
+  @media only screen and (device-width: 768px) and (device-height: 1024px) {
+    width: 100%;
+  }
 }
 .footer {
   position: absolute;
@@ -191,6 +218,13 @@ ul {
     @media only screen and (device-width: 768px) and (device-height: 1024px) {
       height: 40%;
     }
+    @media only screen 
+      and (max-device-width: 640px), 
+      only screen and (max-device-width: 667px), 
+      only screen and (max-width: 480px)
+    { 
+      height: 40%;
+    }
     justify-content: center;  
   }
 }
@@ -201,14 +235,47 @@ ul {
 .el-carousel {
   width: 60%;
   bottom: 30px;
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      bottom: 40px;
+  }
 }
 .el-carousel__arrow--right {
   right: -15px;
   top : 230px;
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      top: 180px;
+  }
+  @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+   top: 270px;
+  }
+  @media only screen and (device-width: 768px) and (device-height: 1024px) {
+    top: 270px;
+  }
 }
 .el-carousel__arrow--left {
   left: -15px;
   top : 230px;
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      top: 180px;
+  }
+  @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+   top: 270px;
+  }
+  @media only screen and (device-width: 768px) and (device-height: 1024px) {
+    top: 270px;
+  }
 }
 .el-carousel__indicators--outside {
   button{
@@ -217,11 +284,28 @@ ul {
     border-radius : 50%;
   }
 }
+.el-carousel__container{
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and ( max-height: 500px )
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      height: 245px !important;
+  }
+  @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+    height: 400px !important;
+  }
+  @media only screen and (device-width: 768px) and (device-height: 1024px) {
+    height: 400px !important;
+  }
+}
 .particles {
   bottom:0;
   position: absolute;
   z-index: 0;
   min-height: 70%;
   left:0;
+  pointer-events: none;
 }
 </style>

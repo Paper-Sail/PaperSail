@@ -123,6 +123,14 @@
     .start {
       transform: scale(.6);
       bottom: 0;
+      @media only screen and (min-device-width: 1024px) and (max-device-height: 1366px) and (-webkit-min-device-pixel-ratio: 2)  and (orientation: portrait){
+        transform: scale(1.2);
+        bottom: 50px;
+      }
+      @media only screen and (device-width: 768px) and (device-height: 1024px) {
+        transform: scale(1.2);
+        bottom: 50px;
+      }
     }
   }
 </style>
