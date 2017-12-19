@@ -8,7 +8,7 @@ window.addEventListener("load",function(){
     ENGINE.quality = false;
   }
   if (!ENGINE.quality){
-    document.getElementById('vig').classList.remove("hidden")
+    //document.getElementById('vig').classList.remove("hidden")
   }
 });
 
@@ -77,9 +77,19 @@ ENGINE.initialise = function(container){
     GAME.onClick(vector); 
   });
   window.addEventListener("resize",function() {
-    ENGINE.setSize(container);
+    if (window.innerWidth!=WINDOW.width || window.innerHeight!=WINDOW.height){
+      WINDOW.width = window.innerWidth;
+      WINDOW.height = window.innerHeight;
+      console.log("w/h: ",WINDOW.width, WINDOW.height);
+      ENGINE.setSize(container);
+    }
   });
   return GAME.renderer.domElement;
+}
+
+WINDOW = {
+  width: 0,
+  height: 0
 }
 
 function px2cm(px) {
@@ -96,7 +106,7 @@ function px2cm(px) {
 ENGINE.setSize = function(container){
   // Set the scene size.
   const WIDTH = container.clientWidth;
-  const HEIGHT = container.clientHeight;
+  const HEIGHT = container.clientHeight-10;
   ENGINE.screenHeight = px2cm(container.clientHeight);
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
