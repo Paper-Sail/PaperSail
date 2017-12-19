@@ -179,7 +179,8 @@ const WORLD = {
       ),
       GAME.materials.glow
     );
-    island.mesh.add(glow);
+    if (ENGINE.quality)
+      island.mesh.add(glow);
     var cmesh = new THREE.Mesh(GAME.models.cylinder,GAME.materials.black);
     island.mesh.add(cmesh);
     cmesh.scale.x = cmesh.scale.y = cmesh.scale.z = 0.1;

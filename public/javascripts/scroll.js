@@ -16,7 +16,7 @@ const SCROLL = {
         //chunk.sprite.scale.set(imsize,imsize,imsize);
         chunk.sprite.position.set(x,y,offset);
         chunk.sprite.renderOrder = offset;
-        GAME.scene.add(chunk.sprite);
+        //GAME.scene.add(chunk.sprite);
         layer.chunks.push(chunk);
       }
     }
