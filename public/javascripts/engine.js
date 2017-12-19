@@ -2,6 +2,15 @@ const ENGINE = {}
 const near_plane = 1;
 const far_plane = 1000;
 
+window.addEventListener("load",function(){
+  ENGINE.quality = true;
+  if (iOS && iOS<10){
+    ENGINE.quality = false;
+  }
+  if (!ENGINE.quality){
+    document.getElementById('vig').classList.remove("hidden")
+  }
+});
 
 ENGINE.initialise = function(container){
   

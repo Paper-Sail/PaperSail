@@ -7,12 +7,6 @@ function createKernel(fromZero){
   }
   return kernel;
 }
-window.addEventListener("load",function(){
-  ENGINE.quality = true;
-  if (iOS && iOS<10){
-    ENGINE.quality = false;
-  }
-});
 
 
 const WORLD = {
@@ -188,7 +182,7 @@ const WORLD = {
     glow.position.z = -4;
     region.three.add(island.mesh);
     //*
-    if (!ENGINE.quality) return;
+    //if (!ENGINE.quality) return;
     for (var il=0; il<rand()*3*iscale*iscale; il++){      
       var seg = Math.floor(rand()*(island.collision.vertices.length-1));
       var p0 = island.collision.vertices[mod(seg-1,island.collision.vertices.length)];
