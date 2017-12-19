@@ -67,7 +67,7 @@ const DRAGON = {
         dragon.rightanchor.rotation.z = lerp(0.25,-0.3,Math.sin(dragon.wingtime)*0.5+0.5 );
         if (dragon.resting){
           dragon.speed = 0;
-          dragon.flytime-=dt*0.25;
+          dragon.flytime-=dt*0.15;
           if (dragon.flytime<=0){
             dragon.twitch = 1;
             dragon.turn = (5+Math.random()*5)*Math.sign(Math.random()-0.5);
@@ -84,7 +84,7 @@ const DRAGON = {
             dragon.resting = true;
             dragon.flytime = 1+Math.random()
           } else {
-            dragon.changedir-=dt;
+            dragon.changedir-=dt*0.5;
             if (dragon.changedir<=0){
               dragon.target = DRAGON.getTarget(dragon);
               dragon.changedir = Math.random()

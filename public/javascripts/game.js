@@ -224,7 +224,7 @@ GAME.start = function(){
     document.getElementById('background-sound').play()
     GAME.clock = new THREE.Clock(true);
     GAME.tick();
-    for (var i = 0; i <= 1; i+=(1/5)) {
+    for (var i = 0; i <= 1; i+=(1/3)) {
       
       DRAGON.spawn(lerp(20,45, i));
     }

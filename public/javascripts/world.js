@@ -285,7 +285,7 @@ const WORLD = {
             map: GAME.textures.fog,
             opacity: 0.4,
             transparent: true,
-            color: 0x000000//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
+            color: 0x030A2D//new THREE.Color(parseInt("0x"+md5(region.x+"-"+region.y+"-"+i+"-"+j).substr(0,6)))//GAME.backgroundcolor
           })
         );
         chunk.three.position.add(new THREE.Vector3(
