@@ -78,7 +78,7 @@ const WORLD = {
     function rand(){
       return ndhash(region.x, region.y, n())
     }
-    var islands = Math.floor(rand()*20)
+    var islands = Math.floor(rand()*10)
     var rs = WORLD.regionSize;
     var i = 0;
     var iscale = 0.75+rand()*2
