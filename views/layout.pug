@@ -31,6 +31,7 @@ html
     script.
       const git = !{JSON.stringify(git)}
       console.log(git.tag + " at revision "+git.branch+"-"+git.short);
+      console.log("https://github.com/Paper-Sail/PaperSail/commits/"+git.short);
     block content
     if(process.env.NODE_ENV=="development")
       script(src="/reload/reload.js")
