@@ -208,6 +208,17 @@ for (var i = 0; i < GAME.textures.islandDecorations.length; i++) {
     });
 }
 
+window.addEventListener("blur",function(){
+  document.getElementById('background-music').pause()
+  document.getElementById('background-sound').pause()
+});
+
+window.addEventListener("focus",function(){
+  if (GAME.started){
+    document.getElementById('background-music').play()
+    document.getElementById('background-sound').play()
+  }
+});
 
 // Setup update-render loop
 GAME.started = false;
