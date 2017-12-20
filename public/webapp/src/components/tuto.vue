@@ -52,10 +52,6 @@
           sentence: this.t(12)
         },
         {
-          url:"tuto_4.gif",
-          sentence: this.t(13)
-        },
-        {
           url:"tuto_5.gif",
           sentence: this.t(14)
         },
