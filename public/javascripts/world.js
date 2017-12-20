@@ -193,7 +193,7 @@ const WORLD = {
       var ang = Math.atan2(d.y, d.x);
       var decomat = GAME.materials.islandDecorations.pickFloaty(rand());
       var size = 7+rand()*10*iscale;
-      if (decomat==GAME.materials.islandDecorations[4]){
+      if (decomat==GAME.materials.islandDecorations[GAME.materials.islandDecorations.length - 1]){
         size = 14;
       }
       var deco = new THREE.Mesh(rectangle(-size,-size/3,size*2,size*2),decomat);

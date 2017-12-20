@@ -5,7 +5,6 @@ function notify_host(data){
   notification_buffer.push(data);
 }
 window.addEventListener("message",function(event) {
-    console.log("Got a message: "+event.data);
     if (event.data == "host"){
       notify_host = function(data){
           event.source.postMessage(data, event.origin);
@@ -95,7 +94,19 @@ GAME.textures = {
     new THREE.TextureLoader().load("/images/plants_2.png"),
     new THREE.TextureLoader().load("/images/plants_3.png"),
     new THREE.TextureLoader().load("/images/roots.png"),
-    //new THREE.TextureLoader().load("/images/port.png"),
+    new THREE.TextureLoader().load("/images/plants_1.png"),
+    new THREE.TextureLoader().load("/images/plants_2.png"),
+    new THREE.TextureLoader().load("/images/plants_3.png"),
+    new THREE.TextureLoader().load("/images/roots.png"),
+    new THREE.TextureLoader().load("/images/plants_1.png"),
+    new THREE.TextureLoader().load("/images/plants_2.png"),
+    new THREE.TextureLoader().load("/images/plants_3.png"),
+    new THREE.TextureLoader().load("/images/roots.png"),
+    new THREE.TextureLoader().load("/images/plants_1.png"),
+    new THREE.TextureLoader().load("/images/plants_2.png"),
+    new THREE.TextureLoader().load("/images/plants_3.png"),
+    new THREE.TextureLoader().load("/images/roots.png"),
+    new THREE.TextureLoader().load("/images/port.png"),
   ]
 }
 GAME.textures.islandtex.wrapT = THREE.RepeatWrapping;
