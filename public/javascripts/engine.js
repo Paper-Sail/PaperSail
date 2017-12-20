@@ -8,7 +8,7 @@ window.addEventListener("load",function(){
     ENGINE.quality = false;
   }
   if (!ENGINE.quality){
-    //document.getElementById('vig').classList.remove("hidden")
+    document.getElementById('vig').classList.remove("hidden")
   }
 });
 
