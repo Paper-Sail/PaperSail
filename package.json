@@ -12,6 +12,7 @@
     "dotenv": "^4.0.0",
     "element-ui": "^1.4.7",
     "express": "~4.14.0",
+    "git-rev": "^0.2.1",
     "morgan": "~1.7.0",
     "node-sass-middleware": "0.9.8",
     "pug": "~2.0.0-beta6",

@@ -28,6 +28,9 @@ html
     script(src="/javascripts/game.js")
 
   body
+    script.
+      const git = !{JSON.stringify(git)}
+      console.log(git.tag + " at revision "+git.branch+"-"+git.short);
     block content
     if(process.env.NODE_ENV=="development")
       script(src="/reload/reload.js")
