@@ -80,7 +80,6 @@ ENGINE.initialise = function(container){
     if (window.innerWidth!=WINDOW.width || window.innerHeight!=WINDOW.height){
       WINDOW.width = window.innerWidth;
       WINDOW.height = window.innerHeight;
-      console.log("w/h: ",WINDOW.width, WINDOW.height);
       ENGINE.setSize(container);
     }
   });
@@ -106,7 +105,7 @@ function px2cm(px) {
 ENGINE.setSize = function(container){
   // Set the scene size.
   const WIDTH = container.clientWidth;
-  const HEIGHT = container.clientHeight-10;
+  const HEIGHT = Math.max(0,container.clientHeight-10);
   ENGINE.screenHeight = px2cm(container.clientHeight);
   // Set some camera attributes.
   const ASPECT = WIDTH / HEIGHT;
