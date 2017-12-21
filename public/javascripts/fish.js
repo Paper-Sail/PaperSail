@@ -47,6 +47,7 @@ const FISH = {
     var fins = new THREE.Mesh(rectangle(-width/2,-width/4,width,width/2), finmaterial);
     var fishy = {
       woboff: Math.random()*TAU,
+      woboff2: Math.random()*TAU,
       mesh: new THREE.Mesh(geometry, material),
       position: position,
       direction: new THREE.Vector3(0,1,0),
@@ -165,7 +166,7 @@ const FISH = {
         var vf = p0.clone().sub(p2).normalize();
         fishy.fins.position.copy(p1);
         fishy.fins.position.z = -5;
-        fishy.fins.scale.set(1+Math.sin(GAME.clock.elapsedTime)*0.1,1,1);
+        fishy.fins.scale.set(1+Math.sin(fishy.woboff2+GAME.clock.elapsedTime)*0.1,1,1);
         fishy.fins.rotation.z = Math.atan2(vf.y,vf.x)+TAU/4;
       } 
     }

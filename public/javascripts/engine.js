@@ -118,5 +118,4 @@ ENGINE.setSize = function(container){
   GAME.camera.aspect = ASPECT;
   GAME.size = Math.max(GAMEWIDTH, GAMEHEIGHT);
   GAME.renderer.setSize(WIDTH, HEIGHT);
-  GAME.camera.zoom = 25/ENGINE.screenHeight;
 }

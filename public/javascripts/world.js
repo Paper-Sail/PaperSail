@@ -11,7 +11,7 @@ function createKernel(fromZero){
 
 const WORLD = {
   regionSize: 300,
-  fogDensity: 12,
+  fogDensity: 18,
   init: function(){
     WORLD.world = new THREE.Object3D();
     WORLD.regions = [];
@@ -78,7 +78,7 @@ const WORLD = {
     function rand(){
       return ndhash(region.x, region.y, n())
     }
-    var islands = Math.floor(rand()*10)
+    var islands = Math.floor(rand()*14)
     var rs = WORLD.regionSize;
     var i = 0;
     var iscale = 0.75+rand()*2
@@ -291,7 +291,7 @@ const WORLD = {
         chunk.three.position.add(new THREE.Vector3(
             (Math.random()*2-1)*(overlap*0.25),
             (Math.random()*2-1)*(overlap*0.25),
-            Math.random()*100
+            Math.random()*200
         ));
         region.three.add(chunk.three);
       }
