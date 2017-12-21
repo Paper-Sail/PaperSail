@@ -145,7 +145,6 @@ const DRAGON = {
           return targetcol;
       }
     }
-    console.log("Could not find target");
     if (dragon.target){
         return dragon.target;
     } else {
