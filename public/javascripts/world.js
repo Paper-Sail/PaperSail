@@ -83,6 +83,10 @@ const WORLD = {
     var i = 0;
     var iscale = 0.75+rand()*2
     function end(){
+      for (var p = 0; p < 1; p++) {
+        PLANT.spawn(region, Math.floor(3+rand()*5), p);
+        //DILL.spawn(region, Math.floor(3+rand()*5), p);
+      }
       if (tracker){
         tracker.value = 1;
         LOADER.refresh();
@@ -143,12 +147,12 @@ const WORLD = {
     var collisions = {
       center: pos.clone().add(island.collision.boundingSphere.center),
       position: pos.clone(),
-      radius: island.collision.boundingSphere.radius*1.5,
+      radius: island.collision.boundingSphere.radius,
       points: collisionpoints,
       island: island
     };
     island.collisions = collisions;
-    region.collisions.push(collisions);
+    region.collisions.push(island.collisions);
     for (var i = 0; i < collisionpoints.length; i++) {
       var pt = collisionpoints[i];
       var pgeom = rectangle(-1,-1,2,2);
@@ -231,7 +235,7 @@ const WORLD = {
       }
     }
   },
-  update: function(){
+  update: function(dt){
     var curx = Math.floor(GAME.camera.position.x/WORLD.regionSize);
     var cury = Math.floor(GAME.camera.position.y/WORLD.regionSize);
     WORLD.regions = WORLD.regions.filter(function(region){
@@ -240,6 +244,16 @@ const WORLD = {
         //region.three.children[0].material.color = new THREE.Color(0xFF0000);
         WORLD.world.remove(region.three);
       } else {
+        if (region.plants){
+          for (var i = 0; i < region.plants.length; i++) {
+            PLANT.update(region.plants[i],dt);
+          }
+        }
+        if (region.dills){
+          for (var i = 0; i < region.dills.length; i++) {
+            DILL.update(region.dills[i],dt);
+          }
+        }
         WORLD.doFog(GAME.camera.position.x,GAME.camera.position.y);
       }
       return valid;

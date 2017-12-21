@@ -74,6 +74,8 @@ function loadModel(name) {
   });
 }
 GAME.textures = {
+  plant: new THREE.TextureLoader().load("/images/nenuphar.png"),
+  dill: new THREE.TextureLoader().load("/images/lentilles.png"),
   islandtex: new THREE.TextureLoader().load("/images/tile_bord.png"),
   fog: new THREE.TextureLoader().load("/images/fogpatch.png"),
   boat: new THREE.TextureLoader().load("/images/boat.png"),
@@ -119,6 +121,18 @@ GAME.materials = {
   }),
   background: new THREE.MeshBasicMaterial({
     color: GAME.backgroundcolor
+  }),
+  plant: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    //opacity: 0,
+    map: GAME.textures.plant,
+    transparent: true
+  }),
+  dill: new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    //opacity: 0,
+    map: GAME.textures.dill,
+    transparent: true
   }),
   islandmat: new THREE.MeshBasicMaterial({
     color: 0x000000,
@@ -248,7 +262,7 @@ GAME.start = function(){
     GAME.tick();
     for (var i = 0; i <= 1; i+=(1/3)) {
       
-      DRAGON.spawn(lerp(20,45, i));
+      DRAGON.spawn(lerp(20,35, i));
     }
   }
 }
@@ -435,7 +449,7 @@ GAME.update = function(dt){
       var cdx = GAME.camera.position.x-collision.center.x;
       var cdy = GAME.camera.position.y-collision.center.y;
       var cd = (cdx*cdx+cdy*cdy);
-      if (cd<Math.pow(collision.radius+GAME.boatradius,2)){
+      if (cd<Math.pow(collision.radius*1.5+GAME.boatradius,2)){
         for (var ci = 0; ci < collision.points.length; ci++) {
           var point = collision.position.clone().add(collision.points[ci]);
           var dx = GAME.camera.position.x-point.x;
@@ -463,7 +477,7 @@ GAME.update = function(dt){
     var cdx = GAME.camera.position.x-ghost.position.x;
     var cdy = GAME.camera.position.y-ghost.position.y;
     var cd = (cdx*cdx+cdy*cdy);
-    if (cd<Math.pow(collision.radius+GAME.boatradius,30)){
+    if (cd<Math.pow(collision.radius*1.5+GAME.boatradius,30)){
       for (var ci = 0; ci < collision.points.length; ci++) {
         var point = collision.position.clone().add(collision.points[ci]);
         var dx = GAME.camera.position.x-point.x;
@@ -640,7 +654,7 @@ function isInIsland(x,y,radius){
       var cdx = x-collision.center.x;
       var cdy = y-collision.center.y;
       var cd = (cdx*cdx+cdy*cdy);
-      if (Math.sqrt(cd)<collision.radius*1+radius){
+      if (Math.sqrt(cd)<collision.radius*1.5+radius){
         return true;
       }
     }

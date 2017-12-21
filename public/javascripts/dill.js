@@ -1,7 +1,7 @@
-const PLANT = {
+const DILL = {
   spawn: function(region, count, seed){
-    if (!region.plants){
-      region.plants = [];
+    if (!region.dills){
+      region.dills = [];
     }
     var wseed = 0;
     function n(){
@@ -14,7 +14,7 @@ const PLANT = {
     var y = region.y*WORLD.regionSize+lerp(WORLD.regionSize/6,5*WORLD.regionSize/6,rand());
     var pos = new THREE.Vector3(x,y,0);
     var scatter = 50;
-    var maxRadius = 15;
+    var maxRadius = 30;
     var good = true;
     for (var tries = 0; tries < 100; tries++){
       good = true;
@@ -47,37 +47,37 @@ const PLANT = {
     if (good){
       for (var i = 0; i<count; i++){
         var rad = lerp(maxRadius/2,maxRadius,rand());
-        var plantmesh = new THREE.Mesh(rectangle(-rad/2,-rad/2,rad,rad), GAME.materials.plant);
+        var dillmesh = new THREE.Mesh(rectangle(-rad/2,-rad/2,rad,rad), GAME.materials.dill);
         var ang = (i/count)*Math.PI*2//+rand()*Math.PI*0.2;
         var d = lerp(0,scatter,rand());
-        plantmesh.position.setX(pos.x+d*Math.cos(ang));
-        plantmesh.position.setY(pos.y+d*Math.sin(ang));
-        plantmesh.position.setZ(-1);
-        plantmesh.rotation.z = rand()*Math.PI*2;
-        var plant = {
-          mesh: plantmesh,
+        dillmesh.position.setX(pos.x+d*Math.cos(ang));
+        dillmesh.position.setY(pos.y+d*Math.sin(ang));
+        dillmesh.position.setZ(-1);
+        dillmesh.rotation.z = rand()*Math.PI*2;
+        var dill = {
+          mesh: dillmesh,
           radius: rad,
-          position: plantmesh.position.clone(),
+          position: dillmesh.position.clone(),
           velocity: new THREE.Vector3(0,0,0),
           spring: 5,
           damp: 1,
           splash: Math.random()
         }
-        region.three.add(plantmesh);
-        region.plants.push(plant)
+        region.three.add(dillmesh);
+        region.dills.push(dill)
       }
     }
   },
-  update: function(plant, dt){
-    plant.tagged = false;
-    plant.splash-=dt*0.1*(1+plant.velocity.length());
-    if (plant.splash<0){
-      plant.splash = 1+Math.random();
-      var partpos = plant.mesh.position.clone();
+  update: function(dill, dt){
+    dill.tagged = false;
+    dill.splash-=dt*0.1*(1+dill.velocity.length());
+    if (dill.splash<0){
+      dill.splash = 1+Math.random();
+      var partpos = dill.mesh.position.clone();
       partpos.z = -2;
       var size = 0.2+Math.random()*0.25;
       SPARTICLE.spawn(partpos,GAME.materials.semisplash,{
-        angle: Math.atan2(plant.velocity.y, plant.velocity.y),
+        angle: Math.atan2(dill.velocity.y, dill.velocity.y),
         minScale: 12*size,
         maxScale: 30*size,
         scaleFunc: function(x){ return Math.sqrt(x);},
@@ -88,33 +88,33 @@ const PLANT = {
     
     
     
-    var boatpush = plant.mesh.position.clone().sub(GAME.camera.position);
+    var boatpush = dill.mesh.position.clone().sub(GAME.camera.position);
     boatpush.setZ(0);
-    if (boatpush.length()<4+plant.radius){
-      var force = (4+plant.radius)-boatpush.length();
-      plant.tagged = true;
-      plant.velocity.add(boatpush.clone().normalize().multiplyScalar(force*dt*plant.spring));
+    if (boatpush.length()<4+dill.radius){
+      var force = (4+dill.radius)-boatpush.length();
+      dill.tagged = true;
+      dill.velocity.add(boatpush.clone().normalize().multiplyScalar(force*dt*dill.spring));
     }
     
     for (var i = 0; i < FISH.fish.length; i++) {
       for (var h = 0; h < FISH.fish[i].history.length; h++) {
         var fpos = FISH.fish[i].history[h];
-        var fishpush = plant.mesh.position.clone().sub(fpos);
+        var fishpush = dill.mesh.position.clone().sub(fpos);
         fishpush.setZ(0);
         if (fishpush.length()<FISH.fish[i].width/2){
           var force = (FISH.fish[i].width/2)-fishpush.length();
           var w = h/FISH.fish[i].history.length;
           w = 1-((w-0.5)*(w-0.5)*4);
           force*=0.1*w;
-          plant.velocity.add(fishpush.clone().normalize().multiplyScalar(force*dt*plant.spring));
+          dill.velocity.add(fishpush.clone().normalize().multiplyScalar(force*dt*dill.spring));
         }
       }
     }
     
-    var error = plant.mesh.position.clone().sub(plant.position);
-    plant.velocity.sub(error.multiplyScalar(dt*plant.spring));
+    var error = dill.mesh.position.clone().sub(dill.position);
+    dill.velocity.sub(error.multiplyScalar(dt*dill.spring));
     
-    plant.mesh.position.add(plant.velocity.clone().multiplyScalar(dt));
-    plant.velocity.sub(plant.velocity.clone().multiplyScalar(plant.damp*dt));
+    dill.mesh.position.add(dill.velocity.clone().multiplyScalar(dt));
+    dill.velocity.sub(dill.velocity.clone().multiplyScalar(dill.damp*dt));
   }
 }
