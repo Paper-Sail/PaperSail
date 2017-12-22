@@ -1,4 +1,4 @@
-var socket = io(window.location.href);
+var socket = io(window.location.origin);
 var MULTI = {
   callbacks: [],
   id: guid()
