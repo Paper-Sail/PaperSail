@@ -2,9 +2,17 @@ const DRAGON = {
   dragon: [],
   spawn: function(size){
     var dragon = {}
-    var startIsland = DRAGON.getTarget();
-    var x = startIsland.mesh.position.x;
-    var y = startIsland.mesh.position.y;
+    dragon.teleportMe = false;
+    var startIsland = DRAGON.getTarget(dragon);
+    var x = 0;
+    var y = 0;
+    if (!startIsland) {
+      dragon.teleportMe = true;
+    } else {
+      dragon.teleportMe = false;
+      x = startIsland.mesh.position.x;
+      y = startIsland.mesh.position.y;
+    }
     dragon.obj = new THREE.Object3D();
     dragon.obj.position.setX(x);
     dragon.obj.position.setY(y);
@@ -130,7 +138,7 @@ const DRAGON = {
     }
   },
   getTarget(dragon){
-    for (var i = 100; i>0; i--){
+    for (var i = 200; i>0; i--){
       var region = WORLD.regions.pickRandom();
       if (region && region.plants && region.plants.length>0){
         var targetcol = region.plants.pickRandom();
@@ -141,14 +149,29 @@ const DRAGON = {
             break;
           }
         }
-        if (good)
-          return targetcol;
+        if (good){
+            if (dragon.teleportMe){
+              dragon.teleportMe = false;
+              dragon.obj.position.setX(targetcol.mesh.position.x);
+              dragon.obj.position.setY(targetcol.mesh.position.y);
+            }
+            return targetcol;
+        }
       }
     }
     if (dragon.target){
         return dragon.target;
     } else {
-      return WORLD.regions.pickRandom().plants.pickRandom();
+      var region = WORLD.regions.pickRandom();
+      if (region.plants){
+        var targetcol = region.plants.pickRandom();
+        if (targetcol && dragon.teleportMe){
+          dragon.teleportMe = false;
+          dragon.obj.position.setX(targetcol.mesh.position.x);
+          dragon.obj.position.setY(targetcol.mesh.position.y);
+        }
+        return targetcol;
+      }
     }
   }
 }
