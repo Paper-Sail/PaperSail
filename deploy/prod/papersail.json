@@ -6,7 +6,7 @@
     "docker": {},
      "portMappings": [
       {
-        "containerPort": 80,
+        "containerPort": 5000,
         "hostPort": 0,
         "name": "http"
       }
@@ -23,7 +23,7 @@
     {
       "path": "_HC_PATH_",
       "protocol": "MESOS_HTTP",
-      "port": 80,
+      "port": 5000,
       "gracePeriodSeconds": 360,
       "intervalSeconds": 10,
       "timeoutSeconds": 10,
