@@ -2,7 +2,7 @@ FROM node:7
 
 COPY package.json /var/www/html/package.json
 
-RUN cd /var/www/html/ && npm install
+RUN cd /var/www/html/ && npm config set strict-ssl false && npm install
 
 #WORKDIR is /var/www/html
 COPY . /var/www/html/
