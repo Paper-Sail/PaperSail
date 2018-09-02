@@ -11,7 +11,7 @@ aslApp {
     owner='veryveryshort'
     apps=[
         [
-            name:'papersail',
+            name:'node',
             branch: 'artestudio',
             env: 'prod',
             deploy: [
